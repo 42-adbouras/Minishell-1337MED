@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:12 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/23 11:03:47 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/07/23 11:11:00 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,6 @@ int	main(int ac, char **av)
 	
 	printf("Hello World\n");
 	_func();
+	ft_pwd();
 	return (0);
 }
