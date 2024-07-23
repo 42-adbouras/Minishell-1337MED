@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   exic.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/23 11:10:35 by eismail          ###   ########.fr       */
+/*   Created: 2024/07/23 11:09:01 by eismail           #+#    #+#             */
+/*   Updated: 2024/07/23 11:14:03 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <stdio.h>
-# include <signal.h>
-# include <unistd.h>
-
-void	_func();
-void ft_pwd();
-
-#endif
+void ft_pwd()
+{
+    char s[100];
+    getcwd(s,100);
+    printf("%s\n",s);
+    chdir("/Users/eismail/Documents");
+    getcwd(s,100);
+    printf("%s\n",s);
+} 
