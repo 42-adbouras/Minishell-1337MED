@@ -1,30 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/23 11:29:04 by adbouras         ###   ########.fr       */
+/*   Created: 2024/07/23 11:24:58 by adbouras          #+#    #+#             */
+/*   Updated: 2024/07/23 11:28:36 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <signal.h>
-# include <unistd.h>
-
-
-
-/***	adbouras	****************************/
-void	_func();
-void	_leaks(void);
-
-/***	eismail		****************************/
-void	ft_pwd();
-
-#endif
+void	_leaks(void)
+{
+	system("leaks minishell");
+}

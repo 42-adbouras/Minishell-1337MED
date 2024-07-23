@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
+#    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/07/23 11:10:48 by eismail          ###   ########.fr        #
+#    Updated: 2024/07/23 11:28:04 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror 
 
-SRC =  main.c minishell.c exic.c
+SRC =  main.c minishell.c exic.c utils.c
 
 OBJ_DIR = objects/
 
