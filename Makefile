@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
+#    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/07/23 11:28:04 by adbouras         ###   ########.fr        #
+#    Updated: 2024/07/25 09:51:19 by eismail          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,8 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror 
 
 SRC =  main.c minishell.c exic.c utils.c
+
+LIBFT = libft/libft.a
 
 OBJ_DIR = objects/
 
@@ -38,14 +40,17 @@ $(OBJ_DIR)%.o:%.c $(HDR)
 
 $(NAME): $(OBJ)
 	@echo "$(YLW)[Compiling ...]$(RST)"
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@make -C libft
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 	@echo "$(GRN)[Compiled]$(RST)"
 
 clean:
+	@make clean -C libft
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)[Removed Objects]$(RST)"
 
 fclean: clean
+	@make fclean -C libft
 	@rm -rf $(NAME)
 	@echo "$(RED)[Removed EXE]$(RST)"
 
