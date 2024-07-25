@@ -23,6 +23,8 @@ LFLAGS = -lreadline
 
 SRC =  main.c minishell.c exic.c utils.c
 
+LIBFT = libft/libft.a
+
 OBJ_DIR = objects/
 
 HDR = minishell.h
@@ -44,10 +46,12 @@ $(NAME): $(OBJ)
 	@echo "$(GRN)[Compiled]$(RST)"
 
 clean:
+	@make clean -C libft
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)[Removed Objects]$(RST)"
 
 fclean: clean
+	@make fclean -C libft
 	@rm -rf $(NAME)
 	@echo "$(RED)[Removed EXE]$(RST)"
 
