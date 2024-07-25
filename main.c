@@ -3,22 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:12 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/23 11:11:00 by eismail          ###   ########.fr       */
+/*   Updated: 2024/07/24 21:27:50 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int ac, char **av)
+// Ensure the next output starts on a new line >> rl_on_new_line();
+
+int	main()
 {
-	(void)ac;
-	(void)av;
+	t_data	*data;
 	
-	printf("Hello World\n");
-	_func();
-	ft_pwd();
+	data->path = getenv("PATH");
+	printf("%s\n", data->path);
+	while (1)
+	{
+		data->rl = readline("minishell$ ");
+		printf("%s\n", data->rl);
+	}
+	// access();
+	system("leaks -q minishell");
 	return (0);
 }

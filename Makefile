@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
+#    By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/07/23 11:28:04 by adbouras         ###   ########.fr        #
+#    Updated: 2024/07/24 19:04:13 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,9 @@ RST	= \033[0;39m
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror
+
+LFLAGS = -lreadline
 
 SRC =  main.c minishell.c exic.c utils.c
 
@@ -38,7 +40,7 @@ $(OBJ_DIR)%.o:%.c $(HDR)
 
 $(NAME): $(OBJ)
 	@echo "$(YLW)[Compiling ...]$(RST)"
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LFLAGS)
 	@echo "$(GRN)[Compiled]$(RST)"
 
 clean:
