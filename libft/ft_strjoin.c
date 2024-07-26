@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 19:45:01 by eismail           #+#    #+#             */
-/*   Updated: 2024/05/12 12:20:52 by eismail          ###   ########.fr       */
+/*   Updated: 2024/07/25 17:03:30 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	ft_strlcpy(new_str, s1, ft_strlen(s1) + 1);
 	ft_strlcat(new_str, s2, size_to_allocate + 1);
+	free ((char *) s1);
 	return (new_str);
 }
