@@ -6,7 +6,7 @@
 #    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/07/25 09:51:19 by eismail          ###   ########.fr        #
+#    Updated: 2024/07/26 09:33:56 by eismail          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,9 @@ RST	= \033[0;39m
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror
+
+LFLAGS = -lreadline
 
 SRC =  main.c minishell.c exic.c utils.c
 
@@ -40,8 +42,7 @@ $(OBJ_DIR)%.o:%.c $(HDR)
 
 $(NAME): $(OBJ)
 	@echo "$(YLW)[Compiling ...]$(RST)"
-	@make -C libft
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LFLAGS)
 	@echo "$(GRN)[Compiled]$(RST)"
 
 clean:
