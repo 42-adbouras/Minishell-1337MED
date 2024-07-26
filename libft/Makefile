@@ -13,26 +13,29 @@ SRCS := ft_isalpha.c    ft_memcmp.c     ft_strlcat.c    ft_strrchr.c\
 BONUSSRC := ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c\
 			ft_lstadd_back_bonus.c ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c\
 
-OBJS := $(SRCS:.c=.o)
+OBJ_DIR = objects/
+OBJS := $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 
 BONUSOBJS := $(BONUSSRC:.c=.o)
 
 NAME := libft.a
 HEADER := libft.h
 
+
 all: $(NAME) 
 
 $(NAME): $(OBJS) $(HEADER)
 	@ar rcs $(NAME) $(OBJS)
 
-%.o:%.c $(HEADER)
+$(OBJ_DIR)%.o:%.c $(HEADER)
+	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 bonus: $(BONUSOBJS) $(HEADER)
 	@ar rcs $(NAME) $(BONUSOBJS)
 
 clean:
-	@rm -f $(OBJS) $(BONUSOBJS)
+	@rm -rf $(OBJ_DIR) $(BONUSOBJS)
 
 fclean: clean
 	@rm -fr $(NAME)

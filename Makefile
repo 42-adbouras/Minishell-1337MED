@@ -6,7 +6,7 @@
 #    By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/07/24 19:04:13 by adbouras         ###   ########.fr        #
+#    Updated: 2024/07/25 13:12:19 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror
 
-LFLAGS = -lreadline
+LDFLAGS = -lreadline
 
 SRC =  main.c minishell.c exic.c utils.c
 
@@ -41,8 +41,11 @@ $(OBJ_DIR)%.o:%.c $(HDR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
+	@echo "$(YLW)[Compiling libft]$(RST)"
+	@make -C libft
+	@echo "$(GRN)[libft Compiled]$(RST)" && sleep 1
 	@echo "$(YLW)[Compiling ...]$(RST)"
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LFLAGS)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) $(LDFLAGS)
 	@echo "$(GRN)[Compiled]$(RST)"
 
 clean:
