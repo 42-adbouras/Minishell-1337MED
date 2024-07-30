@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
+#    By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/07/25 13:12:19 by adbouras         ###   ########.fr        #
+#    Updated: 2024/07/30 17:52:41 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 LDFLAGS = -lreadline
 
-SRC =  main.c minishell.c exic.c utils.c
+SRC =  main.c minishell.c  utils.c clean.c
 
 LIBFT = libft/libft.a
 

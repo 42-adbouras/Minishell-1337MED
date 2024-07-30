@@ -3,67 +3,149 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:12 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/25 17:55:57 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:34:16 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // Ensure the next output starts on a new line >> rl_on_new_line();
-bool	ft_pros_arg(t_cmd *data)
+
+void	ft_add_slash(char **paths)
+{
+	int	i;
+
+	i = 0;
+	while (paths[i])
+	{
+		paths[i] = ft_strjoin(paths[i], "/");
+		i++;
+	}
+}
+
+
+// void	node_init(char **pipes)
+// {
+// 	t_cmd	*new;
+// 	int		i;
+
+// 	i = 0;
+	
+// }
+
+char	*remove_spaces(char *str)
+{
+	char	*s;
+	int		i;
+	int		j;
+
+	s = malloc(ft_strlen(str));
+	i = 0;
+	j = 0;
+	while (str[i] && str[i] == ' ')
+		i++;
+	while (str[i])
+	{
+		if (str[i] == ' ' && str[i + 1])
+		{
+			while (str[i] && str[i] == ' ')
+				i++;
+			s[j++] = ' ';
+		}
+		s[j++] = str[i++];
+	}
+	s[j] = '\0';
+	free (str);
+	return (s);
+}
+
+bool	ft_pros_arg(t_cmd **data)
 {
 	int		i;
 	char	**paths;
-	char	*p;
+	char	**pipe;
+	t_cmd	*new;
+	
+	// t_cmd	*tmp;
+	// char	*p;
 
 	i = 0;
 	paths = ft_split(getenv("PATH"), ':');
-	data->split = ft_split(data->args, ' ');
-	if (!access(data->split[0], X_OK))
-		return (true);
-	while (paths[i])
+	pipe = ft_split((*data)->args, '|');
+	// if (!access(data->split[0], X_OK))
+	// 	return (true);
+	while (pipe[i])
 	{
-		p = ft_strjoin(ft_strjoin(paths[i], "/"), data->split[0]);
-		if (!access(p, X_OK))
-		{
-			data->path = p;
-			return (true);
-		}
-		free(p);
+		pipe[i] = remove_spaces(pipe[i]);
+		new = new_node(pipe[i]);
+		node_add_back(data, new);
 		i++;
 	}
-	i = 0;
+	// tmp = data;
+	// while (tmp)
+	// {
+	// 	printf("|%s|\n", tmp->cmd);
+	// 	tmp = tmp->pipe;
+	// }
+	// ft_add_slash(paths);
 	// while (paths[i])
-	// 	free(paths[i++]);
+	// {
+	// 	p = ft_strjoin(paths[i], data->split[0]);
+		// if (!access(p, X_OK))
+		// {
+		// 	data->path = p;
+		// 	return (true);
+		// }
+	// 	free(p);
+	// 	i++;
+	// }
 	return (false);
 }
 
-// void	ft_init(t_cmd *data)
-// {
-// 	// data->path = getenv("PATH");
-// 	// data->args = "";
-// }
+void	clear_nodes(t_cmd **list)
+{
+	t_cmd	*tmp;
+	
+	if (!*list)
+		return ;
+	while (*list)
+	{
+		tmp = (*list)->pipe;
+		free(*list);
+		*list = tmp;
+	}
+	*list = NULL;
+}
 
 int	main()
 {
-	t_cmd	*data = NULL;
+	t_cmd	*data;
+	t_cmd	*tmp;
 
-	data = malloc(sizeof(t_cmd));
 	// ft_init(data);
 	while (1)
 	{
+		data = malloc(sizeof(t_cmd));
 		data->args = readline("minishell-$ ");
 		if (!data->args)
+		{
+			printf("exit\n");	
 			break;
-		if(!ft_pros_arg(data))
+		}
+		if(!ft_pros_arg(&data))
 			printf("minishell: command not found: %s\n", data->args);
-		free(data->args);
-		printf("-%s-\n", data->path);
+		tmp = data;
+		while (tmp)
+		{
+			printf("|%s|\n", tmp->cmd);
+			tmp = tmp->pipe;
+		}
+		clear_nodes(&data);
+		
 	}
-	free (data);
 	// system("leaks -q minishell");
 	return (0);
 }

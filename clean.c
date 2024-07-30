@@ -1,46 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 11:24:58 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/30 17:36:08 by adbouras         ###   ########.fr       */
+/*   Created: 2024/07/30 17:47:33 by adbouras          #+#    #+#             */
+/*   Updated: 2024/07/30 18:13:40 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_leaks(void)
+void	free_char_arr(char **arr)
 {
-	system("leaks minishell");
+	int	i;
+
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
 }
 
-void	node_add_back(t_cmd **lst, t_cmd *new)
+// void	clear_nodes(t_cmd **list)
+// {
+// 	t_cmd	*tmp;
+	
+// 	if (!*list)
+// 		return ;
+// 	while (*list)
+// 	{
+// 		tmp = (*list)->pipe;
+// 		free(*list);
+// 		*list = tmp;
+// 	}
+// }
+void	ft_exit(t_cmd *data)
 {
-	t_cmd	*last;
-
-	if (!(*lst)->cmd)
-	{
-		printf("CHECK\n");
-		*lst = new;
-		return ;
-	}
-	last = *lst;
-	while (last->pipe)
-		last = last->pipe;
-	last->pipe = new;
-}
-
-t_cmd	*new_node(char *content)
-{
-	t_cmd	*node;
-
-	node = malloc (sizeof(t_cmd));
-	if (!node)
-		return (NULL);
-	node->cmd = content;
-	node->pipe = NULL;
-	return (node);
+	free (data);
+	exit(1);
 }
