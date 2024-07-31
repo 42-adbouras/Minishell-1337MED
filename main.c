@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:12 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/30 18:34:16 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/07/31 09:30:33 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ bool	ft_pros_arg(t_cmd **data)
 	i = 0;
 	paths = ft_split(getenv("PATH"), ':');
 	pipe = ft_split((*data)->args, '|');
-	// if (!access(data->split[0], X_OK))
-	// 	return (true);
 	while (pipe[i])
 	{
 		pipe[i] = remove_spaces(pipe[i]);
@@ -102,23 +100,9 @@ bool	ft_pros_arg(t_cmd **data)
 	// 	free(p);
 	// 	i++;
 	// }
-	return (false);
+	return (true);
 }
 
-void	clear_nodes(t_cmd **list)
-{
-	t_cmd	*tmp;
-	
-	if (!*list)
-		return ;
-	while (*list)
-	{
-		tmp = (*list)->pipe;
-		free(*list);
-		*list = tmp;
-	}
-	*list = NULL;
-}
 
 int	main()
 {
@@ -144,7 +128,7 @@ int	main()
 			tmp = tmp->pipe;
 		}
 		clear_nodes(&data);
-		
+		free (data);
 	}
 	// system("leaks -q minishell");
 	return (0);

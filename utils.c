@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:24:58 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/30 17:36:08 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/07/31 09:14:00 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	node_add_back(t_cmd **lst, t_cmd *new)
 
 	if (!(*lst)->cmd)
 	{
-		printf("CHECK\n");
 		*lst = new;
 		return ;
 	}
