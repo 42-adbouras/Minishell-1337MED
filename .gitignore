@@ -7,7 +7,7 @@ minishell
 # Compiled libraries
 libft.a
 
-# Build directory
+# Build directories
 objects/
 
 # IDE files

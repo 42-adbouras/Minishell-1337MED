@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:24:58 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/31 09:14:00 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/07/31 20:48:31 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ t_cmd	*new_node(char *content)
 	if (!node)
 		return (NULL);
 	node->cmd = content;
+	node->path = NULL;
+	node->rl = NULL;
+	node->option = NULL;
+	node->split = NULL;
+	node->red_in = NULL;
+	node->red_out = NULL;
 	node->pipe = NULL;
 	return (node);
 }

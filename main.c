@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:12 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/31 09:30:33 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:55:50 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,25 @@ void	ft_add_slash(char **paths)
 }
 
 
-// void	node_init(char **pipes)
-// {
-// 	t_cmd	*new;
-// 	int		i;
+void	node_init(t_cmd **node)
+{
+	(*node) = malloc(sizeof(t_cmd));
+	(*node)->path = NULL;
+	(*node)->rl = NULL;
+	(*node)->cmd = NULL;
+	(*node)->option = NULL;
+	(*node)->split = NULL;
+	(*node)->red_in = NULL;
+	(*node)->red_out = NULL;
+}
 
-// 	i = 0;
-	
-// }
+bool	is_white_space(char c)
+{
+	if (c == ' ' || c == '\t' || c == '\n' ||
+		c == '\r' || c == '\v' || c == '\f')
+		return (true);
+	return (false);
+}
 
 char	*remove_spaces(char *str)
 {
@@ -45,13 +56,13 @@ char	*remove_spaces(char *str)
 	s = malloc(ft_strlen(str));
 	i = 0;
 	j = 0;
-	while (str[i] && str[i] == ' ')
+	while (str[i] && is_white_space(str[i]))
 		i++;
 	while (str[i])
 	{
-		if (str[i] == ' ' && str[i + 1])
+		if (is_white_space(str[i]) && str[i + 1])
 		{
-			while (str[i] && str[i] == ' ')
+			while (str[i] && is_white_space(str[i]))
 				i++;
 			s[j++] = ' ';
 		}
@@ -60,6 +71,43 @@ char	*remove_spaces(char *str)
 	s[j] = '\0';
 	free (str);
 	return (s);
+}
+
+char	**ft_get_tokens(char *cmd)
+{
+	char	*sub;
+	char	*sub2;
+	char	**res;
+	int		i;
+	int		j;
+	
+	i = 0;
+	while (cmd[i] && (cmd[i] != '\'' && cmd[i] != '\"'))
+		i++;
+	sub = ft_substr(cmd, 0, i-1);
+	sub2 = ft_substr(cmd, i, ft_strlen(cmd));
+	res = ft_split(sub, ' ');
+	j = 0;
+	while (res[j])
+		j++;
+	res[j] = ft_strjoin(res[j], sub2);
+	free(sub);
+	return (res);
+}
+
+void	if_executable(t_cmd *data)
+{
+	t_cmd	*temp;
+	char	**tokens;
+	int i = 0;
+	temp = data;
+	while (temp)
+	{
+		tokens = ft_get_tokens(data->cmd);
+		while (tokens[i])
+			printf("%s\n", tokens[i++]);
+		temp = temp->pipe;
+	}
 }
 
 bool	ft_pros_arg(t_cmd **data)
@@ -74,7 +122,7 @@ bool	ft_pros_arg(t_cmd **data)
 
 	i = 0;
 	paths = ft_split(getenv("PATH"), ':');
-	pipe = ft_split((*data)->args, '|');
+	pipe = ft_split((*data)->rl, '|');
 	while (pipe[i])
 	{
 		pipe[i] = remove_spaces(pipe[i]);
@@ -82,6 +130,8 @@ bool	ft_pros_arg(t_cmd **data)
 		node_add_back(data, new);
 		i++;
 	}
+	if_executable(*data);
+		// return (false);
 	// tmp = data;
 	// while (tmp)
 	// {
@@ -109,18 +159,18 @@ int	main()
 	t_cmd	*data;
 	t_cmd	*tmp;
 
-	// ft_init(data);
+	data = NULL;
 	while (1)
 	{
-		data = malloc(sizeof(t_cmd));
-		data->args = readline("minishell-$ ");
-		if (!data->args)
+		node_init(&data);
+		data->rl = readline("minishell-$ ");
+		if (!data->rl)
 		{
-			printf("exit\n");	
+			printf("exit\n");
 			break;
 		}
 		if(!ft_pros_arg(&data))
-			printf("minishell: command not found: %s\n", data->args);
+			printf("minishell: command not found: %s\n", data->rl);
 		tmp = data;
 		while (tmp)
 		{
