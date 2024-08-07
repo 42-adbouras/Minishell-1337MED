@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/22 09:22:41 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/23 13:12:13 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/24 17:46:05 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/26 12:42:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*new_list;
-	t_list	*new_node;
-	void	*content;
+	t_list	*chain;
+	t_list	*node;
+	void	*curnt;
 
 	if (!lst || !f || !del)
 		return (NULL);
-	new_list = NULL;
+	chain = NULL;
 	while (lst != NULL)
 	{
-		content = f(lst->content);
-		new_node = ft_lstnew(content);
-		if (!new_node)
+		curnt = f(lst->content);
+		node = ft_lstnew(curnt);
+		if (!node)
 		{
-			del(content);
-			ft_lstclear(&new_list, del);
+			del(curnt);
+			ft_lstclear(&chain, del);
 			return (NULL);
 		}
-		ft_lstadd_back(&new_list, new_node);
+		ft_lstadd_back(&chain, node);
 		lst = lst->next;
 	}
-	return (new_list);
+	return (chain);
 }

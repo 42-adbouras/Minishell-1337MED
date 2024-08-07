@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/10 16:23:52 by eismail           #+#    #+#             */
-/*   Updated: 2024/05/02 13:19:35 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/10 15:18:36 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/26 12:13:19 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
 	size_t	j;
+	size_t	dst_len;
+	size_t	src_len;
 
+	dst_len = ft_strlen(dst);
+	src_len = ft_strlen(src);
+	j = dst_len;
 	i = 0;
-	j = 0;
-	if (dstsize == 0)
-		return (ft_strlen(src));
-	while ((dst[i] != '\0') && (i < dstsize))
+	if (dstsize <= dst_len)
+		return (dstsize + src_len);
+	while (src[i] != '\0' && j < dstsize - 1)
 	{
+		dst[j] = src[i];
+		j++;
 		i++;
 	}
-	while (src[j] && ((j + i + 1) < dstsize))
-	{
-		dst[i + j] = src[j];
-		j++;
-	}
-	if (i != dstsize)
-		dst[i + j] = '\0';
-	return (i + ft_strlen(src));
+	dst[j] = '\0';
+	return (dst_len + src_len);
 }

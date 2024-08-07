@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/05 11:53:41 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/15 17:25:02 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/05 10:15:34 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/27 10:32:50 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,8 @@
 
 int	ft_isprint(int c)
 {
-	return ((c >= 32) && (c < 127));
+	if (c >= 32 && c <= 126)
+		return (1);
+	else
+		return (0);
 }

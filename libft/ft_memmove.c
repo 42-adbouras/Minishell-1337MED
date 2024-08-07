@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/10 13:18:03 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/24 18:27:13 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/08 15:25:39 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/25 18:06:04 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	unsigned char		*ptr1;
-	unsigned char		*ptr2;
-	size_t				i;
+	unsigned char	*p_src;
+	unsigned char	*p_dst;
 
-	ptr1 = (unsigned char *)dst;
-	ptr2 = (unsigned char *) src;
-	if (src < dst)
+	p_src = (unsigned char *) src;
+	p_dst = (unsigned char *) dst;
+	if (dst > src)
 	{
-		i = len;
-		while (i--)
-			ptr1[i] = ptr2 [i];
+		while (len > 0)
+		{
+			p_dst[len - 1] = p_src[len - 1];
+			len--;
+		}
+		return (p_dst);
 	}
 	else
-		ft_memcpy(ptr1, ptr2, len);
-	return (dst);
+		return (ft_memcpy(p_dst, p_src, len));
 }

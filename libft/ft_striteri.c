@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/18 13:58:49 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/24 18:03:03 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/19 18:19:38 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/28 10:48:51 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
-	unsigned int	i;
+	int		i;
 
 	if (!s)
 		return ;
+	if (!f)
+		return ;
 	i = 0;
-	while (s[i])
+	while (s[i] != '\0')
 	{
-		f(i, &s[i]);
+		f (i, &s[i]);
 		i++;
 	}
 }

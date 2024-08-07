@@ -5,47 +5,69 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 11:24:58 by adbouras          #+#    #+#             */
-/*   Updated: 2024/07/31 20:48:31 by adbouras         ###   ########.fr       */
+/*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
+/*   Updated: 2024/08/07 16:56:03 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_leaks(void)
+char	*ft_strndup(const char *s1, int n)
 {
-	system("leaks minishell");
-}
+	char	*ptr;
+	int		len;
+	int		i;
 
-void	node_add_back(t_cmd **lst, t_cmd *new)
-{
-	t_cmd	*last;
-
-	if (!(*lst)->cmd)
-	{
-		*lst = new;
-		return ;
-	}
-	last = *lst;
-	while (last->pipe)
-		last = last->pipe;
-	last->pipe = new;
-}
-
-t_cmd	*new_node(char *content)
-{
-	t_cmd	*node;
-
-	node = malloc (sizeof(t_cmd));
-	if (!node)
+	len = ft_strlen(s1);
+	ptr = malloc(len + 1);
+	i = 0;
+	if (!ptr)
 		return (NULL);
-	node->cmd = content;
-	node->path = NULL;
-	node->rl = NULL;
-	node->option = NULL;
-	node->split = NULL;
-	node->red_in = NULL;
-	node->red_out = NULL;
-	node->pipe = NULL;
-	return (node);
+	while (i < len && i < n)
+	{
+		ptr[i] = s1[i];
+		i++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
+}
+
+char	*remove_spaces(char *str)
+{
+	char	*s;
+	int		i;
+	int		j;
+
+	s = malloc(ft_strlen(str));
+	i = 0;
+	j = 0;
+	while (str[i] && is_white_space(str[i]))
+		i++;
+	while (str[i])
+	{
+		if (is_white_space(str[i]) && str[i + 1])
+		{
+			while (str[i] && is_white_space(str[i]))
+				i++;
+			s[j++] = ' ';
+		}
+		s[j++] = str[i++];
+	}
+	s[j] = '\0';
+	free (str);
+	return (s);
+}
+
+t_elem	*skip_wspace(t_elem **token, char direction)
+{
+	while ((*token) && (*token)->type == W_SPACE)
+	{
+		if (direction == 'N')
+			(*token) = (*token)->next;
+		else if (direction == 'P')
+			(*token) = (*token)->prev;
+		else
+			return (NULL);
+	}
+	return ((*token));
 }

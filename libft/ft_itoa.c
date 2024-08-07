@@ -3,57 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/16 10:09:06 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/23 22:43:49 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/16 10:29:08 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/20 17:55:10 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	void	fillout(char *s, int num, int i)
+static int	ft_sign(int n)
 {
-	long	nbr;
+	int	sign;
 
-	if (num < 0) 
-		nbr = -(long)num;
-	else
-		nbr = num;
-	while (i > 0)
+	sign = 0;
+	if (n < 0)
+		sign = 1;
+	return (sign);
+}
+
+static int	ft_nlen(long n)
+{
+	int	i;
+
+	i = 0;
+	if (n == 0)
+		return (1);
+	while (n > 0)
 	{
-		i--;
-		s[i] = ((nbr % 10) + '0');
-		nbr /= 10;
+		n = n / 10;
+		i++;
 	}
-	if (num < 0)
-		s[0] = '-';
+	return (i);
+}
+
+static char	*ft_rev_swap(char *str)
+{
+	char	swap;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = ft_strlen(str) - 1;
+	while (i < j)
+	{
+		swap = str[i];
+		str[i] = str[j];
+		str[j] = swap;
+		i++;
+		j--;
+	}
+	return (str);
 }
 
 char	*ft_itoa(int n)
 {
-	int		size_to_allocate;
-	long	nbr;
 	char	*str;
+	int		sign;
+	int		len;
+	int		i;
+	long	long_n;
 
-	size_to_allocate = 0;
-	nbr = n;
-	if (n == 0)
-		size_to_allocate = 1;
-	if (nbr < 0)
-	{
-		size_to_allocate++;
-		nbr *= -1;
-	}
-	while (nbr != 0)
-	{
-		nbr /= 10;
-		size_to_allocate++;
-	}
-	str = malloc((size_to_allocate + 1) * sizeof(char));
+	long_n = n;
+	if (long_n < 0)
+		long_n = long_n * (-1);
+	sign = ft_sign(n);
+	len = ft_nlen(long_n);
+	str = ft_calloc((len + sign + 1), sizeof(char));
 	if (str == NULL)
 		return (NULL);
-	str[size_to_allocate] = '\0';
-	fillout(str, n, size_to_allocate);
-	return (str);
+	i = 0;
+	while (long_n > 0)
+	{
+		str[i++] = long_n % 10 + '0';
+		long_n = long_n / 10;
+	}
+	if (sign == 1)
+		str[i] = '-';
+	if (i == 0)
+		str[i] = '0';
+	return (ft_rev_swap(str));
 }

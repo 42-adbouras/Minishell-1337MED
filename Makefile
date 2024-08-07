@@ -6,7 +6,7 @@
 #    By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/07/30 17:52:41 by adbouras         ###   ########.fr        #
+#    Updated: 2024/08/07 19:09:37 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,17 +17,19 @@ RST	= \033[0;39m
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 LDFLAGS = -lreadline
 
-SRC =  main.c minishell.c  utils.c clean.c
+SRC =  main.c utils.c print.c lexer.c list_utils.c syntax.c parse_utils.c
 
 LIBFT = libft/libft.a
 
 OBJ_DIR = objects/
 
 HDR = minishell.h
+
+NCLD = -I/Users/adbouras/.brew/opt/readline/include
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
@@ -38,14 +40,14 @@ all: $(NAME)
 $(OBJ_DIR)%.o:%.c $(HDR)
 	@echo "$(YLW)[Creating Object $@]$(RST)"
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(NCLD) -c $< -o $@
 
 $(NAME): $(OBJ)
 	@echo "$(YLW)[Compiling libft]$(RST)"
 	@make -C libft
 	@echo "$(GRN)[libft Compiled]$(RST)" && sleep 1
 	@echo "$(YLW)[Compiling ...]$(RST)"
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) $(LDFLAGS)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -L/Users/adbouras/.brew/opt/readline/lib $(LDFLAGS) -o $(NAME)
 	@echo "$(GRN)[Compiled]$(RST)"
 
 clean:
@@ -56,6 +58,6 @@ clean:
 fclean: clean
 	@make fclean -C libft
 	@rm -rf $(NAME)
-	@echo "$(RED)[Removed EXE]$(RST)"
+	@echo "$(RED)[Removed $(NAME)]$(RST)"
 
 re: fclean all

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 16:03:51 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/23 16:21:49 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/09 18:58:03 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/19 18:11:41 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,26 @@
 int	ft_atoi(const char *str)
 {
 	int	i;
-	int	neg_flg;
-	int	res;
+	int	sign;
+	int	result;
 
 	i = 0;
-	neg_flg = 1;
-	res = 0;
-	while ((str[i] == ' ') || ((str[i] >= 9) && (str[i] <= 13)))
+	sign = 1;
+	result = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
 	{
 		i++;
 	}
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-		{
-			neg_flg *= -1;
-		}
+			sign = -1;
 		i++;
 	}
-	while ((str[i] >= '0') && (str[i] <= '9'))
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		res = (res * 10) + (str[i] - '0');
+		result = (result * 10) + (str[i] - '0');
 		i++;
 	}
-	return (res * neg_flg);
+	return (result * sign);
 }

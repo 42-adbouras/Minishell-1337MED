@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/04 22:19:03 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/15 15:50:13 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/04 19:34:41 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/27 10:32:21 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,8 @@
 
 int	ft_isascii(int c)
 {
-	return ((c >= 0) && (c <= 127));
+	if (c >= 0 && c <= 127)
+		return (1);
+	else
+		return (0);
 }

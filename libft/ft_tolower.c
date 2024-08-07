@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 17:07:01 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/20 17:35:08 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/08 17:09:30 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/30 13:39:14 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 int	ft_tolower(int c)
 {
-	if ((c >= 'A') && (c <= 'Z'))
-	{
-		return (c + 32);
-	}
+	if (c >= 'A' && c <= 'Z')
+		c = c + 32;
 	return (c);
 }

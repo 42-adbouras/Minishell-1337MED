@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/16 17:08:49 by eismail           #+#    #+#             */
-/*   Updated: 2023/12/18 13:58:01 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/19 14:56:00 by adbouras          #+#    #+#             */
+/*   Updated: 2023/12/28 10:40:11 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,22 @@
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	unsigned int	i;
-	char			*rezz;
+	int		i;
+	char	*p_s;
 
 	i = 0;
-	if (!s || (!s && !f))
-		return (ft_strdup(""));
+	if (!s)
+		return (NULL);
 	if (!f)
 		return (ft_strdup(s));
-	rezz = ft_strdup(s);
-	if (!rezz)
+	p_s = malloc ((ft_strlen(s) + 1) * sizeof(char));
+	if (p_s == NULL)
 		return (NULL);
-	while (s[i])
+	while (s[i] != '\0')
 	{
-		rezz[i] = (*f)(i, s[i]);
+		p_s[i] = f(i, s[i]);
 		i++;
 	}
-	return (rezz);
+	p_s[i] = '\0';
+	return (p_s);
 }

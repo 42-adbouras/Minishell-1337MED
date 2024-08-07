@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/14 15:08:13 by eismail           #+#    #+#             */
-/*   Updated: 2024/01/17 17:26:50 by eismail          ###   ########.fr       */
+/*   Created: 2023/12/12 21:22:11 by adbouras          #+#    #+#             */
+/*   Updated: 2024/08/07 17:03:45 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,28 @@
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*temp;
+	char	*sub_str;
+	int		size;
 	size_t	i;
-	int		size_to_allocate;
-	size_t	s_len;
 
-	i = 0;
-	s_len = ft_strlen(s);
-	size_to_allocate = 0;
 	if (!s)
 		return (NULL);
-	if (start > s_len)
+	if (start > ft_strlen(s))
 		return (ft_strdup(""));
-	if ((ft_strlen(s + start)) > len)
-		size_to_allocate = len;
+	if (ft_strlen(s + start) < len)
+		size = ft_strlen(s + start);
 	else
-		size_to_allocate = ft_strlen(s + start);
-	temp = malloc(sizeof(char) * (size_to_allocate + 1));
-	if (temp == NULL)
+		size = len;
+	sub_str = malloc((size + 1) * sizeof(char));
+	if (sub_str == NULL)
 		return (NULL);
-	while ((start < s_len) && (s[start] != '\0') && (i < len))
-		temp[i++] = s[start++];
-	temp[i] = '\0';
-	return (temp);
+	i = 0;
+	while ((i < len) && (start < ft_strlen(s)))
+	{
+		sub_str[i] = s[start];
+		start++;
+		i++;
+	}
+	sub_str[i] = '\0';
+	return (sub_str);
 }
