@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/09 11:37:06 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:28:10 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_data
 	int		size;
 }	t_data;
 
-typedef struct s_data_exec
+typedef struct s_exec
 {
 	char				**path_option_args;	// /bin/ls -la libft
 	char				**redir_in;			// files_name 
@@ -75,8 +75,8 @@ typedef struct s_data_exec
 	char				**heredoc_end;			// delimiter
 	bool				append;				// last >>
 	bool				heredoc;				// last <<
-	struct s_data_exec	*next;
-}	t_data_exec;
+	struct s_exec		*next;
+}	t_exec;
 
 /***	utils.c				***********************************************/
 void	init_data(t_data **tokens);
@@ -115,4 +115,5 @@ bool	is_white_space(char c);
 void	print_tokens(t_data *tokens);
 char	*state_to_string(t_state state);
 char	*token_to_string(t_token token);
+
 #endif

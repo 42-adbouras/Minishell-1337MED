@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/08 12:20:39 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:21:30 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 void	init_data(t_data **tokens)
 {
 	*tokens = malloc(sizeof(t_data));
+	if (!(*tokens))
+		printf("malloc!\n");
 	(*tokens)->head = NULL;
-	(*tokens)->tail = NULL;
+	// (*tokens)->tail = NULL;
 	(*tokens)->size = 0;
 }
 

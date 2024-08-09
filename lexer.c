@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:11:03 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/09 11:32:13 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:31:31 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	red_token(t_data *tokens, char *read, int i, t_state *status)
 			token_add_back(tokens, new_token(&read[i++],
 					2, REDIR_APP, *status));
 		else
-			token_add_back(tokens, new_token(&read[i++],
+			token_add_back(tokens, new_token(&read[i],
 					1, REDIR_OUT, *status));
 		i++;
 	}
@@ -80,7 +80,7 @@ int	red_token(t_data *tokens, char *read, int i, t_state *status)
 			token_add_back(tokens, new_token(&read[i++],
 					2, REDIR_AND, *status));
 		else
-			token_add_back(tokens, new_token(&read[i++],
+			token_add_back(tokens, new_token(&read[i],
 					1, REDIR_IN, *status));
 		i++;
 	}
