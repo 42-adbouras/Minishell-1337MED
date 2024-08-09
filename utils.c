@@ -6,11 +6,19 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/07 16:56:03 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/08 12:20:39 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	init_data(t_data **tokens)
+{
+	*tokens = malloc(sizeof(t_data));
+	(*tokens)->head = NULL;
+	(*tokens)->tail = NULL;
+	(*tokens)->size = 0;
+}
 
 char	*ft_strndup(const char *s1, int n)
 {
@@ -56,18 +64,4 @@ char	*remove_spaces(char *str)
 	s[j] = '\0';
 	free (str);
 	return (s);
-}
-
-t_elem	*skip_wspace(t_elem **token, char direction)
-{
-	while ((*token) && (*token)->type == W_SPACE)
-	{
-		if (direction == 'N')
-			(*token) = (*token)->next;
-		else if (direction == 'P')
-			(*token) = (*token)->prev;
-		else
-			return (NULL);
-	}
-	return ((*token));
 }

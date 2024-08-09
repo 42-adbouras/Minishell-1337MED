@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/07 12:54:14 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/09 11:40:25 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ bool	pipe_syntax(t_elem *token)
 	t_elem	*next;
 	t_elem	*prev;
 
-	next = skip_wspace(&token->next, 'N');
-	prev = skip_wspace(&token->prev, 'P');
-	printf("N: %s\nP: %s\n", next->content, prev->content);
+	next = skip_wspace(token->next, 'N');
+	prev = skip_wspace(token->prev, 'P');
 	if (!next || !prev)
 		return (false);
 	if (next->type != WORD && !is_red(next->type))
@@ -36,7 +35,6 @@ bool	if_syntax_err(t_data *tokens)
 	tmp = tokens->head;
 	while (tmp)
 	{
-		// Handle quotes
 		if (tmp->type == D_QUOTE || tmp->type == S_QUOTE)
 		{
 			if (!if_closed_quotes(&tmp, tmp->type))
@@ -45,7 +43,6 @@ bool	if_syntax_err(t_data *tokens)
 				return (true);
 			}
 		}
-		// Handle red
 		if (is_red(tmp->type))
 		{
 			if (!red_syntax(tmp))
@@ -54,7 +51,6 @@ bool	if_syntax_err(t_data *tokens)
 				return (true);
 			}
 		}
-		// Handle pipe
 		if (tmp->type == PIPE)
 		{
 			if (!pipe_syntax(tmp))
@@ -83,7 +79,7 @@ bool	red_syntax(t_elem *token)
 {
 	t_elem	*next;
 
-	next = skip_wspace(&token->next, 'N');
+	next = skip_wspace(token->next, 'N');
 	if (!next || next->type != WORD)	// maybe missing conditions!
 		return (false);
 	return (true);

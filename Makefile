@@ -6,7 +6,7 @@
 #    By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/08/07 19:09:37 by adbouras         ###   ########.fr        #
+#    Updated: 2024/08/08 09:13:14 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ RST	= \033[0;39m
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 LDFLAGS = -lreadline
 

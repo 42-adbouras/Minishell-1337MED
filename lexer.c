@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:11:03 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/07 19:00:05 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/09 11:32:13 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,13 @@ int	ft_tokenize(t_data *tokens, char *read, int i, t_state *status)
 		quote_token(tokens, &read[i++], S_QUOTE, status);
 	else if (read[i] == '$')
 		token_add_back(tokens, new_token(&read[i++], 1, ENV, *status));
-	// system ("leaks -q minishell");
 	return (i);
 }
 
 int	get_word(t_data *tokens, char *read, t_state status)
 {
-	int	i;
-	char *sub;
+	char	*sub;
+	int		i;
 
 	i = 0;
 	while (read[i] && !is_grammar(read[i]))
@@ -68,17 +67,21 @@ int	red_token(t_data *tokens, char *read, int i, t_state *status)
 	if (read[i] == '>')
 	{
 		if (read[i + 1] == '>')
-			token_add_back(tokens, new_token(&read[i++], 2, REDIR_APP, *status));
+			token_add_back(tokens, new_token(&read[i++],
+					2, REDIR_APP, *status));
 		else
-			token_add_back(tokens, new_token(&read[i++], 1, REDIR_OUT, *status));
+			token_add_back(tokens, new_token(&read[i++],
+					1, REDIR_OUT, *status));
 		i++;
 	}
 	else if (read[i] == '<')
 	{
 		if (read[i + 1] == '<')
-			token_add_back(tokens, new_token(&read[i++], 2, REDIR_AND, *status));
+			token_add_back(tokens, new_token(&read[i++],
+					2, REDIR_AND, *status));
 		else
-			token_add_back(tokens, new_token(&read[i++], 1, REDIR_IN, *status));
+			token_add_back(tokens, new_token(&read[i++],
+					1, REDIR_IN, *status));
 		i++;
 	}
 	return (i - old_i);

@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/07 18:31:14 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/09 11:32:39 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_elem	*last_token(t_elem *token)
 	}
 	return (last);
 }
+
 void	token_add_back(t_data *token, t_elem *new)
 {
 	if (!token && !new)
@@ -52,4 +53,18 @@ void	token_add_back(t_data *token, t_elem *new)
 	}
 	token->tail = new;
 	token->size++;
+}
+
+t_elem	*skip_wspace(t_elem *token, char direction)
+{
+	while (token && token->type == W_SPACE)
+	{
+		if (direction == 'N')
+			token = token->next;
+		else if (direction == 'P')
+			token = token->prev;
+		else
+			return (NULL);
+	}
+	return (token);
 }
