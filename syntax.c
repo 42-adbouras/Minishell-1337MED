@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/10 12:10:18 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/10 17:12:02 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,18 @@ bool	if_syntax_err(t_data *tokens)
 		if (tmp->type == D_QUOTE || tmp->type == S_QUOTE)
 		{
 			if (!if_closed_quotes(&tmp, tmp->type))
-			{
-				ft_error("[syntax error detected unclosed ' or \"]\n");
-				return (true);
-			}
+				return (ft_error("[syntax error detected unclosed ' or \"]\n"));
 		}
 		if (is_red(tmp->type))
 		{
 			if (!red_syntax(tmp))
-			{
-				ft_error("[syntax error near unexpected token `newline']\n");
-				return (true);
-			}
+				return (ft_error(
+						"[syntax error near unexpected token `newline']\n"));
 		}
 		if (tmp->type == PIPE)
 		{
 			if (!pipe_syntax(tmp))
-			{
-				ft_error("[syntax error near unexpected token `|']\n");
-				return (true);
-			}
+				return (ft_error("[syntax error near unexpected token `|']\n"));
 		}
 		tmp = tmp->next;
 	}

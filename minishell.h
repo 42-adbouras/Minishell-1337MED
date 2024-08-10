@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/10 12:01:33 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/10 17:23:08 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,23 +70,23 @@ typedef struct s_elem
 	struct s_elem	*prev;
 }	t_elem;
 
+typedef struct s_exec
+{
+	char			**path_option_args;	// /bin/ls -la libft
+	char			**redir_in;			// files_name 
+	char			**redir_out;			// files_name
+	char			**heredoc_end;			// delimiter
+	bool			append;				// last >>
+	bool			heredoc;				// last <<
+	struct s_exec	*next;
+}	t_exec;
+
 typedef struct s_data
 {
 	t_elem	*head;
-	t_elem	*tail;
+	t_exec	*exec;
 	int		size;
 }	t_data;
-
-typedef struct s_exec
-{
-	char				**path_option_args;	// /bin/ls -la libft
-	char				**redir_in;			// files_name 
-	char				**redir_out;			// files_name
-	char				**heredoc_end;			// delimiter
-	bool				append;				// last >>
-	bool				heredoc;				// last <<
-	struct s_exec		*next;
-}	t_exec;
 
 /***	utils.c				***********************************************/
 void	init_data(t_data **tokens);
@@ -126,7 +126,7 @@ void	free_tokens(t_data **tokens);
 
 /***	error.c				***********************************************/
 void	ft_exit(t_data **tokens, char *err);
-void	ft_error(char *err);
+bool	ft_error(char *err);
 
 /***	print.c				***********************************************/
 void	print_tokens(t_data *tokens);
