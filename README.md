@@ -1,5 +1,5 @@
 # Hi, this project called minishell but the 's' is silent 👹.
-This project is about creating a simple shell.
+This project is about creating a simple shell, developed by me (adbouras) and [(eismail)](https://github.com/ism417).
 
 ## What is a shell?!
 
