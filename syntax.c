@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/09 11:40:25 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/10 12:10:18 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	if_syntax_err(t_data *tokens)
 		{
 			if (!if_closed_quotes(&tmp, tmp->type))
 			{
-				printf("UNCLOSED QUOTES\n");
+				ft_error("[syntax error detected unclosed ' or \"]\n");
 				return (true);
 			}
 		}
@@ -47,7 +47,7 @@ bool	if_syntax_err(t_data *tokens)
 		{
 			if (!red_syntax(tmp))
 			{
-				printf("REDIRECTION SYNTAX ERR\n");
+				ft_error("[syntax error near unexpected token `newline']\n");
 				return (true);
 			}
 		}
@@ -55,7 +55,7 @@ bool	if_syntax_err(t_data *tokens)
 		{
 			if (!pipe_syntax(tmp))
 			{
-				printf("PIPE SYNTAX ERR\n");
+				ft_error("[syntax error near unexpected token `|']\n");
 				return (true);
 			}
 		}

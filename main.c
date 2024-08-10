@@ -3,32 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/09 12:23:08 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/10 11:58:05 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens(t_data **tokens)
-{
-	t_elem *node = (*tokens)->head;
-	t_elem *temp;
-	
-	node = (*tokens)->head;
-	while (node)
-	{
-		temp = node;
-		node = node->next;
-		free(temp->content);
-		free(temp);
-	}
-	free(*tokens);
-}
-
-
+void _lks(){system("leaks -q minishell");}
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
@@ -36,7 +20,8 @@ int main(int ac, char **av, char **env)
 	(void)env;
 	char    *rl;
 	t_data  *tokens;
-
+	
+	atexit(_lks);
 	while (1)
 	{
 		init_data(&tokens);
@@ -52,7 +37,7 @@ int main(int ac, char **av, char **env)
 			free (rl);
 			free_tokens(&tokens);	
 		}
-		system ("leaks minishell");
+		// system ("leaks minishell");
 	}
 	clear_history();
 }

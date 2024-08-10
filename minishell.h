@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/09 12:28:10 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/10 12:01:33 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,17 @@
 # include <readline/history.h>
 # include <curses.h>
 # include <term.h>
+# include <errno.h>
 # include "libft/libft.h"
+
+# define BBLK "\e[1;30m"
+# define BRED "\e[1;31m"
+# define BGRN "\e[1;32m"
+# define BYEL "\e[1;33m"
+# define BBLU "\e[1;34m"
+# define BMAG "\e[1;35m"
+# define BCYN "\e[1;36m"
+# define RSET "\e[0m"
 
 # define PROMPT "~ "
 
@@ -110,6 +120,13 @@ bool	red_syntax(t_elem *token);
 bool	is_red(t_token type);
 bool	is_grammar(char c);
 bool	is_white_space(char c);
+
+/***	clean.c				***********************************************/
+void	free_tokens(t_data **tokens);
+
+/***	error.c				***********************************************/
+void	ft_exit(t_data **tokens, char *err);
+void	ft_error(char *err);
 
 /***	print.c				***********************************************/
 void	print_tokens(t_data *tokens);
