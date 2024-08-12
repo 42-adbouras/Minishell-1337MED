@@ -48,3 +48,31 @@ but it’s most commonly associated with command-line interfaces (CLIs). Here ar
 		* `unset` with no options
 		* `env` with no options or arguments
 		* `exit` with no options
+
+## I - Displaying the prompt & reading the command.
+For displaying the prompt and getting the command from the terminal, we have the right to work with the function `read_line()` which does both actions at the same time.
+```c
+	#define PROMPT "minishell $ "
+
+	char	*rl;
+
+	while (1)
+	{
+		rl = read_line(PROMPT);
+		add_history(rl);		// add rl to a working history.
+		printf("%s\n", rl);
+	}
+	clear_history();			// frees the working history.
+```
+Now that we've read the command, the next step is to parse it. I’ve decided to proceed with lexing.
+
+
+
+
+
+
+
+
+
+
+
