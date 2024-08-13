@@ -53,17 +53,37 @@ but it’s most commonly associated with command-line interfaces (CLIs). Here ar
 For displaying the prompt and getting the command from the terminal, we have the right to work with the function `read_line()` which does both actions at the same time.
 ```c
 	#define PROMPT "minishell $ "
-
+ 
 	char	*rl;
 
 	while (1)
 	{
-		rl = read_line(PROMPT);
+		rl = readline(PROMPT);
 		add_history(rl);		// add rl to a working history.
 		printf("%s\n", rl);
 	}
 	clear_history();			// frees the working history.
 ```
+NOTICE: You may encounter some issues with the readline library. Please ensure you follow these steps:
+* Include the necessary headers in your code:
+```c 
+	#include <stdio.h>
+	#include <readline/readline.h>
+	#include <readline/history.h>
+```
+* Add the following linker command to your Makefile: `-lreadline`
+If you continue to experience problems with the readline library, you may need to install it manually:
+* Intall [homebrew](https://github.com/kube/42homebrew).
+* Then, install the readline library using the following command
+```bash
+brew install readline
+```
+* Ensure you link it in your Makefile by adding:
+```makefile
+LDFLAGS = -L/Users/<login>/.brew/opt/readline/lib
+INCLUDES = -I/Users/<login>/.brew/opt/readline/include
+``` 
+
 Now that we've read the command, the next step is to parse it. I’ve decided to proceed with lexing.
 
 
