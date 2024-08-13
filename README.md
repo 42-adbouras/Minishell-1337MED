@@ -71,7 +71,7 @@ NOTICE: You may encounter some issues with the readline library. Please ensure y
 	#include <readline/readline.h>
 	#include <readline/history.h>
 ```
-* Add the following linker command to your Makefile: `-lreadline`
+* Add the following linker command to your Makefile: `-lreadline`\
 If you continue to experience problems with the readline library, you may need to install it manually:
 * Intall [homebrew](https://github.com/kube/42homebrew).
 * Then, install the readline library using the following command
@@ -79,14 +79,16 @@ If you continue to experience problems with the readline library, you may need t
 brew install readline
 ```
 * Ensure you link it in your Makefile by adding:
-```makefile
+```bash
 LDFLAGS = -L/Users/<login>/.brew/opt/readline/lib
 INCLUDES = -I/Users/<login>/.brew/opt/readline/include
 ``` 
 
 Now that we've read the command, the next step is to parse it. I’ve decided to proceed with lexing.
 
-
+## II - Lexer
+A lexer (or lexical analyzer) play crucial role in the process of translating a string (or code) into a sequence of tokens.\
+Tokens are categorized strings or symbols that represent the basic building blocks of the language, such as keywords, operators, identifiers.
 
 
 
