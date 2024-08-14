@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/09 12:21:30 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:04:20 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_data(t_data **tokens)
 	if (!(*tokens))
 		printf("malloc!\n");
 	(*tokens)->head = NULL;
-	// (*tokens)->tail = NULL;
+	(*tokens)->exec = NULL;
 	(*tokens)->size = 0;
 }
 
@@ -28,6 +28,8 @@ char	*ft_strndup(const char *s1, int n)
 	int		len;
 	int		i;
 
+	if (!s1)
+		return (NULL);
 	len = ft_strlen(s1);
 	ptr = malloc(len + 1);
 	i = 0;

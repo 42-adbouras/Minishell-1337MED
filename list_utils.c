@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/10 11:07:09 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:57:31 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	token_add_back(t_data *tokens, t_elem *new)
 
 t_elem	*skip_wspace(t_elem *token, char direction)
 {
+	
 	while (token && token->type == W_SPACE)
 	{
 		if (direction == 'N')
