@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/10 17:37:36 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:42:37 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "exec_head.h"
 
 void _lks(){system("leaks -q minishell");}
 
@@ -28,11 +29,13 @@ int main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
-	(void)env;
+	t_env *envi;
+	
 	char    *rl;
 	t_data  *tokens;
 	
 	atexit(_lks);
+	set_env(&envi, env); // enviroment initialize
 	while (1)
 	{
 		init_data(&tokens);
@@ -50,7 +53,8 @@ int main(int ac, char **av, char **env)
 				
 			}
 			free (rl);
-			free_tokens(&tokens);	
+			free_tokens(&tokens);
+			free_env(envi); // free enviroment struct
 		}
 		// system ("leaks minishell");
 	}

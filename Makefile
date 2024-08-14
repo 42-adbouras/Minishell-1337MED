@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
+#    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/08/10 11:16:38 by adbouras         ###   ########.fr        #
+#    Updated: 2024/08/14 10:40:08 by eismail          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 LDFLAGS = -lreadline -L/Users/adbouras/.brew/opt/readline/lib
 
-SRC =  main.c utils.c print.c lexer.c list_utils.c syntax.c parse_utils.c clean.c error.c
+SRC =  main.c utils.c print.c lexer.c list_utils.c syntax.c parse_utils.c clean.c error.c env.c
 
 LIBFT = libft/libft.a
 
