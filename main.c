@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/14 19:58:31 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/15 13:20:14 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,43 @@ int	count_words(t_elem *tokens)
 	return (count);
 }
 
-char	*get_arg(t_elem *token)
+int	count_red(t_elem *tokens)
 {
-	t_elem	*tmp;
+	int count;
+
+	count = 0;
+	while (tokens)
+	{
+		if (is_red(tokens->type))
+			count++;
+		tokens = tokens->next;
+	}
+	return (count);
+}
+
+char	*get_arg(t_elem **token)
+{
 	char	*arg;
 	t_state	state;
 
 	arg = NULL;
-	tmp = token->next;
-	state = token->next->state;
-	while (tmp && tmp->state == state)
+	(*token) = (*token)->next;
+	state = (*token)->next->state;
+	while ((*token) && (*token)->state == state)
 	{
-		arg = ft_strjoin(arg, tmp->content);
-		tmp = tmp->next;
+		arg = ft_strjoin(arg, (*token)->content);
+		(*token) = (*token)->next;
 	}
 	return (arg);
 }
 
+// void	get_red(t_exec **new, t_elem *token)
+// {
+// 	t_elem	*tmp;
+
+// 	tmp = skip_wspace(token->next, 'N');
+	
+// }
 t_exec	*new_exec(t_elem *tokens)
 {
 	t_exec	*new;
@@ -66,6 +86,12 @@ t_exec	*new_exec(t_elem *tokens)
 	temp = tokens;
 	new = malloc(sizeof(t_exec));
 	new->path_option_args = malloc(sizeof(char *) * (count_words(tokens) + 1));
+	new->redir_in = malloc(sizeof(char *) * (count_red(tokens) + 1));
+	new->redir_out = malloc(sizeof(char *) * (count_red(tokens) + 1));
+	new->heredoc_end = malloc(sizeof(char *) * (count_red(tokens) + 1));
+	new->append = false;
+	new->heredoc = false;
+	new->next = NULL;
 	while (temp && temp->type != PIPE)
 	{
 		if (temp->type == WORD)
@@ -76,26 +102,30 @@ t_exec	*new_exec(t_elem *tokens)
 		}
 		else if ((temp->type == D_QUOTE || temp->type == S_QUOTE) && temp->next)
 		{
-			new->path_option_args[i++] = get_arg(temp);
+			new->path_option_args[i++] = get_arg(&temp);
 		}
+		// else if (is_red(temp->type))
+		// {
+		// 	get_red(&new, temp);
+		// }
 		temp = temp->next;
 	}
 	new->path_option_args[i] = NULL;
 	return (new);
 }
 
-void	exec_add_back(t_exec *exec, t_exec *new)
+void	exec_add_back(t_exec **exec, t_exec *new)
 {
 	t_exec	*last;
 
-	if (!exec && !new)
+	if (!*exec && !new)
 		return ;
-	if (!exec)
+	if (!*exec)
 	{
-		exec = new;
+		*exec = new;
 		return ;
 	}
-	last = exec;
+	last = *exec;
 	while (last->next)
 	{
 		last = last->next;
@@ -111,10 +141,25 @@ void	init_exec_struct(t_data **data)
 	temp = (*data)->head;
 	while (temp)
 	{
-		new = new_exec((*data)->head);
-		exec_add_back((*data)->exec, new);
+		new = new_exec(temp);
+		exec_add_back(&(*data)->exec, new);
 		while (temp && temp->type != PIPE)
 			temp = temp->next;
+		 if (temp)
+            temp = temp->next;
+	}
+	t_exec *tmp = (*data)->exec;
+	int i = 0;
+	int j = 1;
+	while (tmp)
+	{
+		i = 0;
+		while (tmp->path_option_args[i])
+		{
+			printf("%d-> %s\n",j , tmp->path_option_args[i++]);
+		}
+		tmp = tmp->next;
+		j++;
 	}
 }
 
