@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/15 20:13:07 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:12:40 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,10 @@ void	get_red(t_exec **new, t_elem **token)
 	else if (temp == REDIR_AND)
 		(*new)->heredoc = true;
 }
+bool	get_access(char *path)
+{
+	if (access)
+}
 t_exec	*new_exec(t_elem *tokens)
 {
 	t_exec	*new;
@@ -146,9 +150,12 @@ t_exec	*new_exec(t_elem *tokens)
 	{
 		if (temp->type == WORD)
 		{
-			new->path_option_args[i++] = get_cmd(temp);
+			new->path_option_args[i] = get_cmd(temp);
 			if (!new->path_option_args)
 				return (NULL);
+			if (!get_access(new->path_option_args[i]))
+				return (NULL);
+			i++;
 		}
 		else if ((temp->type == D_QUOTE || temp->type == S_QUOTE) && temp->next)
 		{
@@ -204,12 +211,12 @@ void	init_exec_struct(t_data **data)
 	while (tmp)
 	{
 		i = 0;
-		for(int x = 0; tmp->redir_in[x]; x++)
-			printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
-		for(int y = 0; tmp->redir_out[y]; y++)
-			printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
-		for(int z = 0; tmp->heredoc_end[z]; z++)
-			printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
+		// for(int x = 0; tmp->redir_in[x]; x++)
+		// 	printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
+		// for(int y = 0; tmp->redir_out[y]; y++)
+		// 	printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
+		// for(int z = 0; tmp->heredoc_end[z]; z++)
+		// 	printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
 		while (tmp->path_option_args[i])
 		{
 			printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
