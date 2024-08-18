@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:11:03 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/15 13:28:25 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/18 18:57:17 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_lexing(char *read, t_data **tokens)
 	{
 		i = ft_tokenize(*tokens, read, i, &state);
 	}
-	// print_tokens(*tokens);
+	print_tokens(*tokens);
 }
 
 int	ft_tokenize(t_data *tokens, char *read, int i, t_state *status)
