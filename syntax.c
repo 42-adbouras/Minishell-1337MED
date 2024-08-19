@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/15 13:37:01 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/18 11:31:59 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	pipe_syntax(t_elem *token)
 		return (false);
 	if (next->type != WORD && !is_red(next->type))
 		return (false);
-	if (prev->type != WORD)
+	if (prev->type != WORD && prev->type != D_QUOTE && prev->type != S_QUOTE) // double QUOTE before pip
 		return (false);
 	return (true);
 }
