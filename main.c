@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/18 19:09:40 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/19 11:31:52 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,21 @@ bool last_heredoc(t_elem	*token)
 		return (true);
 	return (false);
 }
-t_exec	*new_exec(t_elem *tokens)
+char *ft_expand(t_env *env, char *var)
+{
+	int i;
+	
+	i = 0;
+	while(env)
+	{
+		if (!ft_strncmp(env->var, var, ft_strlen(env->var) + 1))
+			return (env->value);
+		i++;
+		env = env->next;
+	}
+	return (NULL);
+}
+t_exec	*new_exec(t_elem *tokens, t_env *env)
 {
 	t_exec	*new;
 	t_elem	*temp;
@@ -144,24 +158,53 @@ t_exec	*new_exec(t_elem *tokens)
 			// 	return (NULL);
 			i++;
 		}
-		else if ((temp->type == D_QUOTE || temp->type == S_QUOTE) && temp->next)
+		else if (temp->type == S_QUOTE && temp->next)
 		{
 			new->path_option_args[i++] = get_arg(&temp);
 		}
-		else if (temp->type == ENV  && temp->next)
+		else if (temp->type == D_QUOTE && temp->next)
 		{
 			temp = temp->next;
-			ft_expand();
-			new->path_option_args[i++] = get_arg(&temp);
+			while (temp && temp->type == W_SPACE)
+				temp = temp->next;
+			if (temp->type == ENV)
+			{
+				if(temp->next)
+				{
+					temp = temp->next;
+					if (temp->type == WORD)
+						new->path_option_args[i++] = ft_expand(env, temp->content);
+					else
+						new->path_option_args[i++] = ft_strdup("$");
+				}
+				else
+					new->path_option_args[i++] = ft_strdup("$");
+			}
+			else
+				new->path_option_args[i++] = get_arg(&temp);
+		}
+		else if (temp->type == ENV)
+		{
+			if(temp->next)
+			{
+				temp = temp->next;
+				if (temp->type == WORD)
+					new->path_option_args[i++] = ft_expand(env, temp->content);
+				else
+					new->path_option_args[i++] = ft_strdup("$");
+			}
+			else
+				new->path_option_args[i++] = ft_strdup("$");
 		}
 		else if (is_red(temp->type))
 		{
 			if (temp->type == REDIR_IN )
 			{
+				new->heredoc = false;
 				new->redir_in[i] = get_redirec(&temp);
 				j++;
 			}
-			if (temp->type == REDIR_OUT || temp->type == REDIR_APP)
+			else if (temp->type == REDIR_OUT || temp->type == REDIR_APP)
 			{
 				new->append = false;
 				if (temp->type == REDIR_APP)
@@ -169,7 +212,7 @@ t_exec	*new_exec(t_elem *tokens)
 				new->redir_out[l] = get_redirec(&temp);
 				l++;
 			}
-			if (temp->type == REDIR_AND)
+			else if (temp->type == REDIR_AND)
 			{
 				new->heredoc_end[n] = get_redirec(&temp);
 				new->heredoc = last_heredoc(temp);
@@ -201,7 +244,7 @@ void	exec_add_back(t_exec **exec, t_exec *new)
 	last->next = new;
 }
 
-void	init_exec_struct(t_data **data)
+void	init_exec_struct(t_data **data, t_env *env)
 {
 	t_exec	*new;
 	t_elem	*temp;
@@ -209,51 +252,51 @@ void	init_exec_struct(t_data **data)
 	temp = (*data)->head;
 	while (temp)
 	{
-		new = new_exec(temp);
+		new = new_exec(temp, env);
 		exec_add_back(&(*data)->exec, new);
 		while (temp && temp->type != PIPE)
 			temp = temp->next;
 		 if (temp)
             temp = temp->next;
 	}
-	t_exec *tmp = (*data)->exec;
-	int i = 0;
-	int j = 1;
-	while (tmp)
-	{
-		i = 0;
-		// for(int x = 0; tmp->redir_in[x]; x++)
-		// 	printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
-		// for(int y = 0; tmp->redir_out[y]; y++)
-		// 	printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
-		// for(int z = 0; tmp->heredoc_end[z]; z++)
-		// 	printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
-		// if (tmp->heredoc)
-		// 	printf("[last redirection is a heredoc]\n");
-		// if (tmp->append)
-		// 	printf("[last redirection is a append]\n");
-		while (tmp->path_option_args[i])
-		{
-			printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
-			i++;
-		}
-		tmp = tmp->next;
-		j++;
-	}
+	// t_exec *tmp = (*data)->exec;
+	// int i = 0;
+	// int j = 1;
+	// while (tmp)
+	// {
+	// 	i = 0;
+	// 	// for(int x = 0; tmp->redir_in[x]; x++)
+	// 	// 	printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
+	// 	// for(int y = 0; tmp->redir_out[y]; y++)
+	// 	// 	printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
+	// 	// for(int z = 0; tmp->heredoc_end[z]; z++)
+	// 	// 	printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
+	// 	// if (tmp->heredoc)
+	// 	// 	printf("[last redirection is a heredoc]\n");
+	// 	// if (tmp->append)
+	// 	// 	printf("[last redirection is a append]\n");
+	// 	while (tmp->path_option_args[i])
+	// 	{
+	// 		printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
+	// 		i++;
+	// 	}
+	// 	tmp = tmp->next;
+	// 	j++;
+	// }
 }
 
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
-	(void)env;
-	// t_env *envi;
+	// (void)env;
+	t_env *envi;
 	
 	char    *rl;
 	t_data  *tokens;
 	
 	// atexit(_lks);
-	// set_env(&envi, env); // enviroment initialize
+	set_env(&envi, env); // enviroment initialize
 	while (1)
 	{
 		init_data(&tokens);
@@ -266,9 +309,32 @@ int main(int ac, char **av, char **env)
 			ft_lexing(rl, &tokens);
 			if (!if_syntax_err(tokens))
 			{
-				init_exec_struct(&tokens);
+				init_exec_struct(&tokens, envi);
+				t_exec *tmp = tokens->exec;
+				int i = 0;
+				int j = 1;
+				while (tmp)
+				{
+					i = 0;
+					for(int x = 0; tmp->redir_in[x]; x++)
+						printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
+					for(int y = 0; tmp->redir_out[y]; y++)
+						printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
+					for(int z = 0; tmp->heredoc_end[z]; z++)
+						printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
+					if (tmp->heredoc)
+						printf("[last redirection is a heredoc]\n");
+					if (tmp->append)
+						printf("[last redirection is a append]\n");
+					while (tmp->path_option_args[i])
+					{
+						printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
+						i++;
+					}
+					tmp = tmp->next;
+					j++;
+				}
 				continue;
-				
 			}
 			free (rl);
 			free_tokens(&tokens);
