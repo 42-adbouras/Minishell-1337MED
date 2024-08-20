@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/18 21:23:11 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/14 10:38:48 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,3 @@ t_env *creat_var(char *var);
 void set_env(t_env **envi, char **env);
 void add_env(t_env **head, t_env *env_new);
 void free_env(t_env *env);
-char **env_to_str(t_env *env);
