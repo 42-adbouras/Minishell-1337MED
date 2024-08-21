@@ -6,7 +6,7 @@
 #    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/08/14 16:00:23 by adbouras         ###   ########.fr        #
+#    Updated: 2024/08/19 14:34:22 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 LDFLAGS = -lreadline -L/Users/adhambouras/.brew/opt/readline/lib
 
-SRC =  main.c utils.c print.c lexer.c list_utils.c syntax.c parse_utils.c clean.c error.c env.c
+SRC =  main.c utils.c print.c lexer.c list_utils.c syntax.c parse_utils.c clean.c error.c env.c \
+		lexer_utils.c
 
 LIBFT = libft/libft.a
 

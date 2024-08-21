@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/19 11:31:52 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/21 10:55:31 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char *get_cmd(t_elem *tokens)
 {
 	char *word;
 
-	word = ft_strndup(tokens->content, tokens->len);
+	word = ft_strdup(tokens->content);
 	if (!word)
 		return (NULL);
 	return (word);
@@ -53,7 +53,21 @@ int	count_red(t_elem *tokens, t_token type)
 	return (count);
 }
 
-char	*get_arg(t_elem **token)
+char *ft_expand(t_env *env, char *var)
+{
+	// int i;
+	
+	// i = 0;
+	while(env)
+	{
+		if (!ft_strncmp(env->var, var, ft_strlen(env->var) + 1))
+			return (env->value);
+		// i++;
+		env = env->next;
+	}
+	return (NULL);
+}
+char	*get_arg(t_elem **token, t_env *env)
 {
 	char	*arg;
 	t_state	state;
@@ -63,7 +77,21 @@ char	*get_arg(t_elem **token)
 	state = (*token)->state;
 	while ((*token) && (*token)->state == state)
 	{
-		arg = ft_strjoin(arg, (*token)->content);
+		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)
+		{
+			if((*token) && (*token)->next)
+			{
+				(*token) = (*token)->next;
+				if ((*token)->type == WORD)
+					arg = ft_strjoin(arg, ft_expand(env, (*token)->content));
+				else
+					arg = ft_strjoin(arg,ft_strdup("$"));
+			}
+			else
+				arg = ft_strjoin(arg,ft_strdup("$"));
+		}
+		else
+			arg = ft_strjoin(arg, (*token)->content);
 		(*token) = (*token)->next;
 	}
 	return (arg);
@@ -90,12 +118,12 @@ char	*get_redir(t_elem *token)
 
 char *get_redirec(t_elem **token)
 {
-	t_elem *temp;
+	// t_elem *temp;
 	char *redir_in;
-	int i;
+	// int i;
 	
-	temp = *token;
-	i = 0;
+	// temp = *token;
+	// i = 0;
 	(*token) = (*token)->next;
 	while ((*token) && (*token)->type == W_SPACE)
 		(*token) = (*token)->next;
@@ -110,78 +138,79 @@ bool last_heredoc(t_elem	*token)
 		return (true);
 	return (false);
 }
-char *ft_expand(t_env *env, char *var)
+char	*get_access(char *cmd, char **env)
 {
-	int i;
-	
+	char	*temp;
+	char	*slash;
+	int		i;
+
 	i = 0;
-	while(env)
+	if (!access(cmd, X_OK))
+		return (cmd);
+	while (env[i])
 	{
-		if (!ft_strncmp(env->var, var, ft_strlen(env->var) + 1))
-			return (env->value);
+		slash = ft_strjoin(cmd, "/");
+		temp = ft_strjoin(env[i], slash);
+		if (!access(temp, X_OK))
+			return (free(slash), temp);
+		free(temp);
+		free(slash);
 		i++;
-		env = env->next;
 	}
 	return (NULL);
 }
+
 t_exec	*new_exec(t_elem *tokens, t_env *env)
 {
 	t_exec	*new;
 	t_elem	*temp;
 	int	i;
-	int	j;
+	// int	j;
 	int	l;
 	int	n;
 
 	i = 0;
-	j = 0;
+	// j = 0;
 	l = 0;
 	n = 0;
 	temp = tokens;
-	new = malloc(sizeof(t_exec));
-	new->path_option_args = malloc(sizeof(char *) * (count_words(tokens) + 1));
-	new->redir_in = malloc(sizeof(char *) * (count_red(temp, REDIR_IN) + 1));
-	new->redir_out = malloc(sizeof(char *) * (count_red(temp, REDIR_OUT) + 1));
-	new->heredoc_end = malloc(sizeof(char *) * (count_red(temp, REDIR_AND) + 1));
-	new->append = false;
-	new->heredoc = false;
-	new->next = NULL;
+	new_exec_node(&new, tokens);
+	// new = malloc(sizeof(t_exec));
+	// new->path_option_args = malloc(sizeof(char *) * (count_words(tokens) + 1));
+	// new->redir_in = malloc(sizeof(char *) * (count_red(temp, REDIR_IN) + 1));
+	// new->redir_out = malloc(sizeof(char *) * (count_red(temp, REDIR_OUT) + 1));
+	// new->heredoc_end = malloc(sizeof(char *) * (count_red(temp, REDIR_AND) + 1));
+	// new->append = false;
+	// new->heredoc = false;
+	// new->next = NULL;
 	while (temp && temp->type != PIPE)
 	{
 		
 		if (temp->type == WORD)
-		{
-			new->path_option_args[i] = get_cmd(temp);
-			if (!new->path_option_args)
-				return (NULL);
-			// if (!get_access(new->path_option_args[i]))
-			// 	return (NULL);
-			i++;
-		}
+			new->path_option_args[i++] = get_cmd(temp);
 		else if (temp->type == S_QUOTE && temp->next)
-		{
-			new->path_option_args[i++] = get_arg(&temp);
-		}
+			new->path_option_args[i++] = get_arg(&temp, env);
 		else if (temp->type == D_QUOTE && temp->next)
 		{
-			temp = temp->next;
-			while (temp && temp->type == W_SPACE)
-				temp = temp->next;
-			if (temp->type == ENV)
-			{
-				if(temp->next)
-				{
-					temp = temp->next;
-					if (temp->type == WORD)
-						new->path_option_args[i++] = ft_expand(env, temp->content);
-					else
-						new->path_option_args[i++] = ft_strdup("$");
-				}
-				else
-					new->path_option_args[i++] = ft_strdup("$");
-			}
-			else
-				new->path_option_args[i++] = get_arg(&temp);
+			new->path_option_args[i++] = get_arg(&temp, env);
+			// temp = temp->next;
+			// while (temp && temp->type == W_SPACE)
+			// 	temp = temp->next;
+			// if (temp->type == ENV)
+			// {
+			// 	if(temp->next)
+			// 	{
+			// 		temp = temp->next;
+			// 		if (temp->type == WORD)
+			// 			new->path_option_args[i++] = ft_expand(env, temp->content);
+			// 		else
+			// 			new->path_option_args[i++] = ft_strdup("$");
+			// 	}
+			// 	else
+			// 		new->path_option_args[i++] = ft_strdup("$");
+			// }
+			// else
+			// 	new->path_option_args[i++] = get_arg(&temp);
 		}
 		else if (temp->type == ENV)
 		{
@@ -202,7 +231,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 			{
 				new->heredoc = false;
 				new->redir_in[i] = get_redirec(&temp);
-				j++;
+				// j++;
 			}
 			else if (temp->type == REDIR_OUT || temp->type == REDIR_APP)
 			{

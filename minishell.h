@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/18 13:25:34 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/19 14:45:51 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ t_elem	*new_token(char *content, int i, t_token type, t_state state);
 t_elem	*last_token(t_elem *token);		// ---------------	 REMOVE LATER!!
 void	token_add_back(t_data *token, t_elem *new);
 
-/***	parse_utils.c		***********************************************/
+/***	lexer_utils.c		***********************************************/
 bool	is_white_space(char c);
 bool	is_grammar(char c);
 bool	is_red(t_token type);
@@ -121,6 +121,11 @@ bool	red_syntax(t_elem *token);
 bool	is_red(t_token type);
 bool	is_grammar(char c);
 bool	is_white_space(char c);
+void    new_exec_node(t_exec **new, t_elem *tokens);
+////////////////////////////////////////////////////
+int	count_words(t_elem *tokens);
+int	count_red(t_elem *tokens, t_token type);
+
 
 /***	clean.c				***********************************************/
 void	free_tokens(t_data **tokens);
