@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/19 14:45:51 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/21 19:47:57 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,14 @@ typedef struct s_elem
 	struct s_elem	*prev;
 }	t_elem;
 
+typedef struct s_env
+{
+    char *var;
+    char *value;
+    struct s_env *next;
+    
+}   t_env;
+
 typedef struct s_exec
 {
 	char			**path_option_args;	// /bin/ls -la libft
@@ -123,12 +131,16 @@ bool	is_grammar(char c);
 bool	is_white_space(char c);
 void    new_exec_node(t_exec **new, t_elem *tokens);
 ////////////////////////////////////////////////////
-int	count_words(t_elem *tokens);
-int	count_red(t_elem *tokens, t_token type);
+int		count_words(t_elem *tokens);
+int		count_red(t_elem *tokens, t_token type);
 
+/***	parse_list_utils.c			***************************************/
+void	init_exec_struct(t_data **data, t_env *env);
+void	exec_add_back(t_exec **exec, t_exec *new);
 
 /***	clean.c				***********************************************/
 void	free_tokens(t_data **tokens);
+void	free_char_arr(char **arr);
 
 /***	error.c				***********************************************/
 void	ft_exit(t_data **tokens, char *err);
@@ -138,5 +150,13 @@ bool	ft_error(char *err);
 void	print_tokens(t_data *tokens);
 char	*state_to_string(t_state state);
 char	*token_to_string(t_token token);
+
+t_exec	*new_exec(t_elem *tokens, t_env *env);
+
+t_env *creat_var(char *var);
+void set_env(t_env **envi, char **env);
+void add_env(t_env **head, t_env *env_new);
+void free_env(t_env *env);
+char **env_to_str(t_env *env);
 
 #endif

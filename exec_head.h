@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_head.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/18 21:23:11 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/21 19:44:52 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,15 @@
 # include <term.h>
 # include <errno.h>
 # include "libft/libft.h"
+# include "minishell.h"
 
-typedef struct s_env
-{
-    char *var;
-    char *value;
-    struct s_env *next;
+// typedef struct s_env
+// {
+//     char *var;
+//     char *value;
+//     struct s_env *next;
     
-}   t_env;
+// }   t_env;
 
 t_env *creat_var(char *var);
 void set_env(t_env **envi, char **env);
