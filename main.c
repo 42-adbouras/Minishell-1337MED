@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/22 17:15:51 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/22 21:17:26 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,34 @@
 #include "exec_head.h"
 
 void _lks(){system("leaks -q minishell");}
+
+void	print_exec(t_exec *exec)
+{
+	t_exec *tmp = exec;
+	int i = 0;
+	int j = 1;
+	while (tmp)
+	{
+		i = 0;
+		for(int x = 0; tmp->redir_in[x]; x++)
+			printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
+		for(int y = 0; tmp->redir_out[y]; y++)
+			printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
+		for(int z = 0; tmp->heredoc_end[z]; z++)
+			printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
+		if (tmp->heredoc)
+			printf("[last redirection is a heredoc]\n");
+		if (tmp->append)
+			printf("[last redirection is a append]\n");
+		while (tmp->path_option_args[i])
+		{
+			printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
+			i++;
+		}
+		tmp = tmp->next;
+		j++;
+	}
+}
 
 int main(int ac, char **av, char **env)
 {
@@ -32,7 +60,7 @@ int main(int ac, char **av, char **env)
 		init_data(&tokens);
 		rl = readline(PROMPT);
 		if (!rl)
-			break ;
+			return(printf("exit\n"), 0);
 		if (rl[0])
 		{
 			add_history(rl);
@@ -40,30 +68,7 @@ int main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				t_exec *tmp = (tokens)->exec;
-				int i = 0;
-				int j = 1;
-				while (tmp)
-				{
-					i = 0;
-					for(int x = 0; tmp->redir_in[x]; x++)
-						printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
-					for(int y = 0; tmp->redir_out[y]; y++)
-						printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
-					for(int z = 0; tmp->heredoc_end[z]; z++)
-						printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
-					if (tmp->heredoc)
-						printf("[last redirection is a heredoc]\n");
-					if (tmp->append)
-						printf("[last redirection is a append]\n");
-					while (tmp->path_option_args[i])
-					{
-						printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
-						i++;
-					}
-					tmp = tmp->next;
-					j++;
-				}
+				print_exec(tokens->exec);
 				continue;
 			}
 			free (rl);

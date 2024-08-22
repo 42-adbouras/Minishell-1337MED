@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/22 17:36:03 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/22 21:20:43 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ typedef struct s_data
 /***	utils.c				***********************************************/
 void	init_data(t_data **tokens);
 char	*ft_strndup(const char *s1, int n);
-char	*remove_spaces(char *str);		// ---------------	 REMOVE LATER!!
 
 /***	arg_utils.c			***********************************************/
 char	*get_cmd(t_elem *tokens);
@@ -163,7 +162,6 @@ bool	ft_error(char *err);
 void	print_tokens(t_data *tokens);
 char	*state_to_string(t_state state);
 char	*token_to_string(t_token token);
-
 
 /****************************		eismail		****************************/
 t_env	*creat_var(char *var);

@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/14 16:04:20 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/22 21:20:29 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,28 +44,3 @@ char	*ft_strndup(const char *s1, int n)
 	return (ptr);
 }
 
-char	*remove_spaces(char *str)
-{
-	char	*s;
-	int		i;
-	int		j;
-
-	s = malloc(ft_strlen(str));
-	i = 0;
-	j = 0;
-	while (str[i] && is_white_space(str[i]))
-		i++;
-	while (str[i])
-	{
-		if (is_white_space(str[i]) && str[i + 1])
-		{
-			while (str[i] && is_white_space(str[i]))
-				i++;
-			s[j++] = ' ';
-		}
-		s[j++] = str[i++];
-	}
-	s[j] = '\0';
-	free (str);
-	return (s);
-}
