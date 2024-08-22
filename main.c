@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/22 10:40:58 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:20:39 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,13 @@ void	process_expander(t_elem *temp, t_exec **new, t_env *env, int *i)
         {
             while (temp && temp->type != S_QUOTE && temp->type != D_QUOTE)
                 temp = temp->next;
-            (*new)->path_option_args[*i - 1] = ft_strjoin((*new)->path_option_args[*i - 1], get_arg(&temp, env));
+            (*new)->path_option_args[(*i) - 1] = ft_strjoin((*new)->path_option_args[(*i) - 1], get_arg(&temp, env));
+        }
+		if (temp->content[0] == '-')
+        {
+            while (temp && temp->type != S_QUOTE && temp->type != D_QUOTE)
+                temp = temp->next;
+            (*new)->path_option_args[(*i) - 1] = ft_strjoin((*new)->path_option_args[(*i) - 1], get_arg(&temp, env));
         }
 		else
 			(*new)->path_option_args[(*i)++] = ft_strdup("$");
