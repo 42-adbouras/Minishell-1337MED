@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:11:03 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/22 12:26:36 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:02:34 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_lexing(char *read, t_data **tokens)
 	{
 		i = ft_tokenize(*tokens, read, i, &state);
 	}
-	print_tokens(*tokens);
+	// print_tokens(*tokens);
 }
 
 int	ft_tokenize(t_data *tokens, char *read, int i, t_state *status)

@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/21 19:47:57 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:36:03 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,21 @@ void	init_data(t_data **tokens);
 char	*ft_strndup(const char *s1, int n);
 char	*remove_spaces(char *str);		// ---------------	 REMOVE LATER!!
 
-/***	list_utils.c		***********************************************/
-t_elem	*skip_wspace(t_elem *token, char direction);
-t_elem	*new_token(char *content, int i, t_token type, t_state state);
-t_elem	*last_token(t_elem *token);		// ---------------	 REMOVE LATER!!
-void	token_add_back(t_data *token, t_elem *new);
+/***	arg_utils.c			***********************************************/
+char	*get_cmd(t_elem *tokens);
+int		count_words(t_elem *tokens);
+char	*get_access(char *cmd, char **env);
 
 /***	lexer_utils.c		***********************************************/
 bool	is_white_space(char c);
 bool	is_grammar(char c);
 bool	is_red(t_token type);
+t_elem	*skip_wspace(t_elem *token, char direction);
+
+/***	lexer_list_utils.c		*******************************************/
+t_elem	*new_token(char *content, int i, t_token type, t_state state);
+t_elem	*last_token(t_elem *token);
+void	token_add_back(t_data *tokens, t_elem *new);
 
 /***	lexer.c				***********************************************/
 void	ft_lexing(char *read, t_data **tokens);
@@ -121,26 +126,34 @@ int		red_token(t_data *tokens, char *read, int i, t_state *status);
 void	quote_token(t_data *tokens, char *read, t_token type, t_state *status);
 
 /***	syntax.c			***********************************************/
+bool	pipe_syntax(t_elem *token);
 bool	if_syntax_err(t_data *tokens);
 bool	if_closed_quotes(t_elem **token, t_token type);
 bool	red_syntax(t_elem *token);
 
 /***	parse_utils.c			*******************************************/
-bool	is_red(t_token type);
-bool	is_grammar(char c);
-bool	is_white_space(char c);
-void    new_exec_node(t_exec **new, t_elem *tokens);
-////////////////////////////////////////////////////
-int		count_words(t_elem *tokens);
-int		count_red(t_elem *tokens, t_token type);
+void	process_redir(t_elem *tokens, t_exec **new);
+void	process_expander(t_elem *temp, t_exec **new, t_env *env, int *i);
+char	*ft_expand(t_env *env, char *var);
+char	*get_arg(t_elem **token, t_env *env);
 
 /***	parse_list_utils.c			***************************************/
+t_exec	*new_exec(t_elem *tokens, t_env *env);
+void    new_exec_node(t_exec **new, t_elem *tokens);
 void	init_exec_struct(t_data **data, t_env *env);
 void	exec_add_back(t_exec **exec, t_exec *new);
+
+/***	redir_utils.c		***********************************************/
+int		count_red(t_elem *tokens, t_token type);
+char	*get_redir(t_elem *token);		//		|CONFLICT|
+char 	*get_redirec(t_elem **token);	//		|!!!!!!!!|
+bool	last_heredoc(t_elem *token);
 
 /***	clean.c				***********************************************/
 void	free_tokens(t_data **tokens);
 void	free_char_arr(char **arr);
+char 	*get_redirec(t_elem **token);
+bool 	last_heredoc(t_elem *token);
 
 /***	error.c				***********************************************/
 void	ft_exit(t_data **tokens, char *err);
@@ -151,12 +164,12 @@ void	print_tokens(t_data *tokens);
 char	*state_to_string(t_state state);
 char	*token_to_string(t_token token);
 
-t_exec	*new_exec(t_elem *tokens, t_env *env);
 
-t_env *creat_var(char *var);
-void set_env(t_env **envi, char **env);
-void add_env(t_env **head, t_env *env_new);
-void free_env(t_env *env);
-char **env_to_str(t_env *env);
+/****************************		eismail		****************************/
+t_env	*creat_var(char *var);
+void	set_env(t_env **envi, char **env);
+void	add_env(t_env **head, t_env *env_new);
+void	free_env(t_env *env);
+char	**env_to_str(t_env *env);
 
 #endif
