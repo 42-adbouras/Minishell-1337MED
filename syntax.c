@@ -72,7 +72,7 @@ bool	red_syntax(t_elem *token)
 	t_elem	*next;
 
 	next = skip_wspace(token->next, 'N');
-	if (!next || next->type != WORD)	// maybe missing conditions!
+	if (!next || (next->type != WORD && next->type != ENV && next->type != S_QUOTE && next->type != D_QUOTE ))	// maybe missing conditions!
 		return (false);
 	return (true);
 }

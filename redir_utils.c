@@ -17,7 +17,7 @@ int	count_red(t_elem *tokens, t_token type)
 	int count;
 
 	count = 0;
-	while (tokens)
+	while (tokens && tokens->type != PIPE)
 	{
 		if (tokens->type == type)
 			count++;
@@ -26,15 +26,58 @@ int	count_red(t_elem *tokens, t_token type)
 	return (count);
 }
 
-char *get_redire(t_elem **token)
+char *get_redire(t_elem **token, t_env *env)
 {
 	char *redir_in;
+
+	if (!token)
+		return (ft_strdup(""));
+	if (!*token)
+		return (ft_strdup(""));
+	(*token) = (*token)->next;
+	while ((*token) && (*token)->type == W_SPACE)
+		(*token) = (*token)->next;
+	if (((*token)->type == S_QUOTE || (*token)->type == D_QUOTE) && (*token)->next)
+			redir_in = get_arg(token, env);
+	else if ((*token) && (*token)->type == ENV)
+	{
+		(*token) = (*token)->next;
+		if ((*token) && (*token)->type == WORD)
+		{
+			redir_in = ft_expand(env, (*token)->content);
+			if (!redir_in || (redir_in && redir_in[0] == '\0'))
+			{
+				fprintf(stderr, "minishell: ambiguous redirect\n");
+				return (NULL);
+			}
+			// printf("+++++++++++++\n");
+		}
+		else
+			redir_in = ft_strdup("$");
+	}
+	else
+		redir_in = ft_strdup((*token)->content);
+	return (redir_in);
+}
+
+char	*get_heredoc(t_elem **token)
+{
+	char	*redir;
 
 	(*token) = (*token)->next;
 	while ((*token) && (*token)->type == W_SPACE)
 		(*token) = (*token)->next;
-	redir_in = ft_strdup((*token)->content);
-	return (redir_in);
+	if (((*token)->type == S_QUOTE || (*token)->type == D_QUOTE) && (*token)->next)
+			redir = get_arg(token, NULL);
+	else if ((*token)->type == ENV)
+	{
+		(*token) = (*token)->next;
+		redir = ft_strndup((*token)->content, (*token)->len);
+		redir = ft_strjoin("$", redir);
+	}
+	else
+		redir = ft_strndup((*token)->content, (*token)->len);
+	return (redir);
 }
 
 bool last_heredoc(t_elem *token)

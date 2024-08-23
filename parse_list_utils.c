@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+void if_redir(t_elem **token)
+{
+	(*token) = (*token)->next;
+	while ((*token) && ((*token)->type == W_SPACE || (*token)->type == ENV))
+		(*token) = (*token)->next;
+}
+
 t_exec	*new_exec(t_elem *tokens, t_env *env)
 {
 	t_exec	*new;
@@ -20,25 +27,29 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 
 	i = 0;
 	temp = tokens;
-	new_exec_node(&new, tokens);
+	new_exec_node(&new, tokens, env);
 	while (temp && temp->type != PIPE)
 	{
-		
 		if (temp->type == WORD)
-			new->path_option_args[i++] = get_cmd(temp);
-		else if (temp->type == S_QUOTE && temp->next)
+			new->path_option_args[i++] = get_cmd(temp, env);
+		if (temp->type == WORD)
+			get_spichil(&temp, &new->path_option_args[i - 1], env);
+		else if (temp && (temp->type == S_QUOTE  || temp->type == D_QUOTE ) && temp->next)
 			new->path_option_args[i++] = get_arg(&temp, env);
-		else if (temp->type == D_QUOTE && temp->next)
-			new->path_option_args[i++] = get_arg(&temp, env);
-		else if (temp->type == ENV)
-			process_expander(temp, &new, env, &i);
-		temp = temp->next;
+		else if (temp && temp->type == ENV)
+			process_expander(&temp, &new, env, &i);
+		else if (temp && is_red(temp->type))
+			if_redir(&temp);
+		if (temp)
+			temp = temp->next;
 	}
-	process_redir(tokens, &new);
+	if (!process_redir(tokens, &new, env))
+		return (NULL);
+	// new->path_option_args[i] = NULL;
 	return (new);
 }
 
-void    new_exec_node(t_exec **new, t_elem *tokens)
+void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 {
 	(*new) = malloc(sizeof(t_exec));
 	(*new)->path_option_args = malloc(sizeof(char *) * (count_words(tokens) + 1));
@@ -51,6 +62,7 @@ void    new_exec_node(t_exec **new, t_elem *tokens)
 	(*new)->heredoc_end[count_red(tokens, REDIR_AND)] = NULL;
 	(*new)->append = false;
 	(*new)->heredoc = false;
+	(*new)->env = env;
 	(*new)->next = NULL;
 }
 

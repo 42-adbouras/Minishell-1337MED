@@ -88,8 +88,9 @@ typedef struct s_exec
 	char			**redir_out;			// files_name
 	char			**heredoc_end;			// delimiter
 	bool			append;				// last >>
-	bool			heredoc;				// last <<
+	bool			heredoc;			// last <<
 	struct s_exec	*next;
+	struct s_env	*env;
 }	t_exec;
 
 typedef struct s_data
@@ -104,9 +105,10 @@ void	init_data(t_data **tokens);
 char	*ft_strndup(const char *s1, int n);
 
 /***	arg_utils.c			***********************************************/
-char	*get_cmd(t_elem *tokens);
+char	*get_cmd(t_elem *tokens, t_env *env);
 int		count_words(t_elem *tokens);
-char	*get_access(char *cmd, char **env);
+char	*get_access(char *cmd, t_env *env);
+char	*get_spichil(t_elem **temp, char **new, t_env *env);
 
 /***	lexer_utils.c		***********************************************/
 bool	is_white_space(char c);
@@ -133,20 +135,21 @@ bool	if_closed_quotes(t_elem **token, t_token type);
 bool	red_syntax(t_elem *token);
 
 /***	parse_utils.c			*******************************************/
-void	process_redir(t_elem *tokens, t_exec **new);
-void	process_expander(t_elem *temp, t_exec **new, t_env *env, int *i);
+bool	process_redir(t_elem *tokens, t_exec **new, t_env *env);
+void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i);
 char	*ft_expand(t_env *env, char *var);
 char	*get_arg(t_elem **token, t_env *env);
 
 /***	parse_list_utils.c			***************************************/
 t_exec	*new_exec(t_elem *tokens, t_env *env);
-void    new_exec_node(t_exec **new, t_elem *tokens);
+void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env);
 void	init_exec_struct(t_data **data, t_env *env);
 void	exec_add_back(t_exec **exec, t_exec *new);
 
 /***	redir_utils.c		***********************************************/
 int		count_red(t_elem *tokens, t_token type);
-char 	*get_redire(t_elem **token);
+char 	*get_redire(t_elem **token, t_env *env);
+char	*get_heredoc(t_elem **token);
 bool	last_heredoc(t_elem *token);
 
 /***	clean.c				***********************************************/
@@ -163,12 +166,46 @@ bool	ft_error(char *err);
 void	print_tokens(t_data *tokens);
 char	*state_to_string(t_state state);
 char	*token_to_string(t_token token);
+/***	signls.c				***********************************************/
+void    signals_init();
+void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
 
 /****************************		eismail		****************************/
-t_env	*creat_var(char *var);
-void	set_env(t_env **envi, char **env);
-void	add_env(t_env **head, t_env *env_new);
-void	free_env(t_env *env);
-char	**env_to_str(t_env *env);
+int g_status;
+
+# define MAX_PATH 1024
+
+t_env *creat_var(char *var);
+void set_env(t_env **envi, char **env);
+void add_env(t_env **head, t_env *env_new);
+void free_env(t_env *env);
+void ft_exic(t_exec *cmds, t_env **envi);
+bool ft_builtin(t_exec *cmd, t_env **envi);
+bool    ft_cd(char *path, t_env *env);
+bool env_var(t_env *env, char **arg);
+int echo_option(t_exec *cmd);
+bool ft_echo(t_exec *cmd);
+bool ft_env(t_env *env);
+bool cheak_var(char *var);
+bool update_var(t_env **env, char *arg, char *new_var);
+bool export_no_arg(t_env *env, char **arg);
+bool ft_unset(t_env **env, char **toDelete);
+bool ft_exit_built(char **arg);
+int ft_count_cmd(t_exec *cmd);
+void	free_int(int **p, int n);
+int	**ft_pip(int cmd_num);
+void	ft_close(int cmd_num, int **pipes, int *fds);
+void	ft_stdin(int **pipes, int pid, int *fds);
+void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds);
+bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos);
+void read_heredoc(char *delimiter, int *pip);
+int if_herdoc(char **delimiters);
+int *open_redir(t_exec *cmd);
+bool if_builtin(char *cmd);
+void ft_clear(int cmd_num, int **fd, int *fds, int *pids);
+bool ft_pwd(void);
+bool ft_export(t_env **env, char **arg);
+char **env_to_str(t_env *env);
 
 #endif

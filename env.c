@@ -75,3 +75,29 @@ void free_env(t_env *env)
         temp = env->next;
     }
 }
+
+char **env_to_str(t_env *env)
+{
+	t_env *temp;
+	char **envstr;
+	int i;
+	
+	i = 0;
+	temp = env;
+	while (temp != NULL)
+	{
+		i++;
+		temp = temp->next;
+	}
+	envstr = malloc (sizeof(char *) * (i + 1));
+	i = 0;
+	while (env)
+	{
+		envstr[i] = ft_strjoin(env->var, "=");
+		envstr[i] = ft_strjoin(envstr[i], env->value);
+		env = env->next;
+		i++;
+	}
+	envstr[i] = NULL;
+	return (envstr);
+}

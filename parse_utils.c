@@ -12,9 +12,23 @@
 
 #include "minishell.h"
 
-void	process_redir(t_elem *tokens, t_exec **new)
+bool redirect_out(t_elem *tokens,t_exec ***new, t_env *env)
+{
+	(*(*new))->append = false;
+	if (tokens->type == REDIR_APP)
+		(*(*new))->append = true;
+	*((*(*new))->redir_out)++ = get_redire(&tokens, env);
+	if ((*(*new))->redir_in)
+		return (false);
+	return (true);
+}
+
+bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 {
 	t_elem	*temp;
+	int i=0;
+	int j=0;
+	int l=0;
 	
 	temp = tokens;
 	while (temp && temp->type != PIPE)
@@ -22,43 +36,36 @@ void	process_redir(t_elem *tokens, t_exec **new)
 		if (temp->type == REDIR_IN )
 		{
 			(*new)->heredoc = false;
-			*((*new)->redir_in)++ = get_redire(&temp);
+			(*new)->redir_in[i++] = get_redire(&temp, env);
+			if (!(*new)->redir_in[i - 1])
+				return (false);
 		}
 		else if (temp->type == REDIR_OUT || temp->type == REDIR_APP)
 		{
 			(*new)->append = false;
 			if (temp->type == REDIR_APP)
 				(*new)->append = true;
-			*((*new)->redir_out)++ = get_redire(&temp);
+			(*new)->redir_out[j++] = get_redire(&temp, env);
+			if (!(*new)->redir_out[j - 1])
+				return (false);
 		}
 		else if (temp->type == REDIR_AND)
 		{
-			*((*new)->heredoc_end)++ = get_redire(&temp);
+			(*new)->heredoc_end[l++] = get_heredoc(&temp);
 			(*new)->heredoc = last_heredoc(temp);
 		}
 		temp = temp->next;
 	}
+	return (true);
 }
 
-void	process_expander(t_elem *temp, t_exec **new, t_env *env, int *i)
+void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 {
-	if (temp->next)
+	if ((*temp)->next)
 	{
-		temp = temp->next;
-		if (temp->type == WORD)
-			(*new)->path_option_args[(*i)++] = ft_expand(env, temp->content);
-		if (temp->content[ft_strlen(temp->content) - 1] == '=')
-        {
-            while (temp && temp->type != S_QUOTE && temp->type != D_QUOTE)
-                temp = temp->next;
-            (*new)->path_option_args[(*i) - 1] = ft_strjoin((*new)->path_option_args[(*i) - 1], get_arg(&temp, env));
-        }
-		if (temp->content[0] == '-') // --------------------- TO DO --------------------- //
-        {
-            while (temp && temp->type != S_QUOTE && temp->type != D_QUOTE)
-                temp = temp->next;
-            (*new)->path_option_args[(*i) - 1] = ft_strjoin((*new)->path_option_args[(*i) - 1], get_arg(&temp, env));
-        }
+		(*temp) = (*temp)->next;
+		if ((*temp)->type == WORD)
+			(*new)->path_option_args[(*i)++] = ft_expand(env, (*temp)->content);
 		else
 			(*new)->path_option_args[(*i)++] = ft_strdup("$");
 	}
@@ -68,11 +75,34 @@ void	process_expander(t_elem *temp, t_exec **new, t_env *env, int *i)
 
 char *ft_expand(t_env *env, char *var)
 {
-	while(env)
+	char *s;
+	char *after;
+	t_env *temp;
+	int i;
+	int j;
+	int l;
+
+	i = 0;
+	j = 0;
+	while (var[i])
 	{
-		if (!ft_strncmp(env->var, var, ft_strlen(env->var) + 1))
-			return (env->value);
-		env = env->next;
+		temp = env; 
+		j = i;
+		l = 0;
+		while (var[j] && !ft_isalnum(var[j++]))
+			i++;
+		s = ft_substr(var, l, j);
+		l = j;
+		while (var[l] && !ft_isalnum(var[l++]))
+		;
+		after = ft_substr (var, j, l);
+		while (temp)
+		{
+			if (!ft_strncmp(temp->var, s, ft_strlen(temp->var) + 1))
+				return (ft_strjoin(temp->value, after));
+			temp = temp->next;
+		}
+		i++;
 	}
 	return (NULL);
 }
@@ -82,6 +112,8 @@ char	*get_arg(t_elem **token, t_env *env)
 	t_state	state;
 
 	arg = NULL;
+	if (!*token)
+		return (NULL);
 	(*token) = (*token)->next;
 	state = (*token)->state;
 	while ((*token) && (*token)->state == state)

@@ -33,7 +33,7 @@ void	print_exec(t_exec *exec)
 			printf("[last redirection is a heredoc]\n");
 		if (tmp->append)
 			printf("[last redirection is a append]\n");
-		while (tmp->path_option_args[i])
+		while (tmp &&tmp->path_option_args &&  tmp->path_option_args[i])
 		{
 			printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
 			i++;
@@ -59,17 +59,13 @@ int main(int ac, char **av, char **env)
 	(void)av;
 	(void)env;
 	
-	t_sa	sa;
 	t_env	*envi;
 	char    *rl;
 	t_data  *tokens;
 	
 	// atexit(_lks);
-
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = &sig_handler;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	signals_init();
+	envi = NULL;
 
 	set_env(&envi, env); // enviroment initialize
 	while (1)
@@ -85,7 +81,9 @@ int main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				print_exec(tokens->exec);
+				// print_exec(tokens->exec);
+				ft_exic(tokens->exec, &envi);
+				// printf("%d\n", g_status);
 				continue;
 			}
 			free (rl);
