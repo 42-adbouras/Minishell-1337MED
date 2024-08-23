@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/22 21:20:43 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:15:31 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@
 # define PROMPT "~ "
 
 /****************************	adbouras	****************************/
+
+typedef struct sigaction t_sa;
 
 typedef enum e_token
 {
@@ -144,8 +146,7 @@ void	exec_add_back(t_exec **exec, t_exec *new);
 
 /***	redir_utils.c		***********************************************/
 int		count_red(t_elem *tokens, t_token type);
-char	*get_redir(t_elem *token);		//		|CONFLICT|
-char 	*get_redirec(t_elem **token);	//		|!!!!!!!!|
+char 	*get_redire(t_elem **token);
 bool	last_heredoc(t_elem *token);
 
 /***	clean.c				***********************************************/

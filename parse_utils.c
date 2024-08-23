@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/22 17:10:41 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:15:48 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ void	process_redir(t_elem *tokens, t_exec **new)
 		if (temp->type == REDIR_IN )
 		{
 			(*new)->heredoc = false;
-			*((*new)->redir_in)++ = get_redirec(&temp);
+			*((*new)->redir_in)++ = get_redire(&temp);
 		}
 		else if (temp->type == REDIR_OUT || temp->type == REDIR_APP)
 		{
 			(*new)->append = false;
 			if (temp->type == REDIR_APP)
 				(*new)->append = true;
-			*((*new)->redir_out)++ = get_redirec(&temp);
+			*((*new)->redir_out)++ = get_redire(&temp);
 		}
 		else if (temp->type == REDIR_AND)
 		{
-			*((*new)->heredoc_end)++ = get_redirec(&temp);
+			*((*new)->heredoc_end)++ = get_redire(&temp);
 			(*new)->heredoc = last_heredoc(temp);
 		}
 		temp = temp->next;
@@ -53,7 +53,7 @@ void	process_expander(t_elem *temp, t_exec **new, t_env *env, int *i)
                 temp = temp->next;
             (*new)->path_option_args[(*i) - 1] = ft_strjoin((*new)->path_option_args[(*i) - 1], get_arg(&temp, env));
         }
-		if (temp->content[0] == '-')
+		if (temp->content[0] == '-') // --------------------- TO DO --------------------- //
         {
             while (temp && temp->type != S_QUOTE && temp->type != D_QUOTE)
                 temp = temp->next;
