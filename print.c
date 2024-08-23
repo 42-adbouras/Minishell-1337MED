@@ -29,7 +29,6 @@ char	*token_to_string(t_token token)
 		case W_SPACE: return "W_SPACE";
 		case D_QUOTE: return "D_QUOTE";
 		case S_QUOTE: return "S_QUOTE";
-		case ESCAPE: return "ESCAPE";
 		case PIPE: return "PIPE";
 		case REDIR_IN: return "REDIR_IN";
 		case REDIR_AND: return "REDIR_AND";

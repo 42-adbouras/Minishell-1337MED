@@ -33,7 +33,7 @@ void	print_exec(t_exec *exec)
 			printf("[last redirection is a heredoc]\n");
 		if (tmp->append)
 			printf("[last redirection is a append]\n");
-		while (tmp &&tmp->path_option_args &&  tmp->path_option_args[i])
+		while (tmp && tmp->path_option_args &&  tmp->path_option_args[i])
 		{
 			printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
 			i++;

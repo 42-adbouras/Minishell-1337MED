@@ -45,7 +45,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 	}
 	if (!process_redir(tokens, &new, env))
 		return (NULL);
-	// new->path_option_args[i] = NULL;
+	new->path_option_args[i] = NULL;
 	return (new);
 }
 
