@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/23 10:16:15 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:08:54 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,6 @@ void	print_exec(t_exec *exec)
 		j++;
 	}
 }
-void	sig_handler(int sig, siginfo_t *info, void *context)
-{
-	(void) info;
-	(void) context;
-
-	if (sig == SIGINT)
-		return;
-	if (sig == SIGQUIT)
-		return;
-}
 
 int main(int ac, char **av, char **env)
 {
@@ -59,18 +49,12 @@ int main(int ac, char **av, char **env)
 	(void)av;
 	(void)env;
 	
-	t_sa	sa;
 	t_env	*envi;
 	char    *rl;
 	t_data  *tokens;
 	
 	// atexit(_lks);
-
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = &sig_handler;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-
+	signals_init();
 	set_env(&envi, env); // enviroment initialize
 	while (1)
 	{

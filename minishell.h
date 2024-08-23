@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/23 10:15:31 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/23 12:05:06 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <term.h>
 # include <errno.h>
 # include "libft/libft.h"
-// # include "exec_head.h"
 
 # define BBLK "\e[1;30m"
 # define BRED "\e[1;31m"
@@ -47,7 +46,6 @@ typedef enum e_token
 	W_SPACE = ' ',
 	D_QUOTE = '\"',
 	S_QUOTE = '\'',
-	ESCAPE = '\\',
 	PIPE = '|',
 	REDIR_IN = '<',
 	REDIR_AND,
@@ -148,6 +146,10 @@ void	exec_add_back(t_exec **exec, t_exec *new);
 int		count_red(t_elem *tokens, t_token type);
 char 	*get_redire(t_elem **token);
 bool	last_heredoc(t_elem *token);
+
+/***	signals.c			***********************************************/
+void    signals_init();
+void	sig_handler(int sig);
 
 /***	clean.c				***********************************************/
 void	free_tokens(t_data **tokens);
