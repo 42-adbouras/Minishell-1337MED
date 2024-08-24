@@ -82,7 +82,9 @@ void	ft_close(int cmd_num, int **pipes, int *fds)
 		i++;
 	}
 	if (fds && fds[0] != -1)
+	{
 		close(fds[0]);
+	}
 	if (fds && fds[1] != -1)
 		close(fds[1]);
 }
@@ -102,9 +104,14 @@ void	ft_stdin(int **pipes, int pid, int *fds)
 void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds)
 {
 	if (fds && fds[1] != -1)
+	{
+		
 		dup2(fds[1], STDOUT_FILENO);
+	}
 	else if (pid != cmd_num - 1)
+	{
 		dup2(pipes[pid][1], STDOUT_FILENO);
+	}
 }
 
 bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos)
@@ -136,25 +143,31 @@ void read_heredoc(char *delimiter, int *pip)
 	free(s);
 }
 
-int if_herdoc(char **delimiters)
+void if_herdoc(char **delimiters, int *fd_heredoc)
 {
 	int i;
 	int *pip;
 
 	i = -1;
 	if (!delimiters || !(*delimiters) )
-		return (-1);
+	{
+		*(fd_heredoc) = -1;
+		exit(0);
+	}
 	pip = malloc(sizeof(int) * 2);
 	while (delimiters[++i])
 	{
 		if (pipe(pip) == -1)
-			return(-1);
+		{
+			*(fd_heredoc) = -1;
+			exit(0);
+		}
 		read_heredoc(delimiters[i], pip);
 	}
 	close(pip[1]);
-	i = pip[0];
+	*(fd_heredoc) = pip[0];
 	free(pip);
-	return (i);
+	exit(0);
 }
 int *open_redir(t_exec *cmd)
 {
@@ -169,12 +182,15 @@ int *open_redir(t_exec *cmd)
 	{
 		if (ft_strchr(cmd->redir_in[i], ' '))
 		{
-			printf("minishell: ambiguous redirect\n");
+			fprintf(stderr, "minishell: ambiguous redirect\n");
 			return (NULL);
 		}
 		fds[0] = open(cmd->redir_in[i], O_RDONLY);
 		if (fds[0] == -1)
-			return (errno, NULL);
+		{
+			perror("minishell");
+			return (NULL);
+		}
 		if (cmd->redir_in[i + 1])
 			close (fds[0]);
 	}
@@ -183,7 +199,7 @@ int *open_redir(t_exec *cmd)
 	{
 		if (ft_strchr(cmd->redir_out[i], ' '))
 		{
-			printf("minishell: ambiguous redirect\n");
+			fprintf(stderr, "minishell: ambiguous redirect\n");
 			return (NULL);
 		}
 		if (cmd->append)
@@ -191,7 +207,10 @@ int *open_redir(t_exec *cmd)
 		else
 			fds[1] = open(cmd->redir_out[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (fds[1] == -1)
-			return (errno, NULL);
+		{
+			perror("minishell");
+			return (NULL);
+		}
 		if (cmd->redir_out[i + 1])
 			close (fds[0]);
 	}
@@ -249,16 +268,18 @@ int *ft_open(t_exec *cmd)
 	int heredoc;
 	int *fds;
 	int pid;
+
+	heredoc = (int)ft_calloc(1, sizeof(int));
 	if (cmd->heredoc_end)
 	{
 		pid = fork();
 		if (pid == 0)
 		{
 			signal(SIGINT, herdoc_signal);
-			heredoc = if_herdoc(cmd->heredoc_end);
-			exit(0);
+			if_herdoc(cmd->heredoc_end, &heredoc);
 		}
-		waitpid(pid, &g_status, 0);
+		else
+			waitpid(pid, &g_status, 0);
 	}
 	fds = open_redir(cmd);
 	if (!fds)
@@ -283,20 +304,14 @@ void ft_exic(t_exec *cmds, t_env **envi)
 	fd = ft_pip(cmd_num);
 	while (i < cmd_num)
 	{
-		// heredoc = if_herdoc(cmds->heredoc_end);
-		// fds = open_redir(cmds);
-		// if (!fds)
-		// 	return ;
-		// if (cmds->heredoc)
-		// 	fds[0] = heredoc;
 		fds = ft_open(cmds);
 		if (!fds)
 			return ;
-		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
+		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0])) //TO DO
 		{
 			fd_hindler(cmd_num, fd, fds, i);
 			ft_builtin(cmds, envi);
-			break ;
+			break;
 		}
 		pids[i] = fork();
 		if (pids[i] == -1)

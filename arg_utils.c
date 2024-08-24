@@ -48,9 +48,17 @@ int	count_words(t_elem *tokens)
 	count = 0;
 	while (tokens && tokens->type != PIPE)
 	{
-		if (tokens->type == WORD)
+		if (tokens && (tokens->type == D_QUOTE || tokens->type == S_QUOTE))
+		{
 			count++;
-		tokens = tokens->next;
+			tokens = tokens->next;
+			while (tokens && (tokens->state ==  IN_DQUOTE || tokens->state ==  IN_SQUOTE))
+				tokens = tokens->next;
+		}
+		else if (tokens && tokens->type == WORD)
+			count++;
+		if (tokens)
+			tokens = tokens->next;
 	}
 	return (count);
 }

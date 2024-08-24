@@ -250,6 +250,8 @@ bool ft_exit_built(char **arg)
 	int i;
 
 	i = -1;
+	if (!arg || !*arg)
+		exit(0);
 	while (arg && *arg && arg[0][++i])
 	{
 		if (!ft_isdigit(arg[0][i]))

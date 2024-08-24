@@ -33,14 +33,14 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 	temp = tokens;
 	while (temp && temp->type != PIPE)
 	{
-		if (temp->type == REDIR_IN )
+		if (temp->type == REDIR_IN && (temp->next && temp->next->state == GENERAL))
 		{
 			(*new)->heredoc = false;
 			(*new)->redir_in[i++] = get_redire(&temp, env);
 			if (!(*new)->redir_in[i - 1])
 				return (false);
 		}
-		else if (temp->type == REDIR_OUT || temp->type == REDIR_APP)
+		else if ((temp->type == REDIR_OUT || temp->type == REDIR_APP) && (temp->next && temp->next->state == GENERAL))
 		{
 			(*new)->append = false;
 			if (temp->type == REDIR_APP)
@@ -49,7 +49,7 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 			if (!(*new)->redir_out[j - 1])
 				return (false);
 		}
-		else if (temp->type == REDIR_AND)
+		else if (temp->type == REDIR_AND && (temp->next && temp->next->state == GENERAL))
 		{
 			(*new)->heredoc_end[l++] = get_heredoc(&temp);
 			(*new)->heredoc = last_heredoc(temp);

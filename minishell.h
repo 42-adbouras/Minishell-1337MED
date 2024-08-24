@@ -203,7 +203,7 @@ void	ft_stdin(int **pipes, int pid, int *fds);
 void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds);
 bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos);
 void read_heredoc(char *delimiter, int *pip);
-int if_herdoc(char **delimiters);
+void if_herdoc(char **delimiters, int *fd_heredoc);
 int *open_redir(t_exec *cmd);
 bool if_builtin(char *cmd);
 void ft_clear(int cmd_num, int **fd, int *fds, int *pids);

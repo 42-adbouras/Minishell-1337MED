@@ -96,9 +96,9 @@ void	init_exec_struct(t_data **data, t_env *env)
 	{
 		new = new_exec(temp, env);
 		exec_add_back(&(*data)->exec, new);
-		while (temp && temp->type != PIPE)
+		while (temp && (temp->type != PIPE || (temp->type == PIPE && temp->state != GENERAL)))
 			temp = temp->next;
-		 if (temp)
+		if (temp)
             temp = temp->next;
 	}
 }
