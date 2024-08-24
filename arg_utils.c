@@ -6,21 +6,23 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/22 17:14:38 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/24 11:34:30 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *get_cmd(t_elem *tokens, t_env *env)
+char *get_cmd(t_elem *tokens, t_env *env, bool *exed)
 {
 	char *word;
 
 	word = ft_strdup(tokens->content);
 	if (!word)
 		return (NULL);
-	if (!if_builtin(word))
+	if (!if_builtin(word) && !*exed)
 		word = get_access(word, env);
+	if (word)
+		*exed = true;
 	return (word);
 }
 char	*get_spichil(t_elem **temp, char **new, t_env *env)

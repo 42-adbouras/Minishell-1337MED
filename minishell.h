@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/23 12:05:06 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/24 11:35:40 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_exec
 	char			**heredoc_end;			// delimiter
 	bool			append;				// last >>
 	bool			heredoc;			// last <<
+	bool			exed;
 	struct s_exec	*next;
 	struct s_env	*env;
 }	t_exec;
@@ -103,7 +104,7 @@ void	init_data(t_data **tokens);
 char	*ft_strndup(const char *s1, int n);
 
 /***	arg_utils.c			***********************************************/
-char	*get_cmd(t_elem *tokens, t_env *env);
+char	*get_cmd(t_elem *tokens, t_env *env, bool *exed);
 int		count_words(t_elem *tokens);
 char	*get_access(char *cmd, t_env *env);
 char	*get_spichil(t_elem **temp, char **new, t_env *env);
