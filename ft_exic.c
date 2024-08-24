@@ -204,6 +204,8 @@ int *open_redir(t_exec *cmd)
 extern char **environ;
 bool if_builtin(char *cmd)
 {
+	if (!cmd)
+		return (false);
 	if (!ft_strncmp(cmd, "cd", 3))
 		return (true);
 	if (!ft_strncmp(cmd, "pwd", 4))
@@ -274,7 +276,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 		if (pids[i] == 0)
 		{
 			fd_hindler(cmd_num, fd, fds, i);
-			if (ft_builtin(cmds, envi))
+			if (cmds->path_option_args && ft_builtin(cmds, envi))
 				exit(0);
 			if (execve(cmds->path_option_args[0], cmds->path_option_args, environ) == -1)
 			{

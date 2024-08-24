@@ -284,6 +284,8 @@ bool ft_builtin(t_exec *cmd, t_env **envi)
 {
 	char *builtin;
 
+	if (!cmd || !cmd->path_option_args)
+		return (false);
 	builtin = cmd->path_option_args[0];
 	if (!ft_strncmp(builtin, "cd", 3) || !ft_strncmp(builtin, "CD", 3))
 		return (ft_cd(cmd->path_option_args[1], *envi));
