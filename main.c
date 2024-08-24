@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/23 13:08:54 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/24 11:25:38 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int main(int ac, char **av, char **env)
 			{
 				init_exec_struct(&tokens, envi);
 				print_exec(tokens->exec);
-				if (tokens && tokens->exec->path_option_args[0] != '\0')
+				if (tokens && tokens->exec->path_option_args[0] != (void *)'\0')
 					ft_exic(tokens->exec, &envi);
 				// printf("%d\n", g_status);
 				continue;

@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/22 17:04:53 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/24 11:35:08 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 	while (temp && temp->type != PIPE)
 	{
 		if (temp->type == WORD)
-			new->path_option_args[i++] = get_cmd(temp, env);
+			new->path_option_args[i++] = get_cmd(temp, env, &new->exed);
 		if (temp->type == WORD)
 			get_spichil(&temp, &new->path_option_args[i - 1], env);
 		else if (temp && (temp->type == S_QUOTE  || temp->type == D_QUOTE ) && temp->next)
@@ -60,6 +60,7 @@ void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 	(*new)->redir_in[count_red(tokens, REDIR_IN)] = NULL; 
 	(*new)->redir_out[count_red(tokens, REDIR_OUT)] = NULL; 
 	(*new)->heredoc_end[count_red(tokens, REDIR_AND)] = NULL;
+	(*new)->exed = false;
 	(*new)->append = false;
 	(*new)->heredoc = false;
 	(*new)->env = env;
