@@ -309,8 +309,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 			return ;
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0])) //TO DO
 		{
-			fd_hindler(cmd_num, fd, fds, i);
-			ft_builtin(cmds, envi);
+			ft_builtin(cmds, envi, fds[1]);
 			break;
 		}
 		pids[i] = fork();
@@ -318,9 +317,9 @@ void ft_exic(t_exec *cmds, t_env **envi)
 			return (free(pids));
 		if (pids[i] == 0)
 		{
-			fd_hindler(cmd_num, fd, fds, i);
-			if (cmds->path_option_args && ft_builtin(cmds, envi))
+			if (cmds->path_option_args && ft_builtin(cmds, envi, fds[1]))
 				exit(0);
+			fd_hindler(cmd_num, fd, fds, i);
 			if (execve(cmds->path_option_args[0], cmds->path_option_args, environ) == -1)
 			{
 				write(2, "minishell: command not found:\n", 31);

@@ -89,28 +89,28 @@ int echo_option(t_exec *cmd)
 	return (i);
 }
 
-bool ft_echo(t_exec *cmd)
+bool ft_echo(t_exec *cmd, int fd_out)
 {
 	int i;
 
 	i = echo_option(cmd) - 1;
 	while (cmd->path_option_args[i + 1] && cmd->path_option_args[++i])
 	{
-		printf("%s",cmd->path_option_args[i]);
+		dprintf(fd_out, "%s", cmd->path_option_args[i]);
 		if (cmd && cmd->path_option_args[i] && cmd->path_option_args[i + 1])
-			printf(" ");
+			dprintf(fd_out, " ");
 	}
 	if (echo_option(cmd) - 1 == 0)
-		printf("\n");
+		dprintf(fd_out, "\n");
 	g_status = 0;
 	return (true);
 }
 
-bool ft_env(t_env *env)
+bool ft_env(t_env *env, int fd_out)
 {
 	while(env)
 	{
-		printf("%s=%s\n",env->var, env->value);
+		dprintf(fd_out, "%s=%s\n",env->var, env->value);
 		env = env->next;
 	}
 	return (true);
@@ -162,24 +162,23 @@ bool update_var(t_env **env, char *arg, char *new_var)
 	return (false);
 }
 
-bool export_no_arg(t_env *env, char **arg)
+bool export_no_arg(t_env *env, char **arg , int fd_out)
 {
 	if (!arg || !*arg)
 	{
 		while (env)
 		{
-			printf("declare -x %s=%s\n", env->var, env->value);
+			dprintf(fd_out, "declare -x %s=%s\n", env->var, env->value);
 			env = env->next;
 		}
 		g_status = 0;
-
 		return (true);
 	}
 	if (arg && *arg && arg[0][0] == ' ')
 	{
 		while (env)
 		{
-			printf("declare -x %s=%s\n", env->var, env->value);
+			dprintf(fd_out, "declare -x %s=%s\n", env->var, env->value);
 			env = env->next;
 		}
 		g_status = 0;
@@ -188,7 +187,7 @@ bool export_no_arg(t_env *env, char **arg)
 	return (false);
 }
 
-bool ft_export(t_env **env, char **arg)
+bool ft_export(t_env **env, char **arg, int fd_out)
 {
 	int i;
 	int j;
@@ -196,7 +195,7 @@ bool ft_export(t_env **env, char **arg)
 	t_env *new;
 
 	j = -1;
-	if (export_no_arg(*env, arg))
+	if (export_no_arg(*env, arg, fd_out))
 		return (true);
 	while (arg[++j])
 	{
@@ -269,7 +268,7 @@ bool ft_exit_built(char **arg)
 		exit(ft_atoi(arg[0]));
 }
 
-bool ft_pwd(void)
+bool ft_pwd(int fd_out)
 {
 	char s[MAX_PATH];
 	if (getcwd(s, MAX_PATH) == NULL)
@@ -277,28 +276,30 @@ bool ft_pwd(void)
 		g_status = 1;
 		return (true);
 	}
-	printf("%s\n",s);
+	dprintf(fd_out, "%s\n",s);
 	g_status = 0;
 	return (true);
 }
 
-bool ft_builtin(t_exec *cmd, t_env **envi)
+bool ft_builtin(t_exec *cmd, t_env **envi, int fd_out)
 {
 	char *builtin;
 
 	if (!cmd || !cmd->path_option_args)
 		return (false);
+	if (fd_out == -1)
+		fd_out = 1;
 	builtin = cmd->path_option_args[0];
 	if (!ft_strncmp(builtin, "cd", 3) || !ft_strncmp(builtin, "CD", 3))
 		return (ft_cd(cmd->path_option_args[1], *envi));
 	if (!ft_strncmp(builtin, "pwd", 4) || !ft_strncmp(builtin, "PWD", 4))
-		return (ft_pwd());
+		return (ft_pwd(fd_out));
 	if (!ft_strncmp(builtin, "echo", 5) || !ft_strncmp(builtin, "ECHO", 5))
-		return (ft_echo(cmd));
+		return (ft_echo(cmd, fd_out));
 	if (!ft_strncmp(builtin, "env", 4) || !ft_strncmp(builtin, "ENV", 4))
-		return (ft_env(cmd->env));
+		return (ft_env(cmd->env, fd_out));
 	if (!ft_strncmp(builtin, "export", 7) || !ft_strncmp(builtin, "EXPORT", 7))
-		return (ft_export(envi, &cmd->path_option_args[1]));
+		return (ft_export(envi, &cmd->path_option_args[1], fd_out));
 	if (!ft_strncmp(builtin, "unset", 6) || !ft_strncmp(builtin, "UNSET", 6))
 		return (ft_unset(envi, &cmd->path_option_args[1]));
 	if (!ft_strncmp(builtin, "exit", 5) || !ft_strncmp(builtin, "EXIT", 5))
