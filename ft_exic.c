@@ -143,10 +143,7 @@ int if_herdoc(char **delimiters)
 
 	i = -1;
 	if (!delimiters || !(*delimiters) )
-	{
-		
 		return (-1);
-	}
 	pip = malloc(sizeof(int) * 2);
 	while (delimiters[++i])
 	{
@@ -241,6 +238,35 @@ void ft_clear(int cmd_num, int **fd, int *fds, int *pids)
 	free_int(fd, cmd_num);
 	g_status = exit_status;
 }
+
+void herdoc_signal(int sig)
+{
+	(void)sig;
+	exit(130);
+}
+int *ft_open(t_exec *cmd)
+{
+	int heredoc;
+	int *fds;
+	int pid;
+	if (cmd->heredoc_end)
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			signal(SIGINT, herdoc_signal);
+			heredoc = if_herdoc(cmd->heredoc_end);
+			exit(0);
+		}
+		waitpid(pid, &g_status, 0);
+	}
+	fds = open_redir(cmd);
+	if (!fds)
+		return (NULL);
+	if (cmd->heredoc)
+		fds[0] = heredoc;
+	return (fds);
+}
 void ft_exic(t_exec *cmds, t_env **envi)
 {
 	int cmd_num;
@@ -248,7 +274,6 @@ void ft_exic(t_exec *cmds, t_env **envi)
 	int *pids;
 	int **fd;
 	int *fds;
-	int heredoc;
 
 	cmd_num = ft_count_cmd(cmds);
 	pids = malloc(sizeof(int) * cmd_num);
@@ -258,12 +283,15 @@ void ft_exic(t_exec *cmds, t_env **envi)
 	fd = ft_pip(cmd_num);
 	while (i < cmd_num)
 	{
-		heredoc = if_herdoc(cmds->heredoc_end);
-		fds = open_redir(cmds);
+		// heredoc = if_herdoc(cmds->heredoc_end);
+		// fds = open_redir(cmds);
+		// if (!fds)
+		// 	return ;
+		// if (cmds->heredoc)
+		// 	fds[0] = heredoc;
+		fds = ft_open(cmds);
 		if (!fds)
 			return ;
-		if (cmds->heredoc)
-			fds[0] = heredoc;
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 		{
 			fd_hindler(cmd_num, fd, fds, i);

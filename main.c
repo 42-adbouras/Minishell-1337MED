@@ -71,7 +71,7 @@ int main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				print_exec(tokens->exec);
+				// print_exec(tokens->exec);
 				if (tokens && tokens->exec->path_option_args[0] != '\0')
 					ft_exic(tokens->exec, &envi);
 				// printf("%d\n", g_status);
