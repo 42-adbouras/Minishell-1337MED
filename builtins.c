@@ -130,7 +130,7 @@ bool cheak_var(char *var)
 			return (false);
 		}
 	}
-	if (var[0] != '_')
+	if (var && var[0] != '\0' && var[0] != '_')
 	{
 		if (!ft_isalpha(var[0])) //123var
 		{
@@ -139,6 +139,8 @@ bool cheak_var(char *var)
 			return (false);
 		}
 	}
+	else 
+		return (false);
 	return (true);
 }
 

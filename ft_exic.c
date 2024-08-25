@@ -288,6 +288,21 @@ int *ft_open(t_exec *cmd)
 		fds[0] = heredoc;
 	return (fds);
 }
+void ft_exec_error(void)
+{
+	if (errno == ENOENT)
+	{
+		perror("minishell");
+		exit(127);
+	}
+	else if (errno == EACCES)
+	{
+		perror("minishell");
+		exit( 126);
+	}
+	else
+		exit(1);
+}
 void ft_exic(t_exec *cmds, t_env **envi)
 {
 	int cmd_num;
@@ -307,7 +322,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 		fds = ft_open(cmds);
 		if (!fds)
 			return ;
-		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0])) //TO DO
+		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 		{
 			ft_builtin(cmds, envi, fds[1]);
 			break;
@@ -317,17 +332,11 @@ void ft_exic(t_exec *cmds, t_env **envi)
 			return (free(pids));
 		if (pids[i] == 0)
 		{
+			fd_hindler(cmd_num, fd, fds, i);
 			if (cmds->path_option_args && ft_builtin(cmds, envi, fds[1]))
 				exit(0);
-			fd_hindler(cmd_num, fd, fds, i);
 			if (execve(cmds->path_option_args[0], cmds->path_option_args, environ) == -1)
-			{
-				write(2, "minishell: command not found:\n", 31);
-				if (errno == ENOENT)
-					exit(127);
-				else
-					exit(126);
-			}
+				ft_exec_error();
 		}
 		i++;
 		cmds = cmds->next; 

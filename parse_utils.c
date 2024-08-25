@@ -64,7 +64,9 @@ void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 	if ((*temp)->next)
 	{
 		(*temp) = (*temp)->next;
-		if ((*temp)->type == WORD)
+		if ((*temp)->content[0] == '?')
+			(*new)->path_option_args[(*i)++] = ft_strjoin(ft_itoa(g_status), &((*temp)->content[1]));
+		else if ((*temp)->type == WORD)
 			(*new)->path_option_args[(*i)++] = ft_expand(env, (*temp)->content);
 		else
 			(*new)->path_option_args[(*i)++] = ft_strdup("$");

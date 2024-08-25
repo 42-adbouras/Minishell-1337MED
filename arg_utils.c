@@ -73,7 +73,7 @@ char	*get_access(char *cmd, t_env *env)
     i = 0;
 	while (env && ft_strncmp(env->var, "PATH", 5))
 		env = env->next;
-    if (!access(cmd, X_OK))
+    if (!access(cmd, X_OK) || !env)
         return (cmd);
 	paths = ft_split(env->value, ':');
     while (paths[i])
