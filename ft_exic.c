@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/26 11:35:29 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/20 12:39:27 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,70 @@ bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos)
 	return (true);
 }
 
+
+void read_heredoc(char *delimiter, int *pip)
+{
+	char *s;
+	char *line;
+	
+	s = ft_strjoin(delimiter, "\n");
+	line = ft_strdup("");
+	while (ft_strncmp(line, s, ft_strlen(s) + 1) != 0)
+	{
+		ft_putstr_fd(line, pip[1]);
+		free(line);
+		line = readline("> ");
+		if (!line)
+        {
+            // Handle SIGINT signal
+            free(s);
+            exit(130);
+        }
+		line = ft_strjoin(line, "\n");
+	}
+	free(line);
+	free(s);
+	exit(0);
+}
+
+void herdoc_signal(int sig)
+{
+	(void)sig;
+	exit(130);
+}
+
+void if_herdoc(char **delimiters, int *fd_heredoc)
+{
+	int i;
+	int *pip;
+	int pid;
+
+	i = -1;
+	if (!delimiters || !(*delimiters) )
+	{
+		*(fd_heredoc) = -1;
+		return ;
+	}
+	pip = malloc(sizeof(int) * 2);
+	while (delimiters[++i])
+	{
+		if (pipe(pip) == -1)
+		{
+			*(fd_heredoc) = -1;
+			return ;
+		}
+		pid = fork();
+		if (pid == 0)
+		{
+			signal(SIGINT, herdoc_signal);
+			read_heredoc(delimiters[i], pip);
+		}
+		waitpid(pid, &g_status, 0);
+	}
+	close(pip[1]);
+	*(fd_heredoc) = pip[0];
+	free(pip);
+}
 int *open_redir(t_exec *cmd)
 {
 	int *fds;
@@ -219,7 +283,7 @@ int *ft_open(t_exec *cmd)
 
 	heredoc = 0;
 	if (cmd->heredoc_end)
-		if_herdoc(cmd->heredoc_end, cmd->env, &heredoc);
+		if_herdoc(cmd->heredoc_end, &heredoc);
 	fds = open_redir(cmd);
 	if (!fds)
 		return (NULL);
@@ -242,30 +306,28 @@ void ft_exec_error(void)
 	else
 		exit(1);
 }
-void ft_exic(t_exec *cmds)
+void ft_exic(t_exec *cmds, t_env **envi)
 {
 	int cmd_num;
 	int i;
 	int *pids;
 	int **fd;
 	int *fds;
-	char **env;
 
 	cmd_num = ft_count_cmd(cmds);
 	pids = malloc(sizeof(int) * cmd_num);
-	env = env_to_str(cmds->env);
 	i = 0;
 	if (!pids)
 		return ;
 	fd = ft_pip(cmd_num);
 	while (i < cmd_num)
 	{
-		fds = ft_open(cmds);
+		fds = ft_open(cmds); //to do
 		if (!fds)
 			return ;
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 		{
-			ft_builtin(cmds, &(cmds)->env, fds[1]);
+			ft_builtin(cmds, envi, fds[1]);
 			break;
 		}
 		pids[i] = fork();
@@ -274,9 +336,9 @@ void ft_exic(t_exec *cmds)
 		if (pids[i] == 0) 
 		{
 			fd_hindler(cmd_num, fd, fds, i);
-			if (cmds->path_option_args && ft_builtin(cmds, &(cmds)->env, fds[1]))
+			if (cmds->path_option_args && ft_builtin(cmds, envi, fds[1]))
 				exit(0);
-			if (execve(cmds->path_option_args[0], cmds->path_option_args, env) == -1)
+			if (execve(cmds->path_option_args[0], cmds->path_option_args, environ) == -1)
 				ft_exec_error();
 		}
 		i++;

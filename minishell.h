@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/26 12:53:30 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/26 12:13:15 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ t_env *creat_var(char *var);
 void set_env(t_env **envi, char **env);
 void add_env(t_env **head, t_env *env_new);
 void free_env(t_env *env);
-void ft_exic(t_exec *cmds);
+void ft_exic(t_exec *cmds, t_env **envi);
 bool ft_builtin(t_exec *cmd, t_env **envi, int fd_out);
 bool    ft_cd(char *path, t_env *env);
 bool env_var(t_env *env, char **arg);
@@ -204,8 +204,8 @@ void	ft_close(int cmd_num, int **pipes, int *fds);
 void	ft_stdin(int **pipes, int pid, int *fds);
 void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds);
 bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos);
-void read_heredoc(char *delimiter, int *pip, t_env *env);
-void if_herdoc(char **delimiters, t_env *env, int *fd_heredoc);
+void read_heredoc(char *delimiter, int *pip);
+void if_herdoc(char **delimiters, int *fd_heredoc);
 int *open_redir(t_exec *cmd);
 bool if_builtin(char *cmd);
 void ft_clear(int cmd_num, int **fd, int *fds, int *pids);

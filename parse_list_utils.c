@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/26 13:24:05 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:34:59 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 			new->path_option_args[i++] = get_cmd(temp, env, &new->exed);
 		if (temp->type == WORD)
 			get_spichil(&temp, &new->path_option_args[i - 1], env);
-		else if (temp && (temp->state == IN_SQUOTE  || temp->state == IN_DQUOTE ) && temp->next)
+		else if (temp && (temp->state == IN_SQUOTE  || temp->state == IN_DQUOTE) && temp->next)
 			new->path_option_args[i++] = get_arg(&temp, env);
 		else if (temp && temp->type == ENV)
 			process_expander(&temp, &new, env, &i);
@@ -86,12 +86,42 @@ void	exec_add_back(t_exec **exec, t_exec *new)
 	last->next = new;
 }
 
+void join_tokens(t_elem **tokens)
+{
+    t_elem	*current;
+    t_elem	*temp;
+	char	*new;
+
+    current = *tokens;
+    while (current && current->next)
+    {
+        if (current->type == WORD && current->next->type == WORD)
+        {
+            new = ft_strjoin(current->content, current->next->content);
+            free(current->content);
+            current->content = new;
+            current->len = ft_strlen(current->content);
+			current->state = GENERAL;
+            temp = current->next;
+            current->next = current->next->next;
+            if (current->next)
+                current->next->prev = current;
+            free(temp);
+        }
+        else
+            current = current->next;
+    }
+}
+
 void	init_exec_struct(t_data **data, t_env *env)
 {
 	t_exec	*new;
 	t_elem	*temp;
 	
 	temp = (*data)->head;
+	remove_quotes(&(*data)->head);
+	join_tokens(&(*data)->head);
+	// print_tokens((*data));
 	while (temp)
 	{
 		new = new_exec(temp, env);

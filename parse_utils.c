@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/26 13:12:26 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/23 10:15:48 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,10 @@ char *ft_expand(t_env *env, char *var)
 		while (temp)
 		{
 			if (!ft_strncmp(temp->var, s, ft_strlen(temp->var) + 1))
-				return (free(s), ft_strjoin(temp->value, after));
+				return (ft_strjoin(temp->value, after));
 			temp = temp->next;
 		}
 		i++;
-		free(s);
-		free(after);
 	}
 	return (NULL);
 }
