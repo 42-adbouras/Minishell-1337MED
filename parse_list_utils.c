@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/26 13:20:46 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/26 13:24:05 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 			new->path_option_args[i++] = get_cmd(temp, env, &new->exed);
 		if (temp->type == WORD)
 			get_spichil(&temp, &new->path_option_args[i - 1], env);
-		else if (temp && (temp->type == S_QUOTE  || temp->type == D_QUOTE ) && temp->next)
+		else if (temp && (temp->state == IN_SQUOTE  || temp->state == IN_DQUOTE ) && temp->next)
 			new->path_option_args[i++] = get_arg(&temp, env);
 		else if (temp && temp->type == ENV)
 			process_expander(&temp, &new, env, &i);
