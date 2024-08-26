@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/24 11:35:40 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:13:15 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,8 @@ char	*token_to_string(t_token token);
 void    signals_init();
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
+
+void	remove_quotes(t_elem **tokens);
 
 /****************************		eismail		****************************/
 int g_status;

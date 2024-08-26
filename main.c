@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/24 11:25:38 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:47:06 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,64 @@ void	print_exec(t_exec *exec)
 		tmp = tmp->next;
 		j++;
 	}
+}
+
+void	remove_spaces(t_elem **tokens)
+{
+    t_elem *temp;
+    t_elem *prev = NULL;
+	t_elem *current = *tokens;
+
+	// print_tokens((*tokens));
+    while (current)
+    {
+        if (current->type == W_SPACE && current->state == GENERAL)
+        {
+            temp = current;
+            if (prev != NULL)
+                prev->next = current->next;
+            else 
+                *tokens = current->next;
+            if (current->next != NULL)
+                current->next->prev = prev;
+            current = current->next;
+            free(temp);
+        }
+        else
+        {
+            prev = current;
+            current = current->next;
+        }
+    }
+}
+
+void	remove_quotes(t_elem **tokens)
+{
+    t_elem *temp;
+    t_elem *prev;
+	t_elem *current = *tokens;
+
+	// print_tokens((*tokens));
+    while (current)
+    {
+        if ((current->type == D_QUOTE || current->type == S_QUOTE) && current->state == GENERAL)
+        {
+            temp = current;
+            if (prev != NULL)
+                prev->next = current->next;
+            else 
+                *tokens = current->next;
+            if (current->next != NULL)
+                current->next->prev = prev;
+            current = current->next;
+            free(temp);
+        }
+        else
+        {
+            prev = current;
+            current = current->next;
+        }
+    }
 }
 
 int main(int ac, char **av, char **env)
