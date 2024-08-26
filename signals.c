@@ -31,17 +31,32 @@ void	sigint_handler(int sig)
     }
 }
 
+void	catch_sigint(int signum)
+{
+	(void)signum;
+    g_status = 1;
+	ft_putstr_fd("\n",1);
+}
+
+void	catch_sigquit(int signum)
+{
+	(void)signum;
+	kill(0, SIGCHLD);
+}
+
 void    signals_init()
 {
-    t_sa	sa_int;
-    t_sa	sa_quit;
+    // t_sa	sa_int;
+    // t_sa	sa_quit;
 
-    rl_catch_signals = 0;
-    sa_int.sa_flags = 0;
-    sa_quit.sa_flags = 0;
-	sa_int.sa_handler = &sigint_handler;
-	sigaction(SIGINT, &sa_int, NULL);
+    // rl_catch_signals = 0;
+    // sa_int.sa_flags = 0;
+    // sa_quit.sa_flags = 0;
+	// sa_int.sa_handler = &sigint_handler;
+	// sigaction(SIGINT, &sa_int, NULL);
     
-	sa_quit.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &sa_quit, NULL);
+	// sa_quit.sa_handler = SIG_IGN;
+	// sigaction(SIGQUIT, &sa_quit, NULL);
+    signal(SIGINT, catch_sigint);
+	signal(SIGQUIT, catch_sigquit);
 }

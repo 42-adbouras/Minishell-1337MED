@@ -29,6 +29,7 @@ int ft_count_cmd(t_exec *cmd)
 	return (i);
 }
 
+
 void	free_int(int **p, int n)
 {
 	int	i;
@@ -136,23 +137,35 @@ void read_heredoc(char *delimiter, int *pip)
 		free(line);
 		line = readline("> ");
 		if (!line)
-			break;
+        {
+            // Handle SIGINT signal
+            free(s);
+            exit(130);
+        }
 		line = ft_strjoin(line, "\n");
 	}
 	free(line);
 	free(s);
+	exit(0);
+}
+
+void herdoc_signal(int sig)
+{
+	(void)sig;
+	exit(130);
 }
 
 void if_herdoc(char **delimiters, int *fd_heredoc)
 {
 	int i;
 	int *pip;
+	int pid;
 
 	i = -1;
 	if (!delimiters || !(*delimiters) )
 	{
 		*(fd_heredoc) = -1;
-		exit(0);
+		return ;
 	}
 	pip = malloc(sizeof(int) * 2);
 	while (delimiters[++i])
@@ -160,14 +173,19 @@ void if_herdoc(char **delimiters, int *fd_heredoc)
 		if (pipe(pip) == -1)
 		{
 			*(fd_heredoc) = -1;
-			exit(0);
+			return ;
 		}
-		read_heredoc(delimiters[i], pip);
+		pid = fork();
+		if (pid == 0)
+		{
+			signal(SIGINT, herdoc_signal);
+			read_heredoc(delimiters[i], pip);
+		}
+		waitpid(pid, &g_status, 0);
 	}
 	close(pip[1]);
 	*(fd_heredoc) = pip[0];
 	free(pip);
-	exit(0);
 }
 int *open_redir(t_exec *cmd)
 {
@@ -258,29 +276,14 @@ void ft_clear(int cmd_num, int **fd, int *fds, int *pids)
 	g_status = exit_status;
 }
 
-void herdoc_signal(int sig)
-{
-	(void)sig;
-	exit(130);
-}
 int *ft_open(t_exec *cmd)
 {
 	int heredoc;
 	int *fds;
-	int pid;
 
-	heredoc = (int)ft_calloc(1, sizeof(int));
+	heredoc = 0;
 	if (cmd->heredoc_end)
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			signal(SIGINT, herdoc_signal);
-			if_herdoc(cmd->heredoc_end, &heredoc);
-		}
-		else
-			waitpid(pid, &g_status, 0);
-	}
+		if_herdoc(cmd->heredoc_end, &heredoc);
 	fds = open_redir(cmd);
 	if (!fds)
 		return (NULL);
@@ -319,7 +322,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 	fd = ft_pip(cmd_num);
 	while (i < cmd_num)
 	{
-		fds = ft_open(cmds);
+		fds = ft_open(cmds); //to do
 		if (!fds)
 			return ;
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
@@ -330,7 +333,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 		pids[i] = fork();
 		if (pids[i] == -1)
 			return (free(pids));
-		if (pids[i] == 0)
+		if (pids[i] == 0) 
 		{
 			fd_hindler(cmd_num, fd, fds, i);
 			if (cmds->path_option_args && ft_builtin(cmds, envi, fds[1]))
