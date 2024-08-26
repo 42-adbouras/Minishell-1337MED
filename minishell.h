@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/26 11:38:07 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/26 12:53:30 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,8 @@ char	*token_to_string(t_token token);
 void    signals_init();
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
+
+void	remove_quotes(t_elem **tokens);
 
 /****************************		eismail		****************************/
 int g_status;
