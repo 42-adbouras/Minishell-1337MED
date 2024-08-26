@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/24 11:25:38 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:28:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int main(int ac, char **av, char **env)
 				init_exec_struct(&tokens, envi);
 				// print_exec(tokens->exec);
 				if (tokens && tokens->exec)
-					ft_exic(tokens->exec, &envi);
+					ft_exic(tokens->exec);
 				continue;
 			}
 			free (rl);
