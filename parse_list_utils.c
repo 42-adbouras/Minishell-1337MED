@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/26 12:45:58 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:20:46 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,42 +86,12 @@ void	exec_add_back(t_exec **exec, t_exec *new)
 	last->next = new;
 }
 
-void join_tokens(t_elem **tokens)
-{
-    t_elem	*current;
-    t_elem	*temp;
-	char	*new;
-
-    current = *tokens;
-    while (current && current->next)
-    {
-        if (current->type == WORD && current->next->type == WORD)
-        {
-            new = ft_strjoin(current->content, current->next->content);
-            free(current->content);
-            current->content = new;
-            current->len = ft_strlen(current->content);
-			current->state = GENERAL;
-            temp = current->next;
-            current->next = current->next->next;
-            if (current->next)
-                current->next->prev = current;
-            free(temp);
-        }
-        else
-            current = current->next;
-    }
-}
-
 void	init_exec_struct(t_data **data, t_env *env)
 {
 	t_exec	*new;
 	t_elem	*temp;
 	
 	temp = (*data)->head;
-	remove_quotes(&(*data)->head);
-	join_tokens(&(*data)->head);
-	// print_tokens((*data));
 	while (temp)
 	{
 		new = new_exec(temp, env);
