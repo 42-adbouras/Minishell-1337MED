@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/26 12:47:06 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:33:36 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,21 @@ void	remove_quotes(t_elem **tokens)
 	t_elem *current = *tokens;
 
 	// print_tokens((*tokens));
+	temp = NULL;
+	prev = NULL;
     while (current)
     {
         if ((current->type == D_QUOTE || current->type == S_QUOTE) && current->state == GENERAL)
         {
             temp = current;
-            if (prev != NULL)
+            if (prev != NULL )
                 prev->next = current->next;
             else 
                 *tokens = current->next;
-            if (current->next != NULL)
-                current->next->prev = prev;
+            if (current && current->next != NULL)
+                current->next->prev = NULL;
             current = current->next;
-            free(temp);
+			// free(temp);
         }
         else
         {
@@ -129,7 +131,7 @@ int main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				// print_exec(tokens->exec);
+				print_exec(tokens->exec);
 				if (tokens && tokens->exec)
 					ft_exic(tokens->exec, &envi);
 				continue;

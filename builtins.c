@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/20 12:16:18 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/27 11:20:30 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,12 @@ bool ft_echo(t_exec *cmd, int fd_out)
 	i = echo_option(cmd) - 1;
 	while (cmd->path_option_args[i + 1] && cmd->path_option_args[++i])
 	{
-		dprintf(fd_out, "%s", cmd->path_option_args[i]);
+		ft_putstr_fd(cmd->path_option_args[i], fd_out);
 		if (cmd && cmd->path_option_args[i] && cmd->path_option_args[i + 1])
-			dprintf(fd_out, " ");
+			ft_putstr_fd(" ", fd_out);
 	}
 	if (echo_option(cmd) - 1 == 0)
-		dprintf(fd_out, "\n");
+		ft_putstr_fd("\n",fd_out);
 	g_status = 0;
 	return (true);
 }
@@ -110,7 +110,10 @@ bool ft_env(t_env *env, int fd_out)
 {
 	while(env)
 	{
-		dprintf(fd_out, "%s=%s\n",env->var, env->value);
+		ft_putstr_fd(env->var, fd_out);
+		ft_putstr_fd("=", fd_out);
+		ft_putstr_fd(env->value,fd_out);
+		ft_putstr_fd("\n", fd_out);
 		env = env->next;
 	}
 	return (true);

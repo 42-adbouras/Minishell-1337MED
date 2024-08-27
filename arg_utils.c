@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/24 11:34:30 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/27 09:49:53 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	count_words(t_elem *tokens)
 	count = 0;
 	while (tokens && tokens->type != PIPE)
 	{
-		if (tokens && (tokens->type == D_QUOTE || tokens->type == S_QUOTE))
+		if (tokens && (tokens->state == IN_DQUOTE || tokens->state == IN_SQUOTE))
 		{
 			count++;
 			tokens = tokens->next;

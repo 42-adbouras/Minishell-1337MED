@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/23 10:15:48 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:12:27 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,37 +74,29 @@ void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 	else
 		(*new)->path_option_args[(*i)++] = ft_strdup("$");
 }
+// char *get_after(char *var)
+// {
+// 	int i;
+	
+// 	i = 0;
 
+// 	while (var[i] && ())
+// }
 char *ft_expand(t_env *env, char *var)
 {
-	char *s;
-	char *after;
 	t_env *temp;
-	int i;
-	int j;
-	int l;
-
-	i = 0;
-	j = 0;
-	while (var[i])
+	// char *after;
+	// char *variable;
+	
+	temp = env;
+	// after = get_after(var);
+	// variable = get_var(var);
+	
+	while (temp)
 	{
-		temp = env; 
-		j = i;
-		l = 0;
-		while (var[j] && !ft_isalnum(var[j++]))
-			i++;
-		s = ft_substr(var, l, j);
-		l = j;
-		while (var[l] && !ft_isalnum(var[l++]))
-		;
-		after = ft_substr (var, j, l);
-		while (temp)
-		{
-			if (!ft_strncmp(temp->var, s, ft_strlen(temp->var) + 1))
-				return (ft_strjoin(temp->value, after));
-			temp = temp->next;
-		}
-		i++;
+		if (!ft_strncmp(temp->var, var, ft_strlen(temp->var) + 1))
+			return (temp->value);
+		temp = temp->next;
 	}
 	return (NULL);
 }
@@ -116,7 +108,7 @@ char	*get_arg(t_elem **token, t_env *env)
 	arg = NULL;
 	if (!*token)
 		return (NULL);
-	(*token) = (*token)->next;
+	// (*token) = (*token)->next;
 	state = (*token)->state;
 	while ((*token) && (*token)->state == state)
 	{

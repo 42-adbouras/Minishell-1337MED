@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/26 14:34:59 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:22:25 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 	new_exec_node(&new, tokens, env);
 	while (temp && temp->type != PIPE)
 	{
-		if (temp->type == WORD)
+		if (temp->type == WORD && !new->exed)
+		{
 			new->path_option_args[i++] = get_cmd(temp, env, &new->exed);
-		if (temp->type == WORD)
-			get_spichil(&temp, &new->path_option_args[i - 1], env);
+		}
+		else if (temp->type == WORD && temp->state == GENERAL)
+			new->path_option_args[i++] = ft_strdup(temp->content);
 		else if (temp && (temp->state == IN_SQUOTE  || temp->state == IN_DQUOTE) && temp->next)
 			new->path_option_args[i++] = get_arg(&temp, env);
-		else if (temp && temp->type == ENV)
+		else if (temp && temp->type == ENV )
 			process_expander(&temp, &new, env, &i);
 		else if (temp && is_red(temp->type))
 			if_redir(&temp);
