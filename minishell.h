@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/26 12:13:15 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:52:46 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ void	free_tokens(t_data **tokens);
 void	free_char_arr(char **arr);
 char 	*get_redirec(t_elem **token);
 bool 	last_heredoc(t_elem *token);
+void	free_exec(t_exec **exec);
 
 /***	error.c				***********************************************/
 void	ft_exit(t_data **tokens, char *err);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/27 09:49:53 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/27 12:01:08 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ char	*get_access(char *cmd, t_env *env)
         slash = ft_strjoin("/", cmd);
         temp = ft_strjoin(paths[i], slash);
         if (!access(temp, X_OK))
-            return (free(slash), temp);
+            return (free_char_arr(paths), free(slash), temp);
         free(temp);
         free(slash);
         i++;
     }
-    return (cmd);
+    return (free_char_arr(paths), cmd);
 }
