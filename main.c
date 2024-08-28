@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/28 09:19:26 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:23:27 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int main(int ac, char **av, char **env)
 	
 	// atexit(_lks);
 	signals_init();
+	// envi = malloc(sizeof(t_env));
 	envi = NULL;
 
 	set_env(&envi, env); // enviroment initialize

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/27 12:05:00 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:23:11 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 	{
 		if (temp->type == WORD && !new->exed)
 		{
+			if (ft_strncmp(&temp->content[ft_strlen(temp->content) - 3], ".sh", 4) == 0)
+				new->path_option_args[i++] = ft_strdup("/bin/bash");
 			new->path_option_args[i++] = get_cmd(temp, env, &new->exed);
 		}
 		else if (temp->type == WORD && temp->state == GENERAL)
 			new->path_option_args[i++] = ft_strdup(temp->content);
-		else if (temp && (temp->state == IN_SQUOTE  || temp->state == IN_DQUOTE) && temp->next)
+		else if (temp && (temp->state == IN_SQUOTE  || temp->state == IN_DQUOTE))
 			new->path_option_args[i++] = get_arg(&temp, env);
 		else if (temp && temp->type == ENV )
 			process_expander(&temp, &new, env, &i);
