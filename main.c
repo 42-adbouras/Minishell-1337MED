@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/27 12:05:26 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:19:26 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,9 @@ int main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				// print_exec(tokens->exec);
+				print_exec(tokens->exec);
 				if (tokens && tokens->exec)
 					ft_exic(tokens->exec, &envi);
-				continue;
 			}
 			free (rl);
 			free_tokens(&tokens);
