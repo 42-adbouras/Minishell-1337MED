@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/27 12:43:08 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 09:48:20 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char *ft_expand(t_env *env, char *var)
 	{
 		if (!ft_strncmp(temp->var, variable, ft_strlen(temp->var) + 1))
 		{
-			re = ft_strjoin(variable, after);
+			re = ft_strjoin(&temp->value[1], after);
 			return (free(after), free(variable), re);
 		}
 		temp = temp->next;

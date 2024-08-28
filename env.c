@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 09:07:33 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 09:52:40 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ t_env *creat_var(char *var)
 	t_env *envi;
 
 	envi = malloc(sizeof(t_env));
-	j = -1;
-	while(var[++j] != '=')
-	;
+	j = 0;
+	while(var[j] && var[j] != '=')
+	j++;
 	envi->var = ft_substr(var, 0,j);
-	envi->value = ft_substr(var, ++j,ft_strlen(var));
+	envi->value = ft_substr(var, j,ft_strlen(var));
 	envi->next = NULL;
 	return (envi);
 }

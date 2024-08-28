@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 09:12:05 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 10:07:59 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,14 +108,14 @@ bool ft_echo(t_exec *cmd, int fd_out)
 
 bool ft_env(t_env *env, int fd_out)
 {
-	// printf("++++++++++++++\n");
-	// printf("[%s]++++++++++++++++\n",env->var);1
-	while(env && env->var)
+	while(env)
 	{
-		ft_putstr_fd(env->var, fd_out);
-		ft_putstr_fd("=", fd_out);
-		ft_putstr_fd(env->value,fd_out);
-		ft_putstr_fd("\n", fd_out);
+		if (ft_strchr(env->value, '='))
+		{
+			ft_putstr_fd(env->var, fd_out);
+			ft_putstr_fd(env->value,fd_out);
+			ft_putstr_fd("\n", fd_out);
+		}
 		env = env->next;
 	}
 	return (true);
@@ -159,6 +159,8 @@ bool update_var(t_env **env, char *arg, char *new_var)
 	{
 		if (!ft_strncmp(new_var,temp->var,ft_strlen(new_var) + 1))
 		{
+			if (!ft_strchr(arg,'='))
+				return (true);
 			new = creat_var(arg);
 			temp->value = new->value;
 			g_status = 0;
@@ -173,9 +175,18 @@ bool export_no_arg(t_env *env, char **arg , int fd_out)
 {
 	if (!arg || !*arg)
 	{
-		while (env)
+		while(env)
 		{
-			dprintf(fd_out, "declare -x %s=%s\n", env->var, env->value);
+			ft_putstr_fd("declare -x ", fd_out);
+			ft_putstr_fd(env->var, fd_out);
+			if (env->value && env->value[0] == '=')
+			{
+				ft_putstr_fd("=", fd_out);
+				ft_putstr_fd("\"", fd_out);
+				ft_putstr_fd(&env->value[1],fd_out);
+				ft_putstr_fd("\"", fd_out);
+			}
+			ft_putstr_fd("\n", fd_out);
 			env = env->next;
 		}
 		g_status = 0;

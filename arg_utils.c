@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 09:17:17 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:39:04 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char *get_cmd(t_elem *tokens, t_env *env, bool *exed)
 	char *word;
 
 	word = NULL;
+	if (if_builtin(tokens->content))
+		word = ft_strdup(tokens->content);
 	if (!if_builtin(tokens->content) && !*exed)
 		word = get_access(tokens->content, env);
 	if (word)
