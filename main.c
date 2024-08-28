@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/28 09:23:27 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:19:26 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,32 +74,29 @@ void	remove_spaces(t_elem **tokens)
 
 void	remove_quotes(t_elem **tokens)
 {
-    t_elem *temp;
-    t_elem *prev;
+    // t_elem *temp;
+    // t_elem *prev;
 	t_elem *current = *tokens;
 
 	// print_tokens((*tokens));
-	temp = NULL;
-	prev = NULL;
+	// temp = NULL;
+	// prev = NULL;
     while (current)
     {
         if ((current->type == D_QUOTE || current->type == S_QUOTE) && current->state == GENERAL)
         {
-            temp = current;
-            if (prev != NULL )
-                prev->next = current->next;
-            else 
-                *tokens = current->next;
-            if (current && current->next != NULL)
-                current->next->prev = NULL;
-            current = current->next;
-			// free(temp);
-        }
-        else
-        {
-            prev = current;
-            current = current->next;
-        }
+			if ((current->next->type == D_QUOTE || current->next->type == S_QUOTE) && current->state == GENERAL)
+			{
+				delete_token(&current);
+				free(current->next->content);
+				current->next->content = ft_strdup("");
+				current->next->type = WORD;
+				current = current->next;
+			}
+			else
+				delete_token(&current);
+		}
+		current = current->next;
     }
 }
 
@@ -133,6 +130,7 @@ int main(int ac, char **av, char **env)
 			{
 				init_exec_struct(&tokens, envi);
 				print_exec(tokens->exec);
+				print_tokens(tokens);
 				if (tokens && tokens->exec)
 					ft_exic(tokens->exec, &envi);
 			}

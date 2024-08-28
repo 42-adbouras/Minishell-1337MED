@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 09:04:44 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:55:06 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,21 @@ void	free_exec(t_exec **exec)
 		free_char_arr(temp->heredoc_end);
 	}
 	free(*exec);
+}
+
+void	delete_token(t_elem **token)
+{
+	t_elem	*next;
+	t_elem	*prev;
+	t_elem	*temp;
+
+	temp = (*token);	
+	next = (*token)->next;
+	prev = (*token)->prev;
+	if (prev)
+		prev->next = next;
+	if (next)
+		next->prev = prev;
 }
 
 void	free_char_arr(char **arr)

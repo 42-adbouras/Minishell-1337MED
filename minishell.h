@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/27 11:52:46 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:55:32 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ void	free_char_arr(char **arr);
 char 	*get_redirec(t_elem **token);
 bool 	last_heredoc(t_elem *token);
 void	free_exec(t_exec **exec);
+void	delete_token(t_elem **token);
 
 /***	error.c				***********************************************/
 void	ft_exit(t_data **tokens, char *err);
@@ -170,6 +171,7 @@ bool	ft_error(char *err);
 void	print_tokens(t_data *tokens);
 char	*state_to_string(t_state state);
 char	*token_to_string(t_token token);
+
 /***	signls.c				***********************************************/
 void    signals_init();
 void	sigint_handler(int sig);
