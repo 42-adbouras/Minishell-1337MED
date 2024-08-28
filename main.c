@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/28 10:25:00 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 18:24:27 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,13 @@ void	remove_quotes(t_elem **tokens)
     {
         if ((current->type == D_QUOTE || current->type == S_QUOTE) && current->state == GENERAL)
         {
-			if ((current->next->type == D_QUOTE || current->next->type == S_QUOTE) && current->state == GENERAL)
+			if (current->next && (current->next->type == D_QUOTE || current->next->type == S_QUOTE) && current->state == GENERAL)
 			{
-				delete_token(&current);
-				free(current->next->content);
-				current->next->content = ft_strdup("");
-				current->next->type = WORD;
-				current = current->next;
+				free(current->content);
+				delete_token(&current->next);
+				current->content = ft_strdup("");
+				current->type = WORD;
+				// current = current->next;
 			}
 			else
 				delete_token(&current);
@@ -104,7 +104,6 @@ int main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
-	(void)env;
 	
 	t_env	*envi;
 	char    *rl;
@@ -129,8 +128,8 @@ int main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				print_exec(tokens->exec);
-				print_tokens(tokens);
+				// print_exec(tokens->exec);
+				// print_tokens(tokens);
 				if (tokens && tokens->exec)
 					ft_exic(tokens->exec, &envi);
 			}
@@ -138,7 +137,7 @@ int main(int ac, char **av, char **env)
 			free_tokens(&tokens);
 			// free_env(envi); // free enviroment struct
 		}
-		// system ("leaks minishell");
+		system ("leaks -q minishell");
 	}
 	clear_history();
 }

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/27 17:23:11 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 17:54:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 		}
 		else if (temp->type == WORD && temp->state == GENERAL)
 			new->path_option_args[i++] = ft_strdup(temp->content);
-		else if (temp && (temp->state == IN_SQUOTE  || temp->state == IN_DQUOTE))
-			new->path_option_args[i++] = get_arg(&temp, env);
+		else if (temp && (temp->type == S_QUOTE  || temp->type == D_QUOTE))
+			new->path_option_args[i++] = get_arg(&temp, env, new->exed);
 		else if (temp && temp->type == ENV )
 			process_expander(&temp, &new, env, &i);
 		else if (temp && is_red(temp->type))
@@ -123,8 +123,8 @@ void	init_exec_struct(t_data **data, t_env *env)
 	t_elem	*temp;
 	
 	temp = (*data)->head;
-	remove_quotes(&(*data)->head);
-	join_tokens(&(*data)->head);
+	// remove_quotes(&(*data)->head);
+	// join_tokens(&(*data)->head);
 	// print_tokens((*data));
 	while (temp)
 	{

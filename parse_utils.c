@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 09:48:20 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 18:34:17 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,19 @@ void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 	if ((*temp)->next)
 	{
 		(*temp) = (*temp)->next;
-		if ((*temp)->content[0] == '?')
-		{
-			(*new)->path_option_args[(*i)++] = ft_itoa(g_status);
-			if (ft_strlen((*temp)->content) > 1)
-				(*new)->path_option_args[(*i)++] = ft_strdup(&((*temp)->content[1]));
-		}
-		else if ((*temp)->type == WORD)
-			(*new)->path_option_args[(*i)++] = ft_expand(env, (*temp)->content);
-		else
-			(*new)->path_option_args[(*i)++] = ft_strdup("$");
+		(*new)->path_option_args[(*i)] = ft_strdup("");
+		(*new)->path_option_args[(*i)] = arg_expand(*temp, env, &(*new)->path_option_args[(*i)]);
+		(*i)++;
+		// if ((*temp)->content[0] == '?')
+		// {
+		// 	(*new)->path_option_args[(*i)++] = ft_itoa(g_status);
+		// 	if (ft_strlen((*temp)->content) > 1)
+		// 		(*new)->path_option_args[(*i)++] = ft_strdup(&((*temp)->content[1]));
+		// }
+		// else if ((*temp)->type == WORD)
+		// 	(*new)->path_option_args[(*i)++] = ft_expand(env, (*temp)->content);
+		// else
+		// 	(*new)->path_option_args[(*i)++] = ft_strdup("$");
 	}
 	else
 		(*new)->path_option_args[(*i)++] = ft_strdup("$");
@@ -123,34 +126,87 @@ char *ft_expand(t_env *env, char *var)
 	}
 	return (NULL);
 }
-char	*get_arg(t_elem **token, t_env *env)
+
+void	_function(t_elem **token, t_state *state)
+{
+	if((*token) && ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
+	{
+		(*token) = (*token)->next;
+		if((*token) && ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE))
+			(*token) = (*token)->next;
+		if ((*token) && (*token)->type != W_SPACE && !is_red((*token)->type))
+		{
+			*state = (*token)->state;
+			if ((*token)->type != WORD)
+				(*token) = (*token)->next;
+		}
+	}
+}
+char *arg_expand(t_elem *token, t_env *env, char **arg)
+{
+	char *temp;
+	char *join;
+	
+	join = ft_strdup("");
+	temp = *arg;
+	if (token && (token)->content[0] == '?')
+	{
+		temp = ft_strjoin(temp, ft_itoa(g_status));
+		if (ft_strlen((token)->content) > 1)
+		{
+			join = ft_strdup(&((token)->content[1]));
+			temp = ft_strjoin(temp, join);
+		}
+	}
+	else if ((token) && (token)->type == WORD)
+	{
+		join = ft_expand(env, (token)->content);
+		temp = ft_strjoin(temp, join);
+	}
+	else
+	{
+		join = ft_strdup("$");
+		temp = ft_strjoin(temp, join);
+	}
+	return (free(join), free(*arg), temp);
+}
+char *arg_join(t_elem *token, char **arg, char *join)
+{
+	char *temp;
+	
+	temp = *arg;
+	if (token && (token->type == D_QUOTE || token->type == S_QUOTE) && token->state == GENERAL)
+		temp = ft_strjoin(temp, join);
+	else
+		temp = ft_strjoin(temp, (token)->content);
+	free(*arg);
+	return (temp);
+}
+char	*get_arg(t_elem **token, t_env *env, bool exec)
 {
 	char	*arg;
+	char	*join;
 	t_state	state;
 
 	arg = NULL;
+	join = ft_strdup("");
 	if (!*token)
 		return (NULL);
+	(*token) = (*token)->next;
 	state = (*token)->state;
 	while ((*token) && (*token)->state == state)
 	{
 		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)
 		{
 			(*token) = (*token)->next;
-			if ((*token)->content[0] == '?')
-			{
-				arg = ft_strjoin(arg, ft_itoa(g_status));
-				if (ft_strlen((*token)->content) > 1)
-					arg = ft_strjoin(arg, ft_strdup(&((*token)->content[1])));
-			}
-			if ((*token) && (*token)->type == WORD)
-				arg = ft_strjoin(arg, ft_expand(env, (*token)->content));
-			else
-				arg = ft_strjoin(arg,ft_strdup("$"));
+			arg = arg_expand(*token, env, &arg);
 		}
 		else
-			arg = ft_strjoin(arg, (*token)->content);
+			arg = arg_join(*token, &arg, join);
 		(*token) = (*token)->next;
+		_function(token, &state);
 	}
-	return (arg);
+	if (!exec)
+		return (free(join), get_access(arg, env));
+	return (free(join), arg);
 }

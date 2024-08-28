@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 09:35:44 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 18:23:39 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 	fd = ft_pip(cmd_num);
 	while (i < cmd_num)
 	{
-		fds = ft_open(cmds); //to do
+		fds = ft_open(cmds);
 		if (!fds)
 			return ;
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
@@ -342,7 +342,8 @@ void ft_exic(t_exec *cmds, t_env **envi)
 				ft_exec_error();
 		}
 		i++;
-		cmds = cmds->next; 
+		cmds = cmds->next;
+		free(fds);
 	}
 	ft_clear(cmd_num ,fd, fds, pids);
 }

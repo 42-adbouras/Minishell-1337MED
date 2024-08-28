@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 10:07:59 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 10:52:05 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,12 @@ bool cheak_var(char *var)
 			return (false);
 		}
 	}
-	else 
-		return (false);
+	else if (var && var[0] == '\0')
+	{
+		g_status = 1;
+		fprintf(stderr, "minishell: export: not a valid identifier\n");
+		return (false);	
+	}
 	return (true);
 }
 

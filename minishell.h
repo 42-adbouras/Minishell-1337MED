@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 09:55:32 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:15:12 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ bool	red_syntax(t_elem *token);
 bool	process_redir(t_elem *tokens, t_exec **new, t_env *env);
 void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i);
 char	*ft_expand(t_env *env, char *var);
-char	*get_arg(t_elem **token, t_env *env);
+char	*get_arg(t_elem **token, t_env *env, bool exec);
 
 /***	parse_list_utils.c			***************************************/
 t_exec	*new_exec(t_elem *tokens, t_env *env);
@@ -215,5 +215,6 @@ void ft_clear(int cmd_num, int **fd, int *fds, int *pids);
 bool ft_pwd(int fd_out);
 bool ft_export(t_env **env, char **arg, int fd_out);
 char **env_to_str(t_env *env);
+char *arg_expand(t_elem *token, t_env *env, char **arg);
 
 #endif

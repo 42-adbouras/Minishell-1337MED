@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 09:55:06 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:00:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	delete_token(t_elem **token)
 		prev->next = next;
 	if (next)
 		next->prev = prev;
+	free (temp->content);
+	free (temp);
 }
 
 void	free_char_arr(char **arr)

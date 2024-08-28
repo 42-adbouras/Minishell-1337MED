@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 09:39:04 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 18:21:55 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,7 @@ char *get_cmd(t_elem *tokens, t_env *env, bool *exed)
 		*exed = true;
 	return (word);
 }
-char	*get_spichil(t_elem **temp, char **new, t_env *env)
-{
-	if ((*temp) && ((*temp)->content[ft_strlen((*temp)->content) - 1] == '=') && *new)
-	{
-		while ((*temp) && (*temp)->type != S_QUOTE && (*temp)->type != D_QUOTE)
-			(*temp) = (*temp)->next;
-		*new = ft_strjoin(*new, get_arg(temp, env));
-	}
-	else if ((*temp) && (*temp)->content[0] == '-' && *new && (*temp)->next)
-	{
-		(*temp) = (*temp)->next;
-		if ((*temp) && ((*temp)->type == S_QUOTE || (*temp)->type == D_QUOTE))
-			*new = ft_strjoin(*new, get_arg(temp, env));
-	}
-	return (*new);
-}
+
 int	count_words(t_elem *tokens)
 {
 	int count;
@@ -48,7 +33,7 @@ int	count_words(t_elem *tokens)
 	count = 0;
 	while (tokens && tokens->type != PIPE)
 	{
-		if (tokens && (tokens->state == IN_DQUOTE || tokens->state == IN_SQUOTE))
+		if (tokens && (tokens->type == D_QUOTE || tokens->type == S_QUOTE))
 		{
 			count++;
 			tokens = tokens->next;
