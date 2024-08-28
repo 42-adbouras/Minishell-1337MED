@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/28 17:54:57 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 21:49:41 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,15 @@ void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 	(*new)->next = NULL;
 }
 
+t_exec	*ft_last_exec(t_exec *exec)
+{
+	if (exec == NULL)
+		return (NULL);
+	while (exec->next != NULL)
+		exec = exec->next;
+	return (exec); 
+}
+
 void	exec_add_back(t_exec **exec, t_exec *new)
 {
 	t_exec	*last;
@@ -82,11 +91,12 @@ void	exec_add_back(t_exec **exec, t_exec *new)
 		*exec = new;
 		return ;
 	}
-	last = *exec;
-	while (last->next)
-	{
-		last = last->next;
-	}
+	// last = *exec;
+	// while (last->next)
+	// {
+	// 	last = last->next;
+	// }
+	last = ft_last_exec(*exec);
 	last->next = new;
 }
 
@@ -123,9 +133,6 @@ void	init_exec_struct(t_data **data, t_env *env)
 	t_elem	*temp;
 	
 	temp = (*data)->head;
-	// remove_quotes(&(*data)->head);
-	// join_tokens(&(*data)->head);
-	// print_tokens((*data));
 	while (temp)
 	{
 		new = new_exec(temp, env);

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/28 18:24:27 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 21:56:46 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,12 @@ int main(int ac, char **av, char **env)
 				if (tokens && tokens->exec)
 					ft_exic(tokens->exec, &envi);
 			}
-			free (rl);
-			free_tokens(&tokens);
 			// free_env(envi); // free enviroment struct
 		}
+		free (rl);
+		free_exec(&tokens->exec);
+		free_tokens(&tokens->head);
+		free(tokens);
 		system ("leaks -q minishell");
 	}
 	clear_history();

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 10:52:05 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 19:53:13 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ bool ft_echo(t_exec *cmd, int fd_out)
 			ft_putstr_fd(" ", fd_out);
 	}
 	if (echo_option(cmd) - 1 == 0)
-		ft_putstr_fd("\n",fd_out);
+		ft_putstr_fd("\n", fd_out);
 	g_status = 0;
 	return (true);
 }

@@ -6,18 +6,18 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 13:00:57 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 21:51:54 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens(t_data **tokens)
+void	free_tokens(t_elem **tokens)
 {
-	t_elem *node = (*tokens)->head;
+	t_elem *node;
 	t_elem *temp;
 	
-	node = (*tokens)->head;
+	node = (*tokens);
 	while (node)
 	{
 		temp = node;
@@ -25,8 +25,7 @@ void	free_tokens(t_data **tokens)
 		free(temp->content);
 		free(temp);
 	}
-	free_exec(&(*tokens)->exec);
-	free(*tokens);
+	// free(*tokens);
 }
 
 void	free_exec(t_exec **exec)
@@ -39,10 +38,15 @@ void	free_exec(t_exec **exec)
 	{
 		temp = node;
 		node = node->next;
-		free_char_arr(temp->path_option_args);
-		free_char_arr(temp->redir_in);
-		free_char_arr(temp->redir_out);
-		free_char_arr(temp->heredoc_end);
+		if (temp->path_option_args)
+			free_char_arr(temp->path_option_args);
+		if (temp->redir_in)
+			free_char_arr(temp->redir_in);
+		if (temp->redir_out)
+			free_char_arr(temp->redir_out);
+		if (temp->heredoc_end)
+			free_char_arr(temp->heredoc_end);
+		// free_env(&temp->env);
 	}
 	free(*exec);
 }
@@ -69,7 +73,9 @@ void	free_char_arr(char **arr)
 	int	i;
 
 	i = 0;
-	while (arr[i])
+	while (arr && arr[i])
+	{
 		free(arr[i++]);
+	}
 	free(arr);
 }

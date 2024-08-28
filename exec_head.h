@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_head.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/21 19:44:52 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 21:28:42 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,5 @@
 t_env *creat_var(char *var);
 void set_env(t_env **envi, char **env);
 void add_env(t_env **head, t_env *env_new);
-void free_env(t_env *env);
+void free_env(t_env **env);
 char **env_to_str(t_env *env);

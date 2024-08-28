@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:05:46 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/10 17:05:39 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:43:10 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	ft_error(char *err)
 
 void	ft_exit(t_data **tokens, char *err)
 {
-	free_tokens(tokens);
+	free_tokens(&(*tokens)->head);
 	write(2, err, ft_strlen(err));
 	if (err)
 		exit(1);

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 09:52:40 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 21:31:59 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,19 @@ void set_env(t_env **envi, char **env)
 	}
 }
 
-void free_env(t_env *env)
+void free_env(t_env **env)
 {
+    t_env *current;
     t_env *temp;
 
-    temp = env;
-    while (temp)
+	current = *env;
+    while (current->next)
     {
+		temp = current;
+		current = current->next;
         free(temp->var);
         free(temp->value);
         free(temp);
-        temp = env->next;
     }
 }
 

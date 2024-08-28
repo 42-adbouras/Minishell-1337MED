@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 18:15:12 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 21:49:59 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void    signals_init();
 void	sig_handler(int sig);
 
 /***	clean.c				***********************************************/
-void	free_tokens(t_data **tokens);
+void	free_tokens(t_elem **tokens);
 void	free_char_arr(char **arr);
 char 	*get_redirec(t_elem **token);
 bool 	last_heredoc(t_elem *token);
@@ -187,7 +187,7 @@ int g_status;
 t_env *creat_var(char *var);
 void set_env(t_env **envi, char **env);
 void add_env(t_env **head, t_env *env_new);
-void free_env(t_env *env);
+void free_env(t_env **env);
 void ft_exic(t_exec *cmds, t_env **envi);
 bool ft_builtin(t_exec *cmd, t_env **envi, int fd_out);
 bool    ft_cd(char *path, t_env *env);

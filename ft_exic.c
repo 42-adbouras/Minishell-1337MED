@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 18:23:39 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 21:54:01 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,6 @@ int *open_redir(t_exec *cmd)
 	return (fds);
 }
 
-extern char **environ;
 bool if_builtin(char *cmd)
 {
 	if (!cmd)
@@ -306,6 +305,9 @@ void ft_exec_error(void)
 	else
 		exit(1);
 }
+
+extern char **environ;
+
 void ft_exic(t_exec *cmds, t_env **envi)
 {
 	int cmd_num;
@@ -328,11 +330,12 @@ void ft_exic(t_exec *cmds, t_env **envi)
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 		{
 			ft_builtin(cmds, envi, fds[1]);
+			free(fds);
 			break;
 		}
 		pids[i] = fork();
 		if (pids[i] == -1)
-			return (free(pids));
+			return (free(fds), free_int(fd, cmd_num), free(pids));
 		if (pids[i] == 0) 
 		{
 			fd_hindler(cmd_num, fd, fds, i);

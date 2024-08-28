@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 18:21:55 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 19:48:41 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,5 @@ char	*get_access(char *cmd, t_env *env)
         free(slash);
         i++;
     }
-    return (free_char_arr(paths), cmd);
+    return (free_char_arr(paths), ft_strdup(cmd));
 }
