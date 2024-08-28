@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/27 11:20:30 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/28 09:12:05 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,9 @@ bool ft_echo(t_exec *cmd, int fd_out)
 
 bool ft_env(t_env *env, int fd_out)
 {
-	while(env)
+	// printf("++++++++++++++\n");
+	// printf("[%s]++++++++++++++++\n",env->var);1
+	while(env && env->var)
 	{
 		ft_putstr_fd(env->var, fd_out);
 		ft_putstr_fd("=", fd_out);
@@ -179,16 +181,16 @@ bool export_no_arg(t_env *env, char **arg , int fd_out)
 		g_status = 0;
 		return (true);
 	}
-	if (arg && *arg && arg[0][0] == ' ')
-	{
-		while (env)
-		{
-			dprintf(fd_out, "declare -x %s=%s\n", env->var, env->value);
-			env = env->next;
-		}
-		g_status = 0;
-		return (true);
-	}
+	// if (arg && *arg && arg[0][0] == '\0')
+	// {
+	// 	while (env)
+	// 	{
+	// 		dprintf(fd_out, "declare -x %s=%s\n", env->var, env->value);
+	// 		env = env->next;
+	// 	}
+	// 	g_status = 0;
+	// 	return (true);
+	// }
 	return (false);
 }
 
@@ -200,13 +202,14 @@ bool ft_export(t_env **env, char **arg, int fd_out)
 	t_env *new;
 
 	j = -1;
+	(void) fd_out;
 	if (export_no_arg(*env, arg, fd_out))
 		return (true);
 	while (arg[++j])
 	{
-		i = -1;
-		while (arg && arg[j] && arg[j][i + 1] != '\0' && arg[j][++i] != '=')
-		;
+		i = 0;
+		while (arg && arg[j] && arg[j][i] != '\0' && arg[j][i] != '=')
+			i++;
 		new_var = ft_substr(arg[j], 0, i);
 		if (!cheak_var(new_var))
 			return (true);
@@ -232,12 +235,19 @@ bool ft_unset(t_env **env, char **toDelete)
 		if (!cheak_var(toDelete[i]))
 			return (true);
 		temp = *env;
+		prev = NULL;
 		while (temp)
 		{
 			if (!ft_strncmp(toDelete[i],temp->var,ft_strlen(temp->var) + 1))
 			{
-				prev->next = temp->next;
+				if (!prev)
+					*env = temp->next;
+				else
+					prev->next = temp->next;
+				free(temp->var);
+				free(temp->value);
 				free(temp);
+				temp = NULL;
 				g_status = 0;
 				return (true);
 			}

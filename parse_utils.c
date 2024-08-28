@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/27 11:12:27 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/27 12:43:08 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,11 @@ void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 	{
 		(*temp) = (*temp)->next;
 		if ((*temp)->content[0] == '?')
-			(*new)->path_option_args[(*i)++] = ft_strjoin(ft_itoa(g_status), &((*temp)->content[1]));
+		{
+			(*new)->path_option_args[(*i)++] = ft_itoa(g_status);
+			if (ft_strlen((*temp)->content) > 1)
+				(*new)->path_option_args[(*i)++] = ft_strdup(&((*temp)->content[1]));
+		}
 		else if ((*temp)->type == WORD)
 			(*new)->path_option_args[(*i)++] = ft_expand(env, (*temp)->content);
 		else
@@ -74,28 +78,47 @@ void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 	else
 		(*new)->path_option_args[(*i)++] = ft_strdup("$");
 }
-// char *get_after(char *var)
-// {
-// 	int i;
+char *get_after(char *var)
+{
+	int i;
+	char *after;
 	
-// 	i = 0;
+	i = 0;
 
-// 	while (var[i] && ())
-// }
+	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
+	i++;
+	after = ft_substr(var, i, ft_strlen(var));
+	return (after);
+}
+char *get_var(char *var)
+{
+	int i;
+	char *variable;
+	
+	i = 0;
+
+	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
+	i++;
+	variable = ft_substr(var, 0, i);
+	return (variable);
+}
 char *ft_expand(t_env *env, char *var)
 {
 	t_env *temp;
-	// char *after;
-	// char *variable;
+	char *after;
+	char *variable;
+	char *re;
 	
 	temp = env;
-	// after = get_after(var);
-	// variable = get_var(var);
-	
+	after = get_after(var);
+	variable = get_var(var);
 	while (temp)
 	{
-		if (!ft_strncmp(temp->var, var, ft_strlen(temp->var) + 1))
-			return (temp->value);
+		if (!ft_strncmp(temp->var, variable, ft_strlen(temp->var) + 1))
+		{
+			re = ft_strjoin(variable, after);
+			return (free(after), free(variable), re);
+		}
 		temp = temp->next;
 	}
 	return (NULL);
@@ -108,13 +131,18 @@ char	*get_arg(t_elem **token, t_env *env)
 	arg = NULL;
 	if (!*token)
 		return (NULL);
-	// (*token) = (*token)->next;
 	state = (*token)->state;
 	while ((*token) && (*token)->state == state)
 	{
 		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)
 		{
 			(*token) = (*token)->next;
+			if ((*token)->content[0] == '?')
+			{
+				arg = ft_strjoin(arg, ft_itoa(g_status));
+				if (ft_strlen((*token)->content) > 1)
+					arg = ft_strjoin(arg, ft_strdup(&((*token)->content[1])));
+			}
 			if ((*token) && (*token)->type == WORD)
 				arg = ft_strjoin(arg, ft_expand(env, (*token)->content));
 			else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/27 12:05:26 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/08/28 09:07:49 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int main(int ac, char **av, char **env)
 	
 	// atexit(_lks);
 	signals_init();
+	// envi = malloc(sizeof(t_env));
 	envi = NULL;
 
 	set_env(&envi, env); // enviroment initialize
