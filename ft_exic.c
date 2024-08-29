@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/29 16:44:04 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:59:24 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,14 @@ void read_heredoc(char *delimiter, int *pip)
 
 void herdoc_signal(int sig)
 {
-	(void)sig;
-	exit(130);
+	if (sig == SIGINT)
+	{
+		write (1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		exit(130);
+	}
 }
 
 void if_herdoc(char **delimiters, int *fd_heredoc)

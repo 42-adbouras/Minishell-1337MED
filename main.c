@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/29 16:54:38 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 17:01:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,31 @@ void	remove_quotes(t_elem **tokens)
     }
 }
 
+char	*get_prompt()
+{
+	char	*s;
+	char	*prompt;
+	char	*temp;
+	int		i;
+	int		j;
+	
+	s = malloc(sizeof(char) * MAX_PATH);
+	getcwd(s, MAX_PATH);
+	i = ft_strlen(s);
+	j = i;
+	while (j > 0)
+	{
+		if (s[j] == '/')
+			break ;
+		j--;
+	}
+	temp = ft_substr(s, j + 1, i - j);
+	prompt = ft_strjoin(temp, " ~ ");
+	free (temp);
+	free (s); 
+	return (prompt);
+}
+
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
@@ -108,12 +133,12 @@ int main(int ac, char **av, char **env)
 	t_env	*envi;
 	char    *rl;
 	t_data  *tokens;
+	char	*prompt;
 	
 	// atexit(_lks);
 	signals_init();
 	// envi = malloc(sizeof(t_env));
 	envi = NULL;
-
 	set_env(&envi, env); // enviroment initialize
 	// char **strenv;
 	// strenv = env_to_str(envi);
@@ -121,7 +146,8 @@ int main(int ac, char **av, char **env)
 	while (1)
 	{
 		init_data(&tokens);
-		rl = readline(PROMPT);
+		prompt = get_prompt();
+		rl = readline(prompt);
 		if (!rl)
 			return(printf("exit\n"), 0);
 		if (rl[0])
@@ -140,9 +166,11 @@ int main(int ac, char **av, char **env)
 			free_tokens(&tokens->head);
 			free_exec(&tokens->exec);
 			free(tokens);
+			free (prompt);
 		}
 		else
 		{
+			free (prompt);
 			free(rl);
 			free(tokens);
 		}
