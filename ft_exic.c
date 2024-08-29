@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exic.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/29 10:17:25 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 13:12:40 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,14 @@ void read_heredoc(char *delimiter, int *pip)
 
 void herdoc_signal(int sig)
 {
-	(void)sig;
-	exit(130);
+	if (sig == SIGINT)
+	{
+		write (1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		exit(130);
+	}
 }
 
 void if_herdoc(char **delimiters, int *fd_heredoc)

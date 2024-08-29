@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/29 10:31:54 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 13:11:14 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,8 @@ bool	last_heredoc(t_elem *token);
 
 /***	signals.c			***********************************************/
 void    signals_init();
-void	sig_handler(int sig);
+void	sig_handler(int sig, siginfo_t *siginfo, void *ptr);
+void	child_sig_init();
 
 /***	clean.c				***********************************************/
 void	free_tokens(t_elem **tokens);
