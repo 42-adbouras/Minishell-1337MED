@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 19:48:41 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 13:01:09 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ char *get_cmd(t_elem *tokens, t_env *env, bool *exed)
 	if (if_builtin(tokens->content))
 		word = ft_strdup(tokens->content);
 	if (!if_builtin(tokens->content) && !*exed)
+	{
+		printf("here\n");
 		word = get_access(tokens->content, env);
+	}
 	if (word)
 		*exed = true;
 	return (word);

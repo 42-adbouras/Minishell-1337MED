@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/29 10:17:25 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:44:04 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,13 +306,14 @@ void ft_exec_error(void)
 
 extern char **environ;
 
-void ft_exic(t_exec *cmds, t_env **envi)
+void ft_exic(t_exec *cmds, t_env **env)
 {
 	int cmd_num;
 	int i;
 	int *pids;
 	int **fd;
 	int *fds;
+	char **strenv;
 
 	cmd_num = ft_count_cmd(cmds);
 	pids = malloc(sizeof(int) * cmd_num);
@@ -320,6 +321,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 	if (!pids)
 		return ;
 	fd = ft_pip(cmd_num);
+	strenv = env_to_str(*env);
 	while (i < cmd_num)
 	{
 		fds = ft_open(cmds);
@@ -327,7 +329,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 			return ;
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 		{
-			ft_builtin(cmds, envi, fds[1]);
+			ft_builtin(cmds, env, fds[1]);
 			free(fds);
 			fds = NULL;
 			break;
@@ -338,9 +340,9 @@ void ft_exic(t_exec *cmds, t_env **envi)
 		if (pids[i] == 0) 
 		{
 			fd_hindler(cmd_num, fd, fds, i);
-			if (cmds->path_option_args && ft_builtin(cmds, envi, fds[1]))
+			if (cmds->path_option_args && ft_builtin(cmds, env, fds[1]))
 				exit(0);
-			if (execve(cmds->path_option_args[0], cmds->path_option_args, environ) == -1)
+			if (execve(cmds->path_option_args[0], cmds->path_option_args, strenv) == -1)
 				ft_exec_error();
 		}
 		i++;
@@ -348,5 +350,6 @@ void ft_exic(t_exec *cmds, t_env **envi)
 		free(fds);
 		fds = NULL;
 	}
+	free_char_arr(strenv);
 	ft_clear(cmd_num ,fd, fds, pids);
 }

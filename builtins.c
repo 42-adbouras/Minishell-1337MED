@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 19:53:13 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:53:19 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool    ft_cd(char *path, t_env *env)
 		home_env = home_env->next;
 	if (path == NULL)
 	{
-		path = home_env->value;
+		path = &home_env->value[1];
 		chdir(path);
 	}
 	if (chdir(path) != 0)
@@ -113,7 +113,7 @@ bool ft_env(t_env *env, int fd_out)
 		if (ft_strchr(env->value, '='))
 		{
 			ft_putstr_fd(env->var, fd_out);
-			ft_putstr_fd(env->value,fd_out);
+			ft_putstr_fd(env->value, fd_out);
 			ft_putstr_fd("\n", fd_out);
 		}
 		env = env->next;
@@ -161,12 +161,17 @@ bool update_var(t_env **env, char *arg, char *new_var)
 	temp = *env;
 	while (temp)
 	{
-		if (!ft_strncmp(new_var,temp->var,ft_strlen(new_var) + 1))
+		if (!ft_strncmp(new_var, temp->var, ft_strlen(new_var) + 1))
 		{
-			if (!ft_strchr(arg,'='))
+			if (!ft_strchr(arg, '='))
 				return (true);
 			new = creat_var(arg);
-			temp->value = new->value;
+			free(temp->value);
+			temp->value = NULL;
+			temp->value = ft_strdup(new->value);
+			free(new->var);
+			free(new->value);
+			free(new);
 			g_status = 0;
 			return (true);
 		}
@@ -196,16 +201,6 @@ bool export_no_arg(t_env *env, char **arg , int fd_out)
 		g_status = 0;
 		return (true);
 	}
-	// if (arg && *arg && arg[0][0] == '\0')
-	// {
-	// 	while (env)
-	// 	{
-	// 		dprintf(fd_out, "declare -x %s=%s\n", env->var, env->value);
-	// 		env = env->next;
-	// 	}
-	// 	g_status = 0;
-	// 	return (true);
-	// }
 	return (false);
 }
 
@@ -217,7 +212,6 @@ bool ft_export(t_env **env, char **arg, int fd_out)
 	t_env *new;
 
 	j = -1;
-	(void) fd_out;
 	if (export_no_arg(*env, arg, fd_out))
 		return (true);
 	while (arg[++j])
@@ -227,13 +221,24 @@ bool ft_export(t_env **env, char **arg, int fd_out)
 			i++;
 		new_var = ft_substr(arg[j], 0, i);
 		if (!cheak_var(new_var))
-			return (true);
-		if (update_var(env, arg[j], new_var))
+		{
+			free(new_var);
+			new_var = NULL;
 			continue;
+		}
+		if (update_var(env, arg[j], new_var))
+		{
+			free(new_var);
+			new_var = NULL;
+			continue;
+		}
 		new = creat_var(arg[j]);
 		add_env(env, new);
 		free(new_var);
+		new_var = NULL;
 	}
+	if (new_var)
+		free(new_var);
 	g_status = 1;
 	return (true);
 }

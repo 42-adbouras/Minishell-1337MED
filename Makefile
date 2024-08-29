@@ -6,7 +6,7 @@
 #    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/08/29 09:55:39 by eismail          ###   ########.fr        #
+#    Updated: 2024/08/29 16:54:42 by eismail          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ RST	= \033[0;39m
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 LDFLAGS = -lreadline -L/Users/eismail/.brew/opt/readline/lib
 

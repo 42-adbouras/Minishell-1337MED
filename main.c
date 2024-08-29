@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/29 11:11:50 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:54:38 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,9 @@ int main(int ac, char **av, char **env)
 	envi = NULL;
 
 	set_env(&envi, env); // enviroment initialize
+	// char **strenv;
+	// strenv = env_to_str(envi);
+	// free_env(&envi);
 	while (1)
 	{
 		init_data(&tokens);
@@ -143,9 +146,10 @@ int main(int ac, char **av, char **env)
 			free(rl);
 			free(tokens);
 		}
-		system ("leaks -q minishell");
+		// free_char_arr(strenv);
+		// system ("leaks -q minishell");
 	}
-	free_env(&envi);
+	
 	clear_history();
 }
 // echo "hello $USER " > file | grep h | cat << eof | cat >> file | echo 'done'

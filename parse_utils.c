@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/29 09:33:52 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 13:03:11 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,33 +156,34 @@ char *arg_expand(t_elem *token, t_env *env, char **arg)
 		join = ft_expand(env, (token)->content);
 	else
 		join = ft_strdup("$");
-	
 	join2 = ft_strjoin(temp, join);
 	return (free(join), free(*arg), free(temp), join2);
 }
 char *arg_join(t_elem *token, char **arg, char *join)
 {
-	char *temp;
-	
-	temp = *arg;
+	char *join2;
+
+	join2 = NULL;
 	if (token && (token->type == D_QUOTE || token->type == S_QUOTE) && token->state == GENERAL)
-		temp = ft_strjoin(temp, join);
+		join2 = ft_strjoin(*arg, join);
 	else
-		temp = ft_strjoin(temp, (token)->content);
+		join2 = ft_strjoin(*arg, (token)->content);
 	free(*arg);
-	return (temp);
+	return (join2);
 }
 char	*get_arg(t_elem **token, t_env *env, bool exec)
 {
 	char	*arg;
 	char	*join;
+	char	*res;
 	t_state	state;
 
 	arg = NULL;
 	join = ft_strdup("");
 	if (!*token)
 		return (NULL);
-	(*token) = (*token)->next;
+	if ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE)
+		(*token) = (*token)->next;
 	state = (*token)->state;
 	while ((*token) && (*token)->state == state)
 	{
@@ -196,7 +197,10 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 		(*token) = (*token)->next;
 		_function(token, &state);
 	}
-	if (!exec)
-		return (free(join), get_access(arg, env));
+	if (!exec && !if_builtin(arg))
+	{
+		res = get_access(arg, env);
+		return (free(join),free(arg), res);
+	}
 	return (free(join), arg);
 }
