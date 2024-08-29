@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 18:34:17 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 09:33:52 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,19 +64,9 @@ void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 	if ((*temp)->next)
 	{
 		(*temp) = (*temp)->next;
-		(*new)->path_option_args[(*i)] = ft_strdup("");
+		(*new)->path_option_args[(*i)] = NULL;
 		(*new)->path_option_args[(*i)] = arg_expand(*temp, env, &(*new)->path_option_args[(*i)]);
 		(*i)++;
-		// if ((*temp)->content[0] == '?')
-		// {
-		// 	(*new)->path_option_args[(*i)++] = ft_itoa(g_status);
-		// 	if (ft_strlen((*temp)->content) > 1)
-		// 		(*new)->path_option_args[(*i)++] = ft_strdup(&((*temp)->content[1]));
-		// }
-		// else if ((*temp)->type == WORD)
-		// 	(*new)->path_option_args[(*i)++] = ft_expand(env, (*temp)->content);
-		// else
-		// 	(*new)->path_option_args[(*i)++] = ft_strdup("$");
 	}
 	else
 		(*new)->path_option_args[(*i)++] = ft_strdup("$");
@@ -124,7 +114,7 @@ char *ft_expand(t_env *env, char *var)
 		}
 		temp = temp->next;
 	}
-	return (NULL);
+	return (free(after), free(variable), NULL);
 }
 
 void	_function(t_elem **token, t_state *state)
@@ -146,29 +136,29 @@ char *arg_expand(t_elem *token, t_env *env, char **arg)
 {
 	char *temp;
 	char *join;
+	char *join2;
+	char *nb;
 	
-	join = ft_strdup("");
+	join = NULL;
 	temp = *arg;
 	if (token && (token)->content[0] == '?')
 	{
-		temp = ft_strjoin(temp, ft_itoa(g_status));
+		nb = ft_itoa(g_status);
+		join2 = ft_strjoin(temp, nb);
+		free(temp);
+		free(nb);
+		temp = ft_strdup(join2);
 		if (ft_strlen((token)->content) > 1)
-		{
 			join = ft_strdup(&((token)->content[1]));
-			temp = ft_strjoin(temp, join);
-		}
+		free(join2);
 	}
 	else if ((token) && (token)->type == WORD)
-	{
 		join = ft_expand(env, (token)->content);
-		temp = ft_strjoin(temp, join);
-	}
 	else
-	{
 		join = ft_strdup("$");
-		temp = ft_strjoin(temp, join);
-	}
-	return (free(join), free(*arg), temp);
+	
+	join2 = ft_strjoin(temp, join);
+	return (free(join), free(*arg), free(temp), join2);
 }
 char *arg_join(t_elem *token, char **arg, char *join)
 {

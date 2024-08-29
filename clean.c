@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 21:51:54 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 11:11:32 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	free_tokens(t_elem **tokens)
 		free(temp->content);
 		free(temp);
 	}
-	// free(*tokens);
 }
 
 void	free_exec(t_exec **exec)
@@ -46,9 +45,8 @@ void	free_exec(t_exec **exec)
 			free_char_arr(temp->redir_out);
 		if (temp->heredoc_end)
 			free_char_arr(temp->heredoc_end);
-		// free_env(&temp->env);
+		free(temp);
 	}
-	free(*exec);
 }
 
 void	delete_token(t_elem **token)

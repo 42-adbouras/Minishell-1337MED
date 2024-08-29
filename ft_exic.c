@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 21:54:01 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 10:17:25 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,7 @@ void	ft_close(int cmd_num, int **pipes, int *fds)
 		i++;
 	}
 	if (fds && fds[0] != -1)
-	{
 		close(fds[0]);
-	}
 	if (fds && fds[1] != -1)
 		close(fds[1]);
 }
@@ -331,6 +329,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 		{
 			ft_builtin(cmds, envi, fds[1]);
 			free(fds);
+			fds = NULL;
 			break;
 		}
 		pids[i] = fork();
@@ -347,6 +346,7 @@ void ft_exic(t_exec *cmds, t_env **envi)
 		i++;
 		cmds = cmds->next;
 		free(fds);
+		fds = NULL;
 	}
 	ft_clear(cmd_num ,fd, fds, pids);
 }

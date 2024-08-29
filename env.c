@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/28 21:31:59 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 09:51:41 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void free_env(t_env **env)
     t_env *temp;
 
 	current = *env;
-    while (current->next)
+    while (current)
     {
 		temp = current;
 		current = current->next;

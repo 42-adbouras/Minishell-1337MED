@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/28 21:56:46 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/29 11:11:50 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,14 +133,19 @@ int main(int ac, char **av, char **env)
 				if (tokens && tokens->exec)
 					ft_exic(tokens->exec, &envi);
 			}
-			// free_env(envi); // free enviroment struct
+			free(rl);
+			free_tokens(&tokens->head);
+			free_exec(&tokens->exec);
+			free(tokens);
 		}
-		free (rl);
-		free_exec(&tokens->exec);
-		free_tokens(&tokens->head);
-		free(tokens);
+		else
+		{
+			free(rl);
+			free(tokens);
+		}
 		system ("leaks -q minishell");
 	}
+	free_env(&envi);
 	clear_history();
 }
 // echo "hello $USER " > file | grep h | cat << eof | cat >> file | echo 'done'
