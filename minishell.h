@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/29 17:02:09 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/30 12:16:08 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <curses.h>
 # include <term.h>
 # include <errno.h>
+# include <sys/stat.h>
 # include "libft/libft.h"
 
 # define BBLK "\e[1;30m"
@@ -88,6 +89,7 @@ typedef struct s_exec
 	bool			append;				// last >>
 	bool			heredoc;			// last <<
 	bool			exed;
+	bool			run;
 	struct s_exec	*next;
 	struct s_env	*env;
 }	t_exec;
@@ -179,6 +181,8 @@ void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
 
 void	remove_quotes(t_elem **tokens);
+void child_process_code();
+void handle_sigint(int sig);
 
 /****************************		eismail		****************************/
 int g_status;

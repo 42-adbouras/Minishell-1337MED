@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/29 16:59:24 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/30 12:23:06 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,11 +151,7 @@ void herdoc_signal(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write (1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		exit(130);
+		exit(1);
 	}
 }
 
@@ -259,19 +255,26 @@ bool if_builtin(char *cmd)
 		return (true);
 	return (false);
 }
+
 void ft_clear(int cmd_num, int **fd, int *fds, int *pids)
 {
 	int i;
 	int exit_status;
+	int status;
 
 	i = 0;
 	exit_status = 0;
 	ft_close(cmd_num, fd, fds);
 	while (i < cmd_num)
 	{
-		waitpid(pids[i], &g_status, 0);
-		if (WIFEXITED(g_status))
-			exit_status = WEXITSTATUS(g_status);
+		waitpid(pids[i], &status, 0);
+		if (WIFEXITED(status))
+			exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGINT)
+				exit_status = 130;
+		}
 		i++;
 	}
 	free(pids);
@@ -294,23 +297,52 @@ int *ft_open(t_exec *cmd)
 		fds[0] = heredoc;
 	return (fds);
 }
-void ft_exec_error(void)
+
+int is_directory(const char *path) {
+    struct stat statbuf;
+    if (stat(path, &statbuf) != 0)
+        return 0;
+    return S_ISDIR(statbuf.st_mode);
+}
+
+bool ft_path(t_env *env)
 {
-	if (errno == ENOENT)
+	while (env)
 	{
-		perror("minishell");
-		exit(127);
+		if ((ft_strncmp(env->var, "PATH", 5) == 0) && env->value != NULL)
+			return (true);
+		env = env->next;
+	}
+	return (false);
+}
+void ft_exec_error(t_exec *cmd)
+{
+	if (is_directory(cmd->path_option_args[0]) == 1)
+	{
+		ft_putstr_fd("minishell: is a directory\n", 2);
+		exit( 126);
 	}
 	else if (errno == EACCES)
 	{
 		perror("minishell");
 		exit( 126);
 	}
+	else if (!ft_path(cmd->env))
+	{
+		ft_putstr_fd("minishell :No such file or directory\n", 2);
+		exit(127);
+	}
+	else if (errno == ENOENT)
+	{
+		ft_putstr_fd("minishell :command not found\n", 2);
+		exit(127);
+	}
 	else
+	{
+		perror("minishell");
 		exit(1);
+	}
 }
-
-extern char **environ;
 
 void ft_exic(t_exec *cmds, t_env **env)
 {
@@ -331,7 +363,7 @@ void ft_exic(t_exec *cmds, t_env **env)
 	while (i < cmd_num)
 	{
 		fds = ft_open(cmds);
-		if (!fds)
+		if (!fds || !cmds->path_option_args[0])
 			return ;
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 		{
@@ -349,7 +381,7 @@ void ft_exic(t_exec *cmds, t_env **env)
 			if (cmds->path_option_args && ft_builtin(cmds, env, fds[1]))
 				exit(0);
 			if (execve(cmds->path_option_args[0], cmds->path_option_args, strenv) == -1)
-				ft_exec_error();
+				ft_exec_error(cmds);
 		}
 		i++;
 		cmds = cmds->next;

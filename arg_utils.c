@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/29 13:01:09 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/30 12:05:12 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ char *get_cmd(t_elem *tokens, t_env *env, bool *exed)
 	if (if_builtin(tokens->content))
 		word = ft_strdup(tokens->content);
 	if (!if_builtin(tokens->content) && !*exed)
-	{
-		printf("here\n");
 		word = get_access(tokens->content, env);
-	}
 	if (word)
 		*exed = true;
 	return (word);
@@ -32,20 +29,35 @@ char *get_cmd(t_elem *tokens, t_env *env, bool *exed)
 int	count_words(t_elem *tokens)
 {
 	int count;
+	t_elem *temp;
 
 	count = 0;
-	while (tokens && tokens->type != PIPE)
+	temp = tokens;
+	while (temp && temp->type == W_SPACE && temp->state == GENERAL)
+		temp = temp->next;
+	if (!temp)
+		return (0);
+	while (tokens && tokens->type != PIPE )
 	{
-		if (tokens && (tokens->type == D_QUOTE || tokens->type == S_QUOTE))
+		// if (tokens && (tokens->type == D_QUOTE || tokens->type == S_QUOTE))
+		// {
+		// 	if(tokens->prev && tokens->prev->type == W_SPACE)
+		// 		count++;
+		// 	tokens = tokens->next;
+		// 	while (tokens && (tokens->state ==  IN_DQUOTE || tokens->state ==  IN_SQUOTE))
+		// 		tokens = tokens->next;
+		// }
+		// else if (tokens && tokens->type == WORD)
+		// 	count++;
+		if(((tokens->prev && tokens->prev->type == PIPE && tokens->prev->state == GENERAL)) || (tokens && tokens->type == W_SPACE && tokens->state == GENERAL))
 		{
 			count++;
-			tokens = tokens->next;
-			while (tokens && (tokens->state ==  IN_DQUOTE || tokens->state ==  IN_SQUOTE))
+			while (tokens && tokens->type == W_SPACE && tokens->state == GENERAL)
 				tokens = tokens->next;
 		}
-		else if (tokens && tokens->type == WORD)
+		else if (!tokens->next || (tokens->next && tokens->next->type == PIPE && tokens->next->state == GENERAL))
 			count++;
-		if (tokens)
+		if (tokens && tokens->type != PIPE)
 			tokens = tokens->next;
 	}
 	return (count);

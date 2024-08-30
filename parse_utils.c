@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/29 13:03:11 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/30 11:01:14 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void	_function(t_elem **token, t_state *state)
 		(*token) = (*token)->next;
 		if((*token) && ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE))
 			(*token) = (*token)->next;
-		if ((*token) && (*token)->type != W_SPACE && !is_red((*token)->type))
+		if ((*token) && (*token)->type != W_SPACE && !is_red((*token)->type) && (*token)->type != PIPE)
 		{
 			*state = (*token)->state;
 			if ((*token)->type != WORD)
@@ -185,7 +185,7 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 	if ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE)
 		(*token) = (*token)->next;
 	state = (*token)->state;
-	while ((*token) && (*token)->state == state)
+	while ((*token) && ((*token)->state == state ))
 	{
 		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)
 		{
@@ -196,11 +196,15 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 			arg = arg_join(*token, &arg, join);
 		(*token) = (*token)->next;
 		_function(token, &state);
+		if ((*token) &&  (((*token)->type == W_SPACE || (*token)->type == PIPE) && (*token)->state == GENERAL))
+			break;
 	}
 	if (!exec && !if_builtin(arg))
 	{
 		res = get_access(arg, env);
-		return (free(join),free(arg), res);
+		if (ft_strncmp(res, arg, ft_strlen(arg)) != 0)
+			free(arg);
+		return (free(join), res);
 	}
 	return (free(join), arg);
 }

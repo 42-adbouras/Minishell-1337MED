@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/29 12:35:42 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/30 12:18:27 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,16 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 	while (temp && temp->type != PIPE)
 	{
 		if (temp->type == WORD && !new->exed && temp->next && (temp->next->type != S_QUOTE  && temp->next->type != D_QUOTE))
-		{
-			if (ft_strncmp(&temp->content[ft_strlen(temp->content) - 3], ".sh", 4) == 0)
-				new->path_option_args[i++] = ft_strdup("/bin/bash");
 			new->path_option_args[i++] = get_cmd(temp, env, &new->exed);
-		}
 		else if (temp && ((temp->type == S_QUOTE  || temp->type == D_QUOTE) || (temp->type == WORD && temp->state == GENERAL)))
+		{
 			new->path_option_args[i++] = get_arg(&temp, env, new->exed);
+		}
 		else if (temp && temp->type == ENV )
 			process_expander(&temp, &new, env, &i);
 		else if (temp && is_red(temp->type))
 			if_redir(&temp);
-		if (temp)
+		if (temp && temp->type != PIPE)
 			temp = temp->next;
 	}
 	if (!process_redir(tokens, &new, env))
@@ -54,6 +52,10 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 {
 	(*new) = malloc(sizeof(t_exec));
+	if (!count_words(tokens))
+		(*new)->run = false;
+	else
+		(*new)->run = true;
 	(*new)->path_option_args = malloc(sizeof(char *) * (count_words(tokens) + 1));
 	(*new)->redir_in = malloc(sizeof(char *) * (count_red(tokens, REDIR_IN) + 1));
 	(*new)->redir_out = malloc(sizeof(char *) * (count_red(tokens, REDIR_OUT) + 1));
