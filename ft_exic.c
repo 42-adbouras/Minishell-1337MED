@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/31 15:54:22 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 17:25:25 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,8 @@ void if_herdoc(char **delimiters, int *fd_heredoc)
 	int i;
 	int *pip;
 	int pid;
+	int status;
+	int exit_status;
 
 	i = -1;
 	if (!delimiters || !(*delimiters) )
@@ -181,9 +183,16 @@ void if_herdoc(char **delimiters, int *fd_heredoc)
 			signal(SIGINT, herdoc_signal);
 			read_heredoc(delimiters[i], pip);
 		}
-		waitpid(pid, &g_status, 0);
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			exit_status = WEXITSTATUS(status);
+		if (exit_status == 1)
+		{
+			g_status = 300;
+			break ;
+		}
+		close(pip[1]);
 	}
-	close(pip[1]);
 	*(fd_heredoc) = pip[0];
 	free(pip);
 }
@@ -256,7 +265,7 @@ bool if_builtin(char *cmd)
 	return (false);
 }
 
-void ft_clear(int cmd_num, int **fd, int *fds, int *pids)
+void ft_clear(int cmd_num, t_fd *fd, int *pids)
 {
 	int i;
 	int exit_status;
@@ -264,7 +273,7 @@ void ft_clear(int cmd_num, int **fd, int *fds, int *pids)
 
 	i = 0;
 	exit_status = 0;
-	ft_close(cmd_num, fd, fds);
+	ft_close(cmd_num, fd->pipes, fd->fds);
 	while (i < cmd_num)
 	{
 		waitpid(pids[i], &status, 0);
@@ -278,7 +287,9 @@ void ft_clear(int cmd_num, int **fd, int *fds, int *pids)
 		i++;
 	}
 	free(pids);
-	free_int(fd, cmd_num);
+	free(fd->fds);
+	free_int(fd->pipes, cmd_num);
+	free(fd);
 	g_status = exit_status;
 }
 
@@ -349,45 +360,46 @@ void ft_exic(t_exec *cmds, t_env **env)
 	int cmd_num;
 	int i;
 	int *pids;
-	int **fd;
-	int *fds;
+	t_fd *fd;
 	char **strenv;
 
 	cmd_num = ft_count_cmd(cmds);
 	pids = malloc(sizeof(int) * cmd_num);
+	fd = malloc(sizeof(t_fd));
 	i = 0;
-	if (!pids)
-		return ;
-	fd = ft_pip(cmd_num);
+	fd->pipes = ft_pip(cmd_num);
 	strenv = env_to_str(*env);
 	while (i < cmd_num)
 	{
-		fds = ft_open(cmds);
-		if (!fds || !cmds->path_option_args[0])
-			return (free_int(fd, cmd_num), free(pids));
+		fd->fds = ft_open(cmds);
+		if (!fd->fds || !cmds->path_option_args[0])
+			return (free_int(fd->pipes, cmd_num), free(pids));
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 		{
-			ft_builtin(cmds, env, fds[1]);
-			free(fds);
-			fds = NULL;
+			ft_builtin(cmds, env, fd->fds[1]);
+			free(fd->fds);
+			fd->fds = NULL;
 			break;
 		}
 		pids[i] = fork();
 		if (pids[i] == -1)
-			return (free(fds), free_int(fd, cmd_num), free(pids));
+			return (free(fd->fds), free_int(fd->pipes, cmd_num), free(pids));
 		if (pids[i] == 0) 
 		{
-			fd_hindler(cmd_num, fd, fds, i);
-			if (cmds->path_option_args && ft_builtin(cmds, env, fds[1]))
+			fd_hindler(cmd_num, fd->pipes, fd->fds, i);
+			if (g_status == 300)
+				exit(1);
+			if (cmds->path_option_args && ft_builtin(cmds, env, fd->fds[1]))
 				exit(0);
 			if (execve(cmds->path_option_args[0], cmds->path_option_args, strenv) == -1)
 				ft_exec_error(cmds);
 		}
 		i++;
 		cmds = cmds->next;
-		free(fds);
-		fds = NULL;
+		free(fd->fds);
+		fd->fds = NULL;
 	}
 	free_char_arr(strenv);
-	ft_clear(cmd_num ,fd, fds, pids);
+	ft_clear(cmd_num ,fd, pids);
 }
+

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/31 12:22:55 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 17:06:10 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 	if (!exec && !if_builtin(arg))
 	{
 		res = get_access(arg, env);
-		if (ft_strncmp(res, arg, ft_strlen(arg)) != 0)
+		if (ft_strlen(arg) <= ft_strlen(res))
 			free(arg);
 		return (free(join), res);
 	}

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/31 12:34:40 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 17:24:17 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,11 @@ typedef struct s_data
 	t_exec	*exec;
 	int		size;
 }	t_data;
+typedef struct s_fd
+{
+	int **pipes;
+	int *fds;
+}	t_fd;
 
 /***	utils.c				***********************************************/
 void	init_data(t_data **tokens);
@@ -216,7 +221,7 @@ void read_heredoc(char *delimiter, int *pip);
 void if_herdoc(char **delimiters, int *fd_heredoc);
 int *open_redir(t_exec *cmd);
 bool if_builtin(char *cmd);
-void ft_clear(int cmd_num, int **fd, int *fds, int *pids);
+void ft_clear(int cmd_num, t_fd *fd, int *pids);
 bool ft_pwd(int fd_out);
 bool ft_export(t_env **env, char **arg, int fd_out);
 char **env_to_str(t_env *env);
