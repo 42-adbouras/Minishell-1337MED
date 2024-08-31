@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/30 12:16:08 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 12:34:40 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,5 +221,6 @@ bool ft_pwd(int fd_out);
 bool ft_export(t_env **env, char **arg, int fd_out);
 char **env_to_str(t_env *env);
 char *arg_expand(t_elem *token, t_env *env, char **arg);
+void if_redir(t_elem **token);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/30 11:01:14 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 12:22:55 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,30 +31,31 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 	int l=0;
 	
 	temp = tokens;
-	while (temp && temp->type != PIPE)
+	while (temp && (temp->type != PIPE || ((temp->type == PIPE && temp->state != GENERAL))))
 	{
-		if (temp->type == REDIR_IN && (temp->next && temp->next->state == GENERAL))
+		if (temp->type == REDIR_IN && temp->state == GENERAL)
 		{
 			(*new)->heredoc = false;
 			(*new)->redir_in[i++] = get_redire(&temp, env);
-			if (!(*new)->redir_in[i - 1])
+			if ((*new) && (*new)->redir_out && !(*new)->redir_in[i - 1])
 				return (false);
 		}
-		else if ((temp->type == REDIR_OUT || temp->type == REDIR_APP) && (temp->next && temp->next->state == GENERAL))
+		else if ((temp->type == REDIR_OUT || temp->type == REDIR_APP) && temp->state == GENERAL)
 		{
 			(*new)->append = false;
 			if (temp->type == REDIR_APP)
 				(*new)->append = true;
 			(*new)->redir_out[j++] = get_redire(&temp, env);
-			if (!(*new)->redir_out[j - 1])
+			if ((*new) && (*new)->redir_out && !(*new)->redir_out[j - 1])
 				return (false);
 		}
-		else if (temp->type == REDIR_AND && (temp->next && temp->next->state == GENERAL))
+		else if (temp->type == REDIR_AND && temp->state == GENERAL)
 		{
 			(*new)->heredoc_end[l++] = get_heredoc(&temp);
 			(*new)->heredoc = last_heredoc(temp);
 		}
-		temp = temp->next;
+		if (temp && (temp->type != PIPE || (temp->type == PIPE && temp->state != GENERAL)))
+			temp = temp->next;
 	}
 	return (true);
 }
@@ -122,7 +123,7 @@ void	_function(t_elem **token, t_state *state)
 	if((*token) && ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 	{
 		(*token) = (*token)->next;
-		if((*token) && ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE))
+		if((*token) && ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 			(*token) = (*token)->next;
 		if ((*token) && (*token)->type != W_SPACE && !is_red((*token)->type) && (*token)->type != PIPE)
 		{
@@ -185,7 +186,7 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 	if ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE)
 		(*token) = (*token)->next;
 	state = (*token)->state;
-	while ((*token) && ((*token)->state == state ))
+	while ((*token) && ((*token)->state == state))
 	{
 		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)
 		{

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/30 12:05:12 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 15:05:20 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,31 @@ char *get_cmd(t_elem *tokens, t_env *env, bool *exed)
 		*exed = true;
 	return (word);
 }
-
+bool skip_space(t_elem **tokens, int *count)
+{
+	while ((*tokens) && (*tokens)->type == W_SPACE && (*tokens)->state == GENERAL)
+		(*tokens) = (*tokens)->next;
+	if (!(*tokens))
+		return (false);
+	(*count)++;
+	return (true);
+}
+void skip_redir(t_elem **tokens)
+{
+	t_state	state;
+	
+	(*tokens) = (*tokens)->next;
+	while (tokens && (*tokens) && (*tokens)->type == W_SPACE && (*tokens)->state == GENERAL)
+		(*tokens) = (*tokens)->next;
+	if ((*tokens)->type == D_QUOTE || (*tokens)->type == S_QUOTE)
+	{
+		(*tokens) = (*tokens)->next;
+		state = (*tokens)->state;
+		while (state == (*tokens)->state)
+			(*tokens) = (*tokens)->next;
+	}
+	(*tokens) = (*tokens)->next;
+}
 int	count_words(t_elem *tokens)
 {
 	int count;
@@ -35,31 +59,22 @@ int	count_words(t_elem *tokens)
 	temp = tokens;
 	while (temp && temp->type == W_SPACE && temp->state == GENERAL)
 		temp = temp->next;
-	if (!temp)
-		return (0);
-	while (tokens && tokens->type != PIPE )
+	while ((tokens && tokens->type != PIPE ) || (tokens &&(tokens)->type == PIPE && (tokens)->state != GENERAL))
 	{
-		// if (tokens && (tokens->type == D_QUOTE || tokens->type == S_QUOTE))
-		// {
-		// 	if(tokens->prev && tokens->prev->type == W_SPACE)
-		// 		count++;
-		// 	tokens = tokens->next;
-		// 	while (tokens && (tokens->state ==  IN_DQUOTE || tokens->state ==  IN_SQUOTE))
-		// 		tokens = tokens->next;
-		// }
-		// else if (tokens && tokens->type == WORD)
-		// 	count++;
 		if(((tokens->prev && tokens->prev->type == PIPE && tokens->prev->state == GENERAL)) || (tokens && tokens->type == W_SPACE && tokens->state == GENERAL))
 		{
-			count++;
-			while (tokens && tokens->type == W_SPACE && tokens->state == GENERAL)
-				tokens = tokens->next;
+			if (!skip_space(&tokens, &count))
+				break ;
 		}
-		else if (!tokens->next || (tokens->next && tokens->next->type == PIPE && tokens->next->state == GENERAL))
+		else if (!tokens->next || (tokens->next && tokens->next->type == PIPE && tokens->next->state == GENERAL) || (is_red(tokens->next->type) && tokens->next->state == GENERAL))
 			count++;
-		if (tokens && tokens->type != PIPE)
+		if (tokens && is_red(tokens->type) && tokens->state == GENERAL)
+			skip_redir(&tokens);
+		if ((tokens && tokens->type != PIPE) || (tokens && (tokens)->type == PIPE && (tokens)->state != GENERAL))
 			tokens = tokens->next;
 	}
+	if (!temp || count < 0)
+		return (0);
 	return (count);
 }
 

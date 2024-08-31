@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:11:34 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/28 17:18:45 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 12:10:53 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	count_red(t_elem *tokens, t_token type)
 	count = 0;
 	while (tokens && tokens->type != PIPE)
 	{
-		if (tokens->type == type)
+		if (tokens->type == type && tokens->state == GENERAL )
 			count++;
 		tokens = tokens->next;
 	}
@@ -35,10 +35,10 @@ char *get_redire(t_elem **token, t_env *env)
 	if (!*token)
 		return (ft_strdup(""));
 	(*token) = (*token)->next;
-	while ((*token) && (*token)->type == W_SPACE)
+	while ((*token) && (*token)->type == W_SPACE && (*token)->state == GENERAL)
 		(*token) = (*token)->next;
-	if (((*token)->type == S_QUOTE || (*token)->type == D_QUOTE) && (*token)->next)
-			redir_in = get_arg(token, env, true);
+	if ((*token) && ((*token)->type == S_QUOTE || (*token)->type == D_QUOTE))
+		redir_in = get_arg(token, env, true);
 	else if ((*token) && (*token)->type == ENV)
 	{
 		(*token) = (*token)->next;
