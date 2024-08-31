@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/31 15:07:24 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 16:08:49 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,6 @@ void	exec_add_back(t_exec **exec, t_exec *new)
 		*exec = new;
 		return ;
 	}
-	// last = *exec;
-	// while (last->next)
-	// {
-	// 	last = last->next;
-	// }
 	last = ft_last_exec(*exec);
 	last->next = new;
 }

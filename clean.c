@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/29 11:11:32 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 16:05:16 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ void	free_char_arr(char **arr)
 	i = 0;
 	while (arr && arr[i])
 	{
-		free(arr[i++]);
+		if (arr[i])
+			free(arr[i++]);
 	}
 	free(arr);
 }

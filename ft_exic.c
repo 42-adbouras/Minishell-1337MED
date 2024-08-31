@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/30 12:23:06 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 15:54:22 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,7 +364,7 @@ void ft_exic(t_exec *cmds, t_env **env)
 	{
 		fds = ft_open(cmds);
 		if (!fds || !cmds->path_option_args[0])
-			return ;
+			return (free_int(fd, cmd_num), free(pids));
 		if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 		{
 			ft_builtin(cmds, env, fds[1]);

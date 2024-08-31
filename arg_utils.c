@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/31 15:05:20 by eismail          ###   ########.fr       */
+/*   Updated: 2024/08/31 16:09:19 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	count_words(t_elem *tokens)
 			if (!skip_space(&tokens, &count))
 				break ;
 		}
-		else if (!tokens->next || (tokens->next && tokens->next->type == PIPE && tokens->next->state == GENERAL) || (is_red(tokens->next->type) && tokens->next->state == GENERAL))
+		else if (!tokens->next || (tokens->next && (tokens->next->type == W_SPACE || tokens->next->type == PIPE) && tokens->next->state == GENERAL))
 			count++;
 		if (tokens && is_red(tokens->type) && tokens->state == GENERAL)
 			skip_redir(&tokens);
