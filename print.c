@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 18:14:23 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/05 13:28:14 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/01 19:31:23 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,4 @@ void    print_tokens(t_data *tokens)
 		printf("\'%s\'\t\t%d\t\t%s\t\t%s\n", tmp->content, tmp->len, token_to_string(tmp->type), state_to_string(tmp->state));
 		tmp = tmp->next;
 	}
-	printf("size: %d\n", tokens->size);
 }

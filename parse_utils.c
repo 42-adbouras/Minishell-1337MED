@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 14:25:59 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:57:43 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,14 @@ bool redirect_out(t_elem *tokens,t_exec ***new, t_env *env)
 bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 {
 	t_elem	*temp;
-	int i=0;
-	int j=0;
-	int l=0;
+	int i;
+	int j;
+	int l;
 	
 	temp = tokens;
+	i = 0;
+	j = 0;
+	l = 0;
 	while (temp && (temp->type != PIPE || ((temp->type == PIPE && temp->state != GENERAL))))
 	{
 		if (temp->type == REDIR_IN && temp->state == GENERAL)
@@ -74,11 +77,10 @@ void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 }
 char *get_after(char *var)
 {
-	int i;
-	char *after;
+	char	*after;
+	int		i;
 	
 	i = 0;
-
 	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
 	i++;
 	after = ft_substr(var, i, ft_strlen(var));
@@ -133,7 +135,7 @@ void	_function(t_elem **token, t_state *state)
 		}
 	}
 }
-char *arg_expand(t_elem *token, t_env *env, char **arg)
+char	*arg_expand(t_elem *token, t_env *env, char **arg)
 {
 	char *temp;
 	char *join;
@@ -160,7 +162,8 @@ char *arg_expand(t_elem *token, t_env *env, char **arg)
 	join2 = ft_strjoin(temp, join);
 	return (free(join), free(*arg), free(temp), join2);
 }
-char *arg_join(t_elem *token, char **arg, char *join)
+
+char	*arg_join(t_elem *token, char **arg, char *join)
 {
 	char *join2;
 

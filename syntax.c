@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/18 11:31:59 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:37:24 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-bool	pipe_syntax(t_elem *token)
-{
-	t_elem	*next;
-	t_elem	*prev;
-
-	next = skip_wspace(token->next, 'N');
-	prev = skip_wspace(token->prev, 'P');
-	if (!next || !prev)
-		return (false);
-	if (next->type != WORD && !is_red(next->type))
-		return (false);
-	if (prev->type != WORD && prev->type != D_QUOTE && prev->type != S_QUOTE) // double QUOTE before pip
-		return (false);
-	return (true);
-}
 
 bool	if_syntax_err(t_data *tokens)
 {
@@ -56,6 +40,23 @@ bool	if_syntax_err(t_data *tokens)
 	return (false);
 }
 
+bool	pipe_syntax(t_elem *token)
+{
+	t_elem	*next;
+	t_elem	*prev;
+
+	next = skip_wspace(token->next, 'N');
+	prev = skip_wspace(token->prev, 'P');
+	if (!next || !prev)
+		return (false);
+	if (next->type != WORD && !is_red(next->type)
+		&& prev->type != D_QUOTE && prev->type != S_QUOTE)
+		return (false);
+	if (prev->type != WORD && prev->type != D_QUOTE && prev->type != S_QUOTE)
+		return (false);
+	return (true);
+}
+
 bool	if_closed_quotes(t_elem **token, t_token type)
 {
 	while ((*token))
@@ -72,7 +73,8 @@ bool	red_syntax(t_elem *token)
 	t_elem	*next;
 
 	next = skip_wspace(token->next, 'N');
-	if (!next || (next->type != WORD && next->type != ENV && next->type != S_QUOTE && next->type != D_QUOTE ))	// maybe missing conditions!
+	if (!next || (next->type != WORD && next->type != ENV
+			&& next->type != S_QUOTE && next->type != D_QUOTE))
 		return (false);
 	return (true);
 }
