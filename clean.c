@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 13:32:06 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 21:07:54 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_data(t_data **data, char **rl, int flag)
+{
+	if (*rl)
+	{
+		free(*rl);
+		*rl = NULL;	
+	}
+	if (*data)
+    {
+        if (flag == 1)
+        {
+            free_tokens(&(*data)->head);
+            free_exec(&(*data)->exec);
+        }
+        free(*data);
+        *data = NULL;
+    }
+}
 
 void	free_tokens(t_elem **tokens)
 {
@@ -47,23 +66,6 @@ void	free_exec(t_exec **exec)
 			free_char_arr(temp->heredoc_end);
 		free(temp);
 	}
-}
-
-void	delete_token(t_elem **token)
-{
-	t_elem	*next;
-	t_elem	*prev;
-	t_elem	*temp;
-
-	temp = (*token);	
-	next = (*token)->next;
-	prev = (*token)->prev;
-	if (prev)
-		prev->next = next;
-	if (next)
-		next->prev = prev;
-	free (temp->content);
-	free (temp);
 }
 
 void	free_char_arr(char **arr)

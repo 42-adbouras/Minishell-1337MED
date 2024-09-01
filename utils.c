@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/29 10:28:43 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:31:14 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	init_data(t_data **tokens)
 		printf("malloc!\n");
 	(*tokens)->head = NULL;
 	(*tokens)->exec = NULL;
-	(*tokens)->size = 0;
 }
 
 char	*ft_strndup(const char *s1, int n)

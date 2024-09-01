@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/01 21:09:44 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 21:17:34 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void _lks(){system("leaks -q minishell");}
 
 void	print_exec(t_exec *exec)
 {
-	t_exec *tmp = exec;
-	int i = 0;
-	int j = 1;
+	t_exec	*tmp = exec;
+	int		i = 0;
+	int		j = 1;
 	while (tmp)
 	{
 		i = 0;
@@ -43,113 +43,23 @@ void	print_exec(t_exec *exec)
 	}
 }
 
-void	remove_spaces(t_elem **tokens)
-{
-    t_elem *temp;
-    t_elem *prev = NULL;
-	t_elem *current = *tokens;
-
-	// print_tokens((*tokens));
-    while (current)
-    {
-        if (current->type == W_SPACE && current->state == GENERAL)
-        {
-            temp = current;
-            if (prev != NULL)
-                prev->next = current->next;
-            else 
-                *tokens = current->next;
-            if (current->next != NULL)
-                current->next->prev = prev;
-            current = current->next;
-            free(temp);
-        }
-        else
-        {
-            prev = current;
-            current = current->next;
-        }
-    }
-}
-
-void	remove_quotes(t_elem **tokens)
-{
-    // t_elem *temp;
-    // t_elem *prev;
-	t_elem *current = *tokens;
-
-	// print_tokens((*tokens));
-	// temp = NULL;
-	// prev = NULL;
-    while (current)
-    {
-        if ((current->type == D_QUOTE || current->type == S_QUOTE) && current->state == GENERAL)
-        {
-			if (current->next && (current->next->type == D_QUOTE || current->next->type == S_QUOTE) && current->state == GENERAL)
-			{
-				free(current->content);
-				delete_token(&current->next);
-				current->content = ft_strdup("");
-				current->type = WORD;
-				// current = current->next;
-			}
-			else
-				delete_token(&current);
-		}
-		current = current->next;
-    }
-}
-
-char	*get_prompt()
-{
-	char	*s;
-	char	*prompt;
-	char	*temp;
-	int		i;
-	int		j;
-	
-	s = malloc(sizeof(char) * MAX_PATH);
-	getcwd(s, MAX_PATH);
-	i = ft_strlen(s);
-	j = i;
-	while (j > 0)
-	{
-		if (s[j] == '/')
-			break ;
-		j--;
-	}
-	temp = ft_substr(s, j + 1, i - j);
-	prompt = ft_strjoin(temp, " ~ ");
-	free (temp);
-	free (s); 
-	return (prompt);
-}
-
 int main(int ac, char **av, char **env)
 {
-	(void)ac;
-	(void)av;
-	
 	t_env	*envi;
 	char    *rl;
 	t_data  *tokens;
-	char	*prompt;
-	
-	// atexit(_lks);
+
+	atexit(_lks);
+	(void)ac;
+	(void)av;
 	signals_init();
-	// envi = malloc(sizeof(t_env));
 	envi = NULL;
 	set_env(&envi, env); // enviroment initialize
 	while (1)
 	{
-		init_data(&tokens);
-		prompt = get_prompt();
-		rl = readline(prompt);
-		if (!rl)
-			return(printf("exit\n"), 0);
-		if (rl[0])
+		if (ft_readline(&rl))
 		{
-			add_history(rl);
+			init_data(&tokens);
 			ft_lexing(rl, &tokens);
 			if (!if_syntax_err(tokens))
 			{
@@ -159,22 +69,13 @@ int main(int ac, char **av, char **env)
 				if (tokens && tokens->exec && tokens->exec->run)
 					ft_exic(tokens->exec, &envi);
 			}
-			free(rl);
-			free_tokens(&tokens->head);
-			free_exec(&tokens->exec);
-			free(tokens);
-			free (prompt);
+			free_data(&tokens, &rl, 1);
 		}
 		else
-		{
-			free (prompt);
-			free(rl);
-			free(tokens);
-		}
-		// free_char_arr(strenv);
-		// system ("leaks -q minishell");
+			free_data(&tokens, &rl, 0);
+		system ("leaks -q minishell");
 	}
-	
 	clear_history();
+	return (0);
 }
 // echo "hello $USER " > file | grep h | cat << eof | cat >> file | echo 'done'

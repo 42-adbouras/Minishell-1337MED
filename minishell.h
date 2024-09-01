@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 21:10:23 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 21:18:04 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,17 @@ typedef struct s_data
 {
 	t_elem	*head;
 	t_exec	*exec;
-	int		size;
 }	t_data;
 typedef struct s_fd
 {
 	int **pipes;
 	int *fds;
 }	t_fd;
+
+/***	ft_readline.c		***********************************************/
+char	*get_prompt();
+char	*ft_getcwd();
+int		ft_readline(char **rl);
 
 /***	utils.c				***********************************************/
 void	init_data(t_data **tokens);
@@ -164,6 +168,7 @@ void	sig_handler(int sig, siginfo_t *siginfo, void *ptr);
 void	child_sig_init();
 
 /***	clean.c				***********************************************/
+void	free_data(t_data **data, char **rl, int flag);
 void	free_tokens(t_elem **tokens);
 void	free_char_arr(char **arr);
 char 	*get_redirec(t_elem **token);

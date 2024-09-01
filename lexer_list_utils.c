@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:20:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/29 10:32:09 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:30:34 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,4 @@ void	token_add_back(t_data *tokens, t_elem *new)
 	last = last_token(tokens->head);
 	last->next = new;
 	new->prev = last;
-	tokens->size++;
 }

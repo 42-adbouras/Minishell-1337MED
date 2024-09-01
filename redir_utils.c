@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:11:34 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/31 12:10:53 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:41:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,23 @@
 
 int	count_red(t_elem *tokens, t_token type)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (tokens && tokens->type != PIPE)
 	{
-		if (tokens->type == type && tokens->state == GENERAL )
+		if (tokens->type == type && tokens->state == GENERAL)
 			count++;
 		tokens = tokens->next;
 	}
 	return (count);
 }
 
-char *get_redire(t_elem **token, t_env *env)
+char	*get_redire(t_elem **token, t_env *env)
 {
-	char *redir_in;
+	char	*redir_in;
 
-	if (!token)
-		return (ft_strdup(""));
-	if (!*token)
+	if (!token || !*token)
 		return (ft_strdup(""));
 	(*token) = (*token)->next;
 	while ((*token) && (*token)->type == W_SPACE && (*token)->state == GENERAL)
@@ -47,7 +45,7 @@ char *get_redire(t_elem **token, t_env *env)
 			redir_in = ft_expand(env, (*token)->content);
 			if (!redir_in || (redir_in && redir_in[0] == '\0'))
 			{
-				fprintf(stderr, "minishell: ambiguous redirect\n");
+				fprintf(stderr, "minishell: ambiguous redirect\n");	// !!!!!!!!!!!!!!!!!!!!!!!!!
 				return (NULL);
 			}
 		}
@@ -66,7 +64,8 @@ char	*get_heredoc(t_elem **token)
 	(*token) = (*token)->next;
 	while ((*token) && (*token)->type == W_SPACE)
 		(*token) = (*token)->next;
-	if (((*token)->type == S_QUOTE || (*token)->type == D_QUOTE) && (*token)->next)
+	if (((*token)->type == S_QUOTE
+		|| (*token)->type == D_QUOTE) && (*token)->next)
 			redir = get_arg(token, NULL, true);
 	else if ((*token)->type == ENV)
 	{
@@ -79,7 +78,7 @@ char	*get_heredoc(t_elem **token)
 	return (redir);
 }
 
-bool last_heredoc(t_elem *token)
+bool	last_heredoc(t_elem *token)
 {
 	while (token && token->type == W_SPACE)
 		token = token->next;
