@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/31 16:09:19 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 14:26:12 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void skip_redir(t_elem **tokens)
 	(*tokens) = (*tokens)->next;
 	while (tokens && (*tokens) && (*tokens)->type == W_SPACE && (*tokens)->state == GENERAL)
 		(*tokens) = (*tokens)->next;
-	if ((*tokens)->type == D_QUOTE || (*tokens)->type == S_QUOTE)
+	if ((*tokens) && ((*tokens)->type == D_QUOTE || (*tokens)->type == S_QUOTE))
 	{
 		(*tokens) = (*tokens)->next;
 		state = (*tokens)->state;
@@ -68,8 +68,8 @@ int	count_words(t_elem *tokens)
 		}
 		else if (!tokens->next || (tokens->next && (tokens->next->type == W_SPACE || tokens->next->type == PIPE) && tokens->next->state == GENERAL))
 			count++;
-		if (tokens && is_red(tokens->type) && tokens->state == GENERAL)
-			skip_redir(&tokens);
+		// if (tokens && is_red(tokens->type) && tokens->state == GENERAL)
+		// 	skip_redir(&tokens);
 		if ((tokens && tokens->type != PIPE) || (tokens && (tokens)->type == PIPE && (tokens)->state != GENERAL))
 			tokens = tokens->next;
 	}
@@ -89,7 +89,7 @@ char	*get_access(char *cmd, t_env *env)
 	while (env && ft_strncmp(env->var, "PATH", 5))
 		env = env->next;
     if (!access(cmd, X_OK) || !env)
-        return (cmd);
+        return (ft_strdup(cmd)); // pointer being freed was not allocated ./test.sh fixed
 	paths = ft_split(env->value, ':');
     while (paths[i])
     {

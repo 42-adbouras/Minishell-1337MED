@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/31 17:06:10 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 14:25:59 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,9 +183,10 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 	join = ft_strdup("");
 	if (!*token)
 		return (NULL);
-	if ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE)
+	if ((*token) && ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE))
 		(*token) = (*token)->next;
-	state = (*token)->state;
+	if (*token) // about at empty arg or arg of w_spaces fixed
+		state = (*token)->state;
 	while ((*token) && ((*token)->state == state))
 	{
 		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)

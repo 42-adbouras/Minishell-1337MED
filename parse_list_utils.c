@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/31 17:00:41 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 14:50:39 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,12 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 		else if (temp && temp->type == ENV )
 			process_expander(&temp, &new, env, &i);
 		else if (temp && is_red(temp->type) && temp->state == GENERAL)
-		{
 			if_redir(&temp);
-		}
 		if (temp && temp->type != PIPE)
 			temp = temp->next;
 	}
 	if (!process_redir(tokens, &new, env))
-		return (NULL);
+		return (free_exec(&new), NULL); // leaks fixed
 	new->path_option_args[i] = NULL;
 	return (new);
 }

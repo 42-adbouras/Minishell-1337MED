@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/08/29 16:53:19 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 13:09:56 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,18 @@ bool ft_export(t_env **env, char **arg, int fd_out)
 	return (true);
 }
 
+void remove_var(t_env **prev, t_env **var, t_env ***env)
+{
+	if (!*prev)
+		**env = (*var)->next;
+	else
+		(*prev)->next = (*var)->next;
+	free((*var)->var);
+	free((*var)->value);
+	free(*var);
+	*var = NULL;
+}
+
 bool ft_unset(t_env **env, char **toDelete)
 {
 	t_env *temp;
@@ -260,44 +272,40 @@ bool ft_unset(t_env **env, char **toDelete)
 		{
 			if (!ft_strncmp(toDelete[i],temp->var,ft_strlen(temp->var) + 1))
 			{
-				if (!prev)
-					*env = temp->next;
-				else
-					prev->next = temp->next;
-				free(temp->var);
-				free(temp->value);
-				free(temp);
-				temp = NULL;
-				g_status = 0;
+				remove_var(&prev, &temp, &env);
 				return (true);
 			}
 			prev = temp;
 			temp = temp->next;
 		}
-		g_status = 0;
 	}
 	return (true);
 }
 
-bool ft_exit_built(char **arg)
+bool ft_exit_built(char **arg, int cmd_num)
 {
 	int i;
 
 	i = -1;
 	if (!arg || !*arg)
-		exit(0);
+	{
+		if (cmd_num > 1)
+			exit(0);
+		exit(g_status);
+	}
 	while (arg && *arg && arg[0][++i])
 	{
 		if (!ft_isdigit(arg[0][i]))
 		{
-			printf("bash: exit: numeric argument required");
+			ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
 			exit (255);
 		}	
 	}
 	if (arg && *arg && arg[1])
 	{
-		printf("bash: exit: too many arguments");
-		return (true);
+		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		return (false);
 	}
 	else
 		exit(ft_atoi(arg[0]));
@@ -311,7 +319,8 @@ bool ft_pwd(int fd_out)
 		g_status = 1;
 		return (true);
 	}
-	dprintf(fd_out, "%s\n",s);
+	ft_putstr_fd(s, fd_out);
+	ft_putstr_fd("\n", fd_out);
 	g_status = 0;
 	return (true);
 }
@@ -319,7 +328,9 @@ bool ft_pwd(int fd_out)
 bool ft_builtin(t_exec *cmd, t_env **envi, int fd_out)
 {
 	char *builtin;
+	int cmd_num;
 
+	cmd_num = ft_count_cmd(cmd);
 	if (!cmd || !cmd->path_option_args)
 		return (false);
 	if (fd_out == -1)
@@ -338,6 +349,6 @@ bool ft_builtin(t_exec *cmd, t_env **envi, int fd_out)
 	if (!ft_strncmp(builtin, "unset", 6) || !ft_strncmp(builtin, "UNSET", 6))
 		return (ft_unset(envi, &cmd->path_option_args[1]));
 	if (!ft_strncmp(builtin, "exit", 5) || !ft_strncmp(builtin, "EXIT", 5))
-		return (ft_exit_built(&cmd->path_option_args[1]));
+		return (ft_exit_built(&cmd->path_option_args[1], cmd_num));
 	return (false);
 }

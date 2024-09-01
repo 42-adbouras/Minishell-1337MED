@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/08/31 17:11:04 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 15:22:38 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,9 +140,6 @@ int main(int ac, char **av, char **env)
 	// envi = malloc(sizeof(t_env));
 	envi = NULL;
 	set_env(&envi, env); // enviroment initialize
-	// char **strenv;
-	// strenv = env_to_str(envi);
-	// free_env(&envi);
 	while (1)
 	{
 		init_data(&tokens);
@@ -157,7 +154,7 @@ int main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				// print_exec(tokens->exec);
+				print_exec(tokens->exec);
 				// print_tokens(tokens);
 				if (tokens && tokens->exec && tokens->exec->run)
 					ft_exic(tokens->exec, &envi);
@@ -175,7 +172,7 @@ int main(int ac, char **av, char **env)
 			free(tokens);
 		}
 		// free_char_arr(strenv);
-		system ("leaks -q minishell");
+		// system ("leaks -q minishell");
 	}
 	
 	clear_history();

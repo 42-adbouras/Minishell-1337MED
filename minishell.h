@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/31 17:24:17 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 11:19:18 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ bool cheak_var(char *var);
 bool update_var(t_env **env, char *arg, char *new_var);
 bool export_no_arg(t_env *env, char **arg, int fd_out);
 bool ft_unset(t_env **env, char **toDelete);
-bool ft_exit_built(char **arg);
+bool ft_exit_built(char **arg, int cmd_num);
 int ft_count_cmd(t_exec *cmd);
 void	free_int(int **p, int n);
 int	**ft_pip(int cmd_num);
