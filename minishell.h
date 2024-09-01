@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 11:19:18 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 21:10:23 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,8 +217,8 @@ void	ft_close(int cmd_num, int **pipes, int *fds);
 void	ft_stdin(int **pipes, int pid, int *fds);
 void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds);
 bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos);
-void read_heredoc(char *delimiter, int *pip);
-void if_herdoc(char **delimiters, int *fd_heredoc);
+void read_heredoc(char *delimiter, int *pip, t_env *env);
+void if_herdoc(char **delimiters, int *fd_heredoc, t_env *env);
 int *open_redir(t_exec *cmd);
 bool if_builtin(char *cmd);
 void ft_clear(int cmd_num, t_fd *fd, int *pids);

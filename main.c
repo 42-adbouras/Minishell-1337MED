@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/01 15:22:38 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 21:09:44 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				print_exec(tokens->exec);
+				// print_exec(tokens->exec);
 				// print_tokens(tokens);
 				if (tokens && tokens->exec && tokens->exec->run)
 					ft_exic(tokens->exec, &envi);
