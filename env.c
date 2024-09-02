@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 10:48:46 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 17:06:31 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_env *creat_var(char *var)
 	envi = malloc(sizeof(t_env));
 	j = 0;
 	while(var[j] && var[j] != '=')
-	j++;
+		j++;
 	envi->var = ft_substr(var, 0, j);
 	envi->value = ft_substr(var, j, ft_strlen(var));
 	envi->next = NULL;

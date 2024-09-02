@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:29:28 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 17:32:11 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,10 @@ void	skip_redir(t_elem **token);
 int g_status;
 
 # define MAX_PATH 1024
+
+/***	builtins_utils.c	***********************************************/
+bool	free_new_var(char **s);
+void	remove_var(t_env **prev, t_env **var, t_env ***env);
 
 t_env *creat_var(char *var);
 t_env *set_env(char **env);

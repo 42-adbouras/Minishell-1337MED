@@ -6,7 +6,7 @@
 #    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/09/02 15:07:26 by adbouras         ###   ########.fr        #
+#    Updated: 2024/09/02 17:35:51 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ LDFLAGS = -lreadline -L/Users/adbouras/.brew/opt/readline/lib
 
 SRC =  main.c utils.c print.c lexer.c parse_list_utils.c syntax.c parse_utils.c clean.c error.c env.c \
 		lexer_utils.c redir_utils.c arg_utils.c lexer_list_utils.c builtins.c ft_exic.c signals.c ft_readline.c \
-		getters.c process_redir_utils.c expand_utils.c expand_utils_2.c \
+		getters.c process_redir_utils.c expand_utils.c expand_utils_2.c ft_cd.c ft_echo.c ft_env.c ft_export.c ft_unset.c \
+		ft_exit.c ft_pwd.c\
 
 LIBFT = libft/libft.a
 
