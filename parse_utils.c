@@ -6,13 +6,13 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 19:57:43 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 12:57:02 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool redirect_out(t_elem *tokens,t_exec ***new, t_env *env)
+bool	redirect_out(t_elem *tokens, t_exec ***new, t_env *env)
 {
 	(*(*new))->append = false;
 	if (tokens->type == REDIR_APP)
@@ -23,41 +23,85 @@ bool redirect_out(t_elem *tokens,t_exec ***new, t_env *env)
 	return (true);
 }
 
+bool	get_redir_in(t_exec ***new, t_elem *temp, t_env *env, int i)
+{
+	if (temp->type == REDIR_IN && temp->state == GENERAL)
+	{
+		(**new)->heredoc = false;
+		(**new)->redir_in[i] = get_redire(&temp, env);
+		if ((new) && (*new) && (**new)
+			&& (**new)->redir_out && !(**new)->redir_in[i])
+			return (false);
+	}
+	return (true);
+}
+
+bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int j)
+{
+	(**new)->append = false;
+	if (temp->type == REDIR_APP)
+		(**new)->append = true;
+	(**new)->redir_out[j] = get_redire(&temp, env);
+	if ((**new) && (**new)->redir_out && !(**new)->redir_out[j])
+		return (false);	
+	return (true);
+}
+
+void	heredoc_getter(t_exec ***new, t_elem *temp, int l)
+{
+	(**new)->heredoc_end[l] = get_heredoc(&temp);
+	(**new)->heredoc = last_heredoc(temp);
+}
+
+bool	redir_conditions(t_elem *temp, int flag)
+{
+	if (flag == 0)
+	{
+		if (temp && (temp->type != PIPE || ((temp->type == PIPE && temp->state != GENERAL))))
+			return (true);
+		else
+			return (false);
+	}
+	else if (flag == 1)
+	{
+		if ((temp->type == REDIR_OUT || temp->type == REDIR_APP) && temp->state == GENERAL)
+			return (true);
+		else
+			return (false);
+	}
+	else if (flag == 2)
+	{
+		if (temp && (temp->type != PIPE || (temp->type == PIPE && temp->state != GENERAL)))
+			return (true);
+		else
+			return (false);
+	}
+	return (true);
+}
+
 bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 {
 	t_elem	*temp;
-	int i;
-	int j;
-	int l;
-	
+	int		i;
+	int		j;
+	int		l;
+
 	temp = tokens;
 	i = 0;
 	j = 0;
 	l = 0;
-	while (temp && (temp->type != PIPE || ((temp->type == PIPE && temp->state != GENERAL))))
+	while (redir_conditions(temp, 0))
 	{
-		if (temp->type == REDIR_IN && temp->state == GENERAL)
+		if (!get_redir_in(&new, temp, env, i++))
+			return (false);
+		else if (redir_conditions(temp, 1))
 		{
-			(*new)->heredoc = false;
-			(*new)->redir_in[i++] = get_redire(&temp, env);
-			if ((*new) && (*new)->redir_out && !(*new)->redir_in[i - 1])
-				return (false);
-		}
-		else if ((temp->type == REDIR_OUT || temp->type == REDIR_APP) && temp->state == GENERAL)
-		{
-			(*new)->append = false;
-			if (temp->type == REDIR_APP)
-				(*new)->append = true;
-			(*new)->redir_out[j++] = get_redire(&temp, env);
-			if ((*new) && (*new)->redir_out && !(*new)->redir_out[j - 1])
+			if (!get_redir_out(&new, temp, env, j++))
 				return (false);
 		}
 		else if (temp->type == REDIR_AND && temp->state == GENERAL)
-		{
-			(*new)->heredoc_end[l++] = get_heredoc(&temp);
-			(*new)->heredoc = last_heredoc(temp);
-		}
-		if (temp && (temp->type != PIPE || (temp->type == PIPE && temp->state != GENERAL)))
+			heredoc_getter(&new, temp, l++);
+		if (redir_conditions(temp, 2))
 			temp = temp->next;
 	}
 	return (true);
@@ -75,6 +119,7 @@ void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
 	else
 		(*new)->path_option_args[(*i)++] = ft_strdup("$");
 }
+
 char *get_after(char *var)
 {
 	char	*after;
@@ -82,10 +127,11 @@ char *get_after(char *var)
 	
 	i = 0;
 	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
-	i++;
+		i++;
 	after = ft_substr(var, i, ft_strlen(var));
 	return (after);
 }
+
 char *get_var(char *var)
 {
 	int i;
@@ -94,11 +140,12 @@ char *get_var(char *var)
 	i = 0;
 
 	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
-	i++;
+		i++;
 	variable = ft_substr(var, 0, i);
 	return (variable);
 }
-char *ft_expand(t_env *env, char *var)
+
+char	*ft_expand(t_env *env, char *var)
 {
 	t_env *temp;
 	char *after;
@@ -135,6 +182,7 @@ void	_function(t_elem **token, t_state *state)
 		}
 	}
 }
+
 char	*arg_expand(t_elem *token, t_env *env, char **arg)
 {
 	char *temp;
@@ -175,21 +223,41 @@ char	*arg_join(t_elem *token, char **arg, char *join)
 	free(*arg);
 	return (join2);
 }
+
+void	skip_quotes(t_elem ***token, t_state *state)
+{
+	if ((**token) && ((**token)->type == D_QUOTE || (**token)->type == S_QUOTE))
+		(**token) = (**token)->next;
+	if (**token)
+		*state = (**token)->state;
+}
+
+char	*check_exec(bool exec, char **arg, char **join, t_env *env)
+{
+	char	*res;
+
+	res = NULL;
+	if (!exec && !if_builtin(*arg))
+	{
+		res = get_access(*arg, env);
+		if (ft_strlen(*arg) <= ft_strlen(res))
+			free(*arg);
+		return (free(*join), res);
+	}
+	if (!res)
+		return (free(*join), *arg);
+	return (res);
+}
+
 char	*get_arg(t_elem **token, t_env *env, bool exec)
 {
 	char	*arg;
 	char	*join;
-	char	*res;
 	t_state	state;
 
 	arg = NULL;
 	join = ft_strdup("");
-	if (!*token)
-		return (NULL);
-	if ((*token) && ((*token)->type == D_QUOTE || (*token)->type == S_QUOTE))
-		(*token) = (*token)->next;
-	if (*token) // about at empty arg or arg of w_spaces fixed
-		state = (*token)->state;
+	skip_quotes(&token, &state);
 	while ((*token) && ((*token)->state == state))
 	{
 		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)
@@ -201,15 +269,9 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 			arg = arg_join(*token, &arg, join);
 		(*token) = (*token)->next;
 		_function(token, &state);
-		if ((*token) &&  (((*token)->type == W_SPACE || (*token)->type == PIPE) && (*token)->state == GENERAL))
+		if ((*token) &&  (((*token)->type == W_SPACE
+			|| (*token)->type == PIPE) && (*token)->state == GENERAL))
 			break;
 	}
-	if (!exec && !if_builtin(arg))
-	{
-		res = get_access(arg, env);
-		if (ft_strlen(arg) <= ft_strlen(res))
-			free(arg);
-		return (free(join), res);
-	}
-	return (free(join), arg);
+	return (check_exec(exec, &arg, &join, env));
 }

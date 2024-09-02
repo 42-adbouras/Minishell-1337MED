@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:46:07 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 21:11:59 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:29:24 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	ft_readline(char **rl)
 	if (!*rl)
 	{
 		free(prompt);
-		printf("exit\n");
 		clear_history();
+		printf("exit\n");
 		exit (0);
 	}
 	if (!*rl[0])

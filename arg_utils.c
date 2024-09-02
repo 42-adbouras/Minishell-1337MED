@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 14:26:12 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 09:03:58 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,22 @@ bool skip_space(t_elem **tokens, int *count)
 	(*count)++;
 	return (true);
 }
-void skip_redir(t_elem **tokens)
-{
-	t_state	state;
+// void skip_redir(t_elem **tokens)
+// {
+// 	t_state	state;
 	
-	(*tokens) = (*tokens)->next;
-	while (tokens && (*tokens) && (*tokens)->type == W_SPACE && (*tokens)->state == GENERAL)
-		(*tokens) = (*tokens)->next;
-	if ((*tokens) && ((*tokens)->type == D_QUOTE || (*tokens)->type == S_QUOTE))
-	{
-		(*tokens) = (*tokens)->next;
-		state = (*tokens)->state;
-		while (state == (*tokens)->state)
-			(*tokens) = (*tokens)->next;
-	}
-	(*tokens) = (*tokens)->next;
-}
+// 	(*tokens) = (*tokens)->next;
+// 	while (tokens && (*tokens) && (*tokens)->type == W_SPACE && (*tokens)->state == GENERAL)
+// 		(*tokens) = (*tokens)->next;
+// 	if ((*tokens) && ((*tokens)->type == D_QUOTE || (*tokens)->type == S_QUOTE))
+// 	{
+// 		(*tokens) = (*tokens)->next;
+// 		state = (*tokens)->state;
+// 		while (state == (*tokens)->state)
+// 			(*tokens) = (*tokens)->next;
+// 	}
+// 	(*tokens) = (*tokens)->next;
+// }
 int	count_words(t_elem *tokens)
 {
 	int count;

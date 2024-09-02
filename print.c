@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 18:14:23 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/01 19:31:23 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:31:30 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,33 @@ void    print_tokens(t_data *tokens)
 	{
 		printf("\'%s\'\t\t%d\t\t%s\t\t%s\n", tmp->content, tmp->len, token_to_string(tmp->type), state_to_string(tmp->state));
 		tmp = tmp->next;
+	}
+}
+
+void	print_exec(t_exec *exec)
+{
+	t_exec	*tmp = exec;
+	int		i = 0;
+	int		j = 1;
+	while (tmp)
+	{
+		i = 0;
+		for(int x = 0; tmp->redir_in[x]; x++)
+			printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
+		for(int y = 0; tmp->redir_out[y]; y++)
+			printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
+		for(int z = 0; tmp->heredoc_end[z]; z++)
+			printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
+		if (tmp->heredoc)
+			printf("[last redirection is a heredoc]\n");
+		if (tmp->append)
+			printf("[last redirection is a append]\n");
+		while (tmp && tmp->path_option_args &&  tmp->path_option_args[i])
+		{
+			printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
+			i++;
+		}
+		tmp = tmp->next;
+		j++;
 	}
 }

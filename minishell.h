@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 21:08:19 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:59:23 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ bool	ft_error(char *err);
 void	print_tokens(t_data *tokens);
 char	*state_to_string(t_state state);
 char	*token_to_string(t_token token);
+void	print_exec(t_exec *exec);
 
 /***	signls.c				***********************************************/
 void    signals_init();
@@ -194,6 +195,8 @@ void	remove_quotes(t_elem **tokens);
 void child_process_code();
 void handle_sigint(int sig);
 
+
+void	skip_redir(t_elem **token);
 /****************************		eismail		****************************/
 int g_status;
 

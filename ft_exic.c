@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exic.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/01 15:22:27 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 10:51:04 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,7 @@ bool open_redir_in(t_exec *cmd, int *fds)
 	}
 	return (true);
 }
-bool open_redir_out(t_exec *cmd, int *fds)
+bool	open_redir_out(t_exec *cmd, int *fds)
 {
 	int i;
 
