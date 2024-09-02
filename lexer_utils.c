@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:19:27 by adbouras          #+#    #+#             */
-/*   Updated: 2024/08/22 17:26:41 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 15:13:20 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ bool	is_grammar(char c)
 
 t_elem	*skip_wspace(t_elem *token, char direction)
 {
-	
 	while (token && token->type == W_SPACE)
 	{
 		if (direction == 'N')

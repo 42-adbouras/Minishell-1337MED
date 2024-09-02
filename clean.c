@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 11:03:07 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 15:10:45 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,26 @@ void	free_data(t_data **data, char **rl, int flag)
 	if (*rl)
 	{
 		free(*rl);
-		*rl = NULL;	
+		*rl = NULL;
 	}
 	if (data && *data)
-    {
-        if (flag == 1)
-        {
-            free_tokens(&(*data)->head);
+	{
+		if (flag == 1)
+		{
+			free_tokens(&(*data)->head);
 			if ((*data)->exec)
-           		free_exec(&(*data)->exec);
-        }
-        free(*data);
-        *data = NULL;
-    }
+				free_exec(&(*data)->exec);
+		}
+		free(*data);
+		*data = NULL;
+	}
 }
 
 void	free_tokens(t_elem **tokens)
 {
-	t_elem *node;
-	t_elem *temp;
-	
+	t_elem	*node;
+	t_elem	*temp;
+
 	node = (*tokens);
 	while (node)
 	{

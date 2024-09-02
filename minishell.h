@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 13:08:22 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:18:44 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_exec
 	bool			heredoc;			// last <<
 	bool			exed;
 	bool			run;
+	bool			expand_heredoc;
 	struct s_exec	*next;
 	struct s_env	*env;
 }	t_exec;
@@ -156,10 +157,16 @@ void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env);
 void	init_exec_struct(t_data **data, t_env *env);
 void	exec_add_back(t_exec **exec, t_exec *new);
 
+/***	expand_utils.c		***********************************************/
+char	*process_expander(t_elem **temp, t_env *env);
+char	*arg_expand(t_elem *token, t_env *env, char **arg);
+char	*check_exec(bool exec, char **arg, char **join, t_env *env);
+char	*ft_expand(t_env *env, char *var);
+
 /***	redir_utils.c		***********************************************/
 int		count_red(t_elem *tokens, t_token type);
 char 	*get_redire(t_elem **token, t_env *env);
-char	*get_heredoc(t_elem **token);
+char	*get_heredoc(t_elem **token, bool *heredoc);
 bool	last_heredoc(t_elem *token);
 
 /***	signals.c			***********************************************/
@@ -176,6 +183,18 @@ bool 	last_heredoc(t_elem *token);
 void	free_exec(t_exec **exec);
 void	delete_token(t_elem **token);
 
+/***	process_redir_utils.c	*******************************************/
+bool	redir_conditions(t_elem *temp, int flag);
+bool	get_redir_in(t_exec ***new, t_elem *temp, t_env *env, int *i);
+void	if_redir(t_elem **token);
+
+
+/***	getters.c			***********************************************/
+bool	cmd_getter(t_elem *temp, t_exec *new);
+bool	arg_getter(t_elem *temp);
+bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int *j);
+void	heredoc_getter(t_exec ***new, t_elem *temp, int *l);
+
 /***	error.c				***********************************************/
 void	ft_exit(t_data **tokens, char *err);
 bool	ft_error(char *err);
@@ -186,14 +205,17 @@ char	*state_to_string(t_state state);
 char	*token_to_string(t_token token);
 void	print_exec(t_exec *exec);
 
-/***	signls.c				***********************************************/
+/***	signls.c			***********************************************/
 void    signals_init();
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
 
 void	remove_quotes(t_elem **tokens);
-void child_process_code();
-void handle_sigint(int sig);
+void 	child_process_code();
+void 	handle_sigint(int sig);
+char	*get_after(char *var);
+char	*get_var(char *var);
+char	*arg_join(t_elem *token, char **arg, char *join);
 
 
 void	skip_redir(t_elem **token);

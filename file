@@ -7,9 +7,12 @@ clean.c
 env.c
 error.c
 exec_head.h
+expand_utils.c
+expand_utils_2.c
 file
 ft_exic.c
 ft_readline.c
+getters.c
 lexer.c
 lexer_list_utils.c
 lexer_utils.c
@@ -21,6 +24,7 @@ objects
 parse_list_utils.c
 parse_utils.c
 print.c
+process_redir_utils.c
 redir_utils.c
 signals.c
 syntax.c

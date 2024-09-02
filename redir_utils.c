@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:11:34 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 16:04:51 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:46:28 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@ char	*get_redire(t_elem **token, t_env *env)
 		{
 			redir_in = ft_expand(env, (*token)->content);
 			if (!redir_in || (redir_in && redir_in[0] == '\0'))
-			{
-				ft_putstr_fd("minishell: ambiguous redirect\n", 2);
-				return (NULL);
-			}
+				return (ft_putstr_fd("minishell: ambiguous redirect\n", 2)
+					, NULL);
 		}
 		else
 			redir_in = ft_strdup("$");
@@ -57,7 +55,7 @@ char	*get_redire(t_elem **token, t_env *env)
 	return (redir_in);
 }
 
-char	*get_heredoc(t_elem **token)
+char	*get_heredoc(t_elem **token, bool *heredoc)
 {
 	char	*redir;
 
@@ -65,8 +63,11 @@ char	*get_heredoc(t_elem **token)
 	while ((*token) && (*token)->type == W_SPACE)
 		(*token) = (*token)->next;
 	if (((*token)->type == S_QUOTE
-		|| (*token)->type == D_QUOTE) && (*token)->next)
-			redir = get_arg(token, NULL, true);
+			|| (*token)->type == D_QUOTE) && (*token)->next)
+	{
+		*heredoc = true;
+		redir = get_arg(token, NULL, true);
+	}
 	else if ((*token)->type == ENV)
 	{
 		(*token) = (*token)->next;
