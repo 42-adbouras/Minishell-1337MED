@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 21:18:04 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 12:27:23 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ bool	red_syntax(t_elem *token);
 
 /***	parse_utils.c			*******************************************/
 bool	process_redir(t_elem *tokens, t_exec **new, t_env *env);
-void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i);
+char 	*process_expander(t_elem **temp, t_env *env);
 char	*ft_expand(t_env *env, char *var);
 char	*get_arg(t_elem **token, t_env *env, bool exec);
 
@@ -200,13 +200,13 @@ int g_status;
 # define MAX_PATH 1024
 
 t_env *creat_var(char *var);
-void set_env(t_env **envi, char **env);
+t_env *set_env(char **env);
 void add_env(t_env **head, t_env *env_new);
 void free_env(t_env **env);
 void ft_exic(t_exec *cmds, t_env **envi);
 bool ft_builtin(t_exec *cmd, t_env **envi, int fd_out);
 bool    ft_cd(char *path, t_env *env);
-bool env_var(t_env *env, char **arg);
+// bool env_var(t_env *env, char **arg);
 int echo_option(t_exec *cmd);
 bool ft_echo(t_exec *cmd, int fd_out);
 bool ft_env(t_env *env, int fd_out);

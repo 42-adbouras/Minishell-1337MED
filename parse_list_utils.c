@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/01 14:50:39 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 10:56:59 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,15 @@
 void if_redir(t_elem **token)
 {
 	(*token) = (*token)->next;
-	while ((*token) && ((*token)->type == W_SPACE || (*token)->type == ENV) && (*token)->state == GENERAL)
+		
+	while ((*token) && (*token)->type == W_SPACE && (*token)->state == GENERAL)
 		(*token) = (*token)->next;
+	if ((*token) && (*token)->type == ENV && (*token)->state == GENERAL)
+	{
+		(*token) = (*token)->next;
+		if (*token)
+			(*token) = (*token)->next;
+	}
 	while ((*token) && (((*token)->type != W_SPACE && (*token)->type != PIPE) || (((*token)->type == W_SPACE && (*token)->type == PIPE) && (*token)->state == GENERAL)))
 		(*token) = (*token)->next;
 }
@@ -37,21 +44,25 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 		else if (temp && ((temp->type == S_QUOTE  || temp->type == D_QUOTE) || (temp->type == WORD && temp->state == GENERAL)))
 			new->path_option_args[i++] = get_arg(&temp, env, new->exed);
 		else if (temp && temp->type == ENV )
-			process_expander(&temp, &new, env, &i);
+			new->path_option_args[i++] =  process_expander(&temp, env);
 		else if (temp && is_red(temp->type) && temp->state == GENERAL)
 			if_redir(&temp);
 		if (temp && temp->type != PIPE)
 			temp = temp->next;
 	}
+	new->path_option_args[i] = NULL;
 	if (!process_redir(tokens, &new, env))
 		return (free_exec(&new), NULL); // leaks fixed
-	new->path_option_args[i] = NULL;
 	return (new);
 }
 
 void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 {
-	int n = count_words(tokens);
+	int n;
+	int out;
+	
+	n = count_words(tokens);
+	out = (count_red(tokens, REDIR_OUT) + count_red(tokens, REDIR_APP));
 	(*new) = malloc(sizeof(t_exec));
 	if (!n)
 		(*new)->run = false;
@@ -59,11 +70,11 @@ void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 		(*new)->run = true;
 	(*new)->path_option_args = malloc(sizeof(char *) * (n + 1));
 	(*new)->redir_in = malloc(sizeof(char *) * (count_red(tokens, REDIR_IN) + 1));
-	(*new)->redir_out = malloc(sizeof(char *) * (count_red(tokens, REDIR_OUT) + 1));
+	(*new)->redir_out = malloc(sizeof(char *) * (out + 1));
 	(*new)->heredoc_end = malloc(sizeof(char *) * (count_red(tokens, REDIR_AND) + 1));
 	(*new)->path_option_args[n] = NULL;
 	(*new)->redir_in[count_red(tokens, REDIR_IN)] = NULL; 
-	(*new)->redir_out[count_red(tokens, REDIR_OUT)] = NULL; 
+	(*new)->redir_out[out] = NULL; 
 	(*new)->heredoc_end[count_red(tokens, REDIR_AND)] = NULL;
 	(*new)->exed = false;
 	(*new)->append = false;

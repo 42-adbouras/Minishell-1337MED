@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/01 13:09:56 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 12:35:44 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,6 @@ bool    ft_cd(char *path, t_env *env)
 	return (true);
 }
 
-bool env_var(t_env *env, char **arg)
-{
-	int i;
-	t_env *temp;
-
-	i = -1;
-	temp = env;
-	while(arg[++i])
-	{
-		if (arg[i][0] == '$')
-		{
-			while (temp)
-			{
-				if (!ft_strncmp(&arg[i][1], temp->var, ft_strlen(temp->var) + 1))
-				{
-					
-					printf("%s\n",temp->value);
-					return (true);
-				}
-				temp = temp->next;
-			}
-		}
-	}
-	return (false);
-}
 
 int echo_option(t_exec *cmd)
 {
@@ -121,35 +96,30 @@ bool ft_env(t_env *env, int fd_out)
 	return (true);
 }
 
+void export_error()
+{
+	ft_putstr_fd("minishell: export: not a valid identifier\n", 2);
+}
+
 bool cheak_var(char *var)
 {
 	int i;
 
 	i = -1;
+	g_status = 1;
 	while (var[++i])
 	{
 		if (var[i] != '_' && !ft_isalnum(var[i])) //!@#$%^&*()-=+
-		{
-			g_status = 1;
-			fprintf(stderr, "minishell: export: not a valid identifier\n");
-			return (false);
-		}
+			return (export_error(), false);
 	}
 	if (var && var[0] != '\0' && var[0] != '_')
 	{
 		if (!ft_isalpha(var[0])) //123var
-		{
-			g_status = 1;
-			fprintf(stderr, "minishell: export: not a valid identifier\n");
-			return (false);
-		}
+			return (export_error(), false);
 	}
 	else if (var && var[0] == '\0')
-	{
-		g_status = 1;
-		fprintf(stderr, "minishell: export: not a valid identifier\n");
-		return (false);	
-	}
+		return (export_error(), false);
+	g_status = 0;
 	return (true);
 }
 
@@ -172,7 +142,6 @@ bool update_var(t_env **env, char *arg, char *new_var)
 			free(new->var);
 			free(new->value);
 			free(new);
-			g_status = 0;
 			return (true);
 		}
 		temp = temp->next;
@@ -204,6 +173,13 @@ bool export_no_arg(t_env *env, char **arg , int fd_out)
 	return (false);
 }
 
+bool free_new_var(char **s)
+{
+	free(*s);
+	*s = NULL;
+	return (true);
+}
+
 bool ft_export(t_env **env, char **arg, int fd_out)
 {
 	int i;
@@ -220,26 +196,16 @@ bool ft_export(t_env **env, char **arg, int fd_out)
 		while (arg && arg[j] && arg[j][i] != '\0' && arg[j][i] != '=')
 			i++;
 		new_var = ft_substr(arg[j], 0, i);
-		if (!cheak_var(new_var))
-		{
-			free(new_var);
-			new_var = NULL;
+		if (!cheak_var(new_var) && free_new_var(&new_var))
 			continue;
-		}
-		if (update_var(env, arg[j], new_var))
-		{
-			free(new_var);
-			new_var = NULL;
+		if (update_var(env, arg[j], new_var) && free_new_var(&new_var))
 			continue;
-		}
 		new = creat_var(arg[j]);
 		add_env(env, new);
-		free(new_var);
-		new_var = NULL;
+		free_new_var(&new_var);
 	}
 	if (new_var)
 		free(new_var);
-	g_status = 1;
 	return (true);
 }
 

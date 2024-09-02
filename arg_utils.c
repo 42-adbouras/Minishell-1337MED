@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 14:26:12 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/01 21:34:29 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	*get_access(char *cmd, t_env *env)
     i = 0;
 	while (env && ft_strncmp(env->var, "PATH", 5))
 		env = env->next;
-    if (!access(cmd, X_OK) || !env)
+    if (cmd[0] == '\0' || !access(cmd, X_OK) || !env)
         return (ft_strdup(cmd)); // pointer being freed was not allocated ./test.sh fixed
 	paths = ft_split(env->value, ':');
     while (paths[i])

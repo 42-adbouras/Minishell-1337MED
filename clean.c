@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 21:07:54 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:03:07 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ void	free_data(t_data **data, char **rl, int flag)
 		free(*rl);
 		*rl = NULL;	
 	}
-	if (*data)
+	if (data && *data)
     {
         if (flag == 1)
         {
             free_tokens(&(*data)->head);
-            free_exec(&(*data)->exec);
+			if ((*data)->exec)
+           		free_exec(&(*data)->exec);
         }
         free(*data);
         *data = NULL;

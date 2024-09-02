@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 19:57:43 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 10:09:43 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,35 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 	return (true);
 }
 
-void	process_expander(t_elem **temp, t_exec **new, t_env *env, int *i)
+char *process_expander(t_elem **temp, t_env *env)
 {
-	if ((*temp)->next)
+	char *arg;
+	char *join;
+	char *join2;
+	
+	arg = NULL;
+	while (temp && *temp && (*temp)->type == ENV)
 	{
-		(*temp) = (*temp)->next;
-		(*new)->path_option_args[(*i)] = NULL;
-		(*new)->path_option_args[(*i)] = arg_expand(*temp, env, &(*new)->path_option_args[(*i)]);
-		(*i)++;
+		join = ft_strdup(arg);
+		free(arg);
+		arg = NULL;
+		if ((*temp)->next)
+		{
+			(*temp) = (*temp)->next;
+			arg = arg_expand(*temp, env, &arg);
+		}
+		else
+			arg = ft_strdup("$");
+		join2 = ft_strjoin(join, arg);
+		free(arg);
+		arg = ft_strdup(join2);
+		free(join2);
+		free(join);
+		*temp = (*temp)->next;
 	}
-	else
-		(*new)->path_option_args[(*i)++] = ft_strdup("$");
+	return (arg);
 }
+
 char *get_after(char *var)
 {
 	char	*after;
@@ -82,7 +99,7 @@ char *get_after(char *var)
 	
 	i = 0;
 	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
-	i++;
+		i++;
 	after = ft_substr(var, i, ft_strlen(var));
 	return (after);
 }
@@ -94,7 +111,7 @@ char *get_var(char *var)
 	i = 0;
 
 	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
-	i++;
+		i++;
 	variable = ft_substr(var, 0, i);
 	return (variable);
 }
@@ -160,7 +177,7 @@ char	*arg_expand(t_elem *token, t_env *env, char **arg)
 	else
 		join = ft_strdup("$");
 	join2 = ft_strjoin(temp, join);
-	return (free(join), free(*arg), free(temp), join2);
+	return (free(join), free(temp), join2); //free(*arg)
 }
 
 char	*arg_join(t_elem *token, char **arg, char *join)
