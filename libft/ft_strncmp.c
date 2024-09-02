@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 19:45:23 by adbouras          #+#    #+#             */
-/*   Updated: 2023/12/26 11:59:37 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 15:37:50 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	unsigned char	*p_s1;
 	unsigned char	*p_s2;
 	size_t			i;
-	
+
 	if (!s1 || !s2)
 		return (1);
 	p_s1 = (unsigned char *)s1;

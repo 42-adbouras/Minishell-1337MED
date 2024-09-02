@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   getters.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/10 11:05:46 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:11:06 by adbouras         ###   ########.fr       */
+/*   Created: 2024/09/02 13:15:27 by adbouras          #+#    #+#             */
+/*   Updated: 2024/09/02 13:43:55 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	ft_error(char *err)
+bool	cmd_getter(t_elem *temp, t_exec *new)
 {
-	write(2, BRED, ft_strlen(BRED));
-	write(2, err, ft_strlen(err));
-	write(2, RSET, ft_strlen(RSET));
-	return (EXIT_FAILURE);
+	if (temp->type == WORD && !new->exed && temp->next
+		&& (temp->next->type != S_QUOTE && temp->next->type != D_QUOTE))
+		return (true);
+	return (false);
 }
 
-void	ft_exit(t_data **tokens, char *err)
+bool	arg_getter(t_elem *temp)
 {
-	free_tokens(&(*tokens)->head);
-	write(2, err, ft_strlen(err));
-	if (err)
-		exit(1);
-	exit(0);
+	if (temp && ((temp->type == S_QUOTE || temp->type == D_QUOTE)
+			|| (temp->type == WORD && temp->state == GENERAL)))
+		return (true);
+	return (false);
 }

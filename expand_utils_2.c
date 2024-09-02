@@ -1,44 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   expand_utils_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/02 15:37:12 by adbouras         ###   ########.fr       */
+/*   Created: 2024/09/02 15:02:17 by adbouras          #+#    #+#             */
+/*   Updated: 2024/09/02 15:02:58 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_data(t_data **tokens)
+char	*get_var(char *var)
 {
-	*tokens = malloc(sizeof(t_data));
-	if (!(*tokens))
-		printf("malloc!\n");
-	(*tokens)->head = NULL;
-	(*tokens)->exec = NULL;
-}
-
-char	*ft_strndup(const char *s1, int n)
-{
-	char	*ptr;
-	int		len;
+	char	*variable;
 	int		i;
 
-	if (!s1)
-		return (NULL);
-	len = ft_strlen(s1);
-	ptr = malloc(len + 1);
 	i = 0;
-	if (!ptr)
-		return (NULL);
-	while (i < len && i < n)
-	{
-		ptr[i] = s1[i];
+	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
 		i++;
-	}
-	ptr[i] = '\0';
-	return (ptr);
+	variable = ft_substr(var, 0, i);
+	return (variable);
+}
+
+char	*arg_join(t_elem *token, char **arg, char *join)
+{
+	char	*join2;
+
+	join2 = NULL;
+	if (token && (token->type == D_QUOTE
+			|| token->type == S_QUOTE) && token->state == GENERAL)
+		join2 = ft_strjoin(*arg, join);
+	else
+		join2 = ft_strjoin(*arg, (token)->content);
+	free(*arg);
+	return (join2);
 }

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 12:35:44 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 15:42:09 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool    ft_cd(char *path, t_env *env)
+bool	ft_cd(char *path, t_env *env)
 {
-	t_env *home_env;
+	t_env	*home_env;
 
 	home_env = env;
 	while (home_env && ft_strncmp(home_env->var, "HOME", 5))
@@ -37,17 +37,16 @@ bool    ft_cd(char *path, t_env *env)
 	return (true);
 }
 
-
-int echo_option(t_exec *cmd)
+int	echo_option(t_exec *cmd)
 {
-	int i;
-	int j;
-	
+	int	i;
+	int	j;
+
 	i = 0;
 	j = -1;
 	if (!cmd->path_option_args)
 		return (0);
-	while(cmd->path_option_args[++i])
+	while (cmd->path_option_args[++i])
 	{
 		j = 0;
 		if (cmd->path_option_args[i][0] == '-')
@@ -59,14 +58,14 @@ int echo_option(t_exec *cmd)
 			}
 		}
 		else
-			break;
+			break ;
 	}
 	return (i);
 }
 
-bool ft_echo(t_exec *cmd, int fd_out)
+bool	ft_echo(t_exec *cmd, int fd_out)
 {
-	int i;
+	int	i;
 
 	i = echo_option(cmd) - 1;
 	while (cmd->path_option_args[i + 1] && cmd->path_option_args[++i])
@@ -81,9 +80,9 @@ bool ft_echo(t_exec *cmd, int fd_out)
 	return (true);
 }
 
-bool ft_env(t_env *env, int fd_out)
+bool	ft_env(t_env *env, int fd_out)
 {
-	while(env)
+	while (env)
 	{
 		if (ft_strchr(env->value, '='))
 		{
@@ -96,14 +95,14 @@ bool ft_env(t_env *env, int fd_out)
 	return (true);
 }
 
-void export_error()
+void	export_error(void)
 {
 	ft_putstr_fd("minishell: export: not a valid identifier\n", 2);
 }
 
-bool cheak_var(char *var)
+bool	cheak_var(char *var)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	g_status = 1;
@@ -123,11 +122,11 @@ bool cheak_var(char *var)
 	return (true);
 }
 
-bool update_var(t_env **env, char *arg, char *new_var)
+bool	update_var(t_env **env, char *arg, char *new_var)
 {
-	t_env *temp;
-	t_env *new;
-	
+	t_env	*temp;
+	t_env	*new;
+
 	temp = *env;
 	while (temp)
 	{

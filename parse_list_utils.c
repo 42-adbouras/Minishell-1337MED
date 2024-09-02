@@ -3,47 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/02 13:11:53 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 15:14:52 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	if_redir(t_elem **token)
-{
-	(*token) = (*token)->next;
-	while ((*token) && (*token)->type == W_SPACE && (*token)->state == GENERAL)
-        (*token) = (*token)->next;
-    if ((*token) && (*token)->type == ENV && (*token)->state == GENERAL)
-    {
-        (*token) = (*token)->next;
-        if (*token)
-            (*token) = (*token)->next;
-    }
-	while ((*token) && (((*token)->type != W_SPACE && (*token)->type != PIPE)
-			|| (((*token)->type == W_SPACE && (*token)->type == PIPE)
-				&& (*token)->state == GENERAL)))
-		(*token) = (*token)->next;
-}
-
-bool	cmd_getter(t_elem *temp, t_exec *new)
-{
-	if (temp->type == WORD && !new->exed && temp->next
-		&& (temp->next->type != S_QUOTE && temp->next->type != D_QUOTE))
-		return (true);
-	return (false);
-}
-
-bool	arg_getter(t_elem *temp)
-{
-	if (temp && ((temp->type == S_QUOTE || temp->type == D_QUOTE)
-			|| (temp->type == WORD && temp->state == GENERAL)))
-		return (true);
-	return (false);
-}
 
 t_exec	*new_exec(t_elem *tokens, t_env *env)
 {
@@ -124,33 +91,6 @@ void	exec_add_back(t_exec **exec, t_exec *new)
 	}
 	last = ft_last_exec(*exec);
 	last->next = new;
-}
-
-void	join_tokens(t_elem **tokens)
-{
-	t_elem	*current;
-	t_elem	*temp;
-	char	*new;
-
-	current = *tokens;
-	while (current && current->next)
-	{
-		if (current->type == WORD && current->next->type == WORD)
-		{
-			new = ft_strjoin(current->content, current->next->content);
-			free(current->content);
-			current->content = new;
-			current->len = ft_strlen(current->content);
-			current->state = GENERAL;
-			temp = current->next;
-			current->next = current->next->next;
-			if (current->next)
-				current->next->prev = current;
-			free(temp);
-		}
-		else
-			current = current->next;
-	}
 }
 
 void	init_exec_struct(t_data **data, t_env *env)
