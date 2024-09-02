@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/02 11:13:44 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 13:07:44 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,6 @@
 #include "exec_head.h"
 
 void _lks(){system("leaks -q minishell");}
-
-void	print_exec(t_exec *exec)
-{
-	t_exec	*tmp = exec;
-	int		i = 0;
-	int		j = 1;
-	while (tmp)
-	{
-		i = 0;
-		for(int x = 0; tmp->redir_in[x]; x++)
-			printf("redir_in %d-> %s\n",j , tmp->redir_in[x]);
-		for(int y = 0; tmp->redir_out[y]; y++)
-			printf("redir_out %d-> %s\n",j , tmp->redir_out[y]);
-		for(int z = 0; tmp->heredoc_end[z]; z++)
-			printf("heredoc_end %d-> %s\n",j , tmp->heredoc_end[z]);
-		if (tmp->heredoc)
-			printf("[last redirection is a heredoc]\n");
-		if (tmp->append)
-			printf("[last redirection is a append]\n");
-		while (tmp && tmp->path_option_args &&  tmp->path_option_args[i])
-		{
-			printf("cmd %d-> %s\n",j , tmp->path_option_args[i]);
-			i++;
-		}
-		tmp = tmp->next;
-		j++;
-	}
-}
 
 int main(int ac, char **av, char **env)
 {

@@ -1,4 +1,4 @@
-/Users/eismail/Desktop/norm_minishell/Minishell-1337
+hello world
 Makefile
 README.md
 arg_utils.c
@@ -8,10 +8,6 @@ env.c
 error.c
 exec_head.h
 file
-file1
-file2
-folder one
-folder\
 ft_exic.c
 ft_readline.c
 lexer.c
@@ -22,7 +18,6 @@ main.c
 minishell
 minishell.h
 objects
-one
 parse_list_utils.c
 parse_utils.c
 print.c

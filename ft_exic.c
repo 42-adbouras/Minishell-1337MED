@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 12:59:13 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 13:09:06 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,7 @@ bool open_redir_in(t_exec *cmd, int *fds)
 	}
 	return (true);
 }
-bool open_redir_out(t_exec *cmd, int *fds)
+bool	open_redir_out(t_exec *cmd, int *fds)
 {
 	int i;
 
