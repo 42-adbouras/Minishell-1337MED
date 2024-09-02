@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:11:34 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:33:42 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 16:46:28 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*get_redire(t_elem **token, t_env *env)
 	return (redir_in);
 }
 
-char	*get_heredoc(t_elem **token)
+char	*get_heredoc(t_elem **token, bool *heredoc)
 {
 	char	*redir;
 
@@ -64,7 +64,10 @@ char	*get_heredoc(t_elem **token)
 		(*token) = (*token)->next;
 	if (((*token)->type == S_QUOTE
 			|| (*token)->type == D_QUOTE) && (*token)->next)
+	{
+		*heredoc = true;
 		redir = get_arg(token, NULL, true);
+	}
 	else if ((*token)->type == ENV)
 	{
 		(*token) = (*token)->next;

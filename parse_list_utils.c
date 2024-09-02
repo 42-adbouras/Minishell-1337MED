@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/02 15:14:52 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 16:42:54 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	init_exec_struct(t_data **data, t_env *env)
 	while (temp)
 	{
 		new = new_exec(temp, env);
+		new->expand_heredoc = false;
 		exec_add_back(&(*data)->exec, new);
 		while (temp && (temp->type != PIPE
 				|| (temp->type == PIPE && temp->state != GENERAL)))
