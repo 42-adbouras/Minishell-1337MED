@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 13:12:10 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:40:43 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,30 +120,72 @@ bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos)
 	return (true);
 }
 
-// char *expand_heredoc(char **line ,t_env *env)
-// {
-// 	char *env_var;
-// 	char *temp;
+char *expand_heredoc(char **line ,t_env *env)
+{
+	char *env_var;
+	char *temp;
+	char *temp2;
+	char *join;
+	char *join2;
+	char *sub;
+	int i;
+	int j;
 	
-// 	temp = ft_strjoin(*line, "\n");
-// 	if (temp[0] == '$')
-// 	{
-// 		if(temp[1] == '?')
-// 			temp = ft_itoa(g_status);
-// 		else
-// 			env_var = ft_expand(env, &temp[1]);
-// 		free(temp);
-// 		temp = env_var;
-// 	}
-// 	free(*line);
-// 	return (temp);
-// }
+	i = -1;
+	j = 0;
+	env_var = NULL;
+	temp = ft_strjoin(*line, "\n");
+	while (temp[j] && temp[j] != '$')
+		j++;
+	if (temp[j] && temp[j] != '$')
+		j--;
+	while (temp[++i])
+	{
+		join2 = ft_strdup(env_var);
+		if (temp[i] == '$')
+		{
+			j = i + 1;
+			while (temp[j] && temp[j] != '$')
+				j++;
+			sub = ft_substr(&temp[i+1], 0, (j - i)-1);
+			int l = 0;
+			if(sub[l + 1] == '?')
+			{
+				temp2 = ft_itoa(g_status);
+				env_var = ft_strjoin(temp2, "\n");
+				free (temp2);
+			}
+			else if (sub[l + 1] && sub[l + 1] != '\n')
+			{
+				env_var = ft_expand(env, sub);
+			}
+			else 
+				env_var = ft_strdup("$\n");
+			i++;
+			join = ft_strjoin(join2, env_var);
+			free(env_var);
+			env_var = ft_strdup(join);
+			free(join2);
+			free(join);
+		}
+		else
+			env_var = ft_substr(temp, 0, j);
+		while (temp[i] && temp[i] != '$')
+			i++;
+		if (temp[i] == '$')
+			i--;
+	}
+	free(temp);
+	temp = env_var;
+	free(*line);
+	return (temp);
+}
 
 void read_heredoc(char *delimiter, int *pip, t_env *env)
 {
 	char *s;
 	char *line;
-	char *env_var;
+	// char *env_var;
 	
 	s = ft_strjoin(delimiter, "\n");
 	line = ft_strdup("");
@@ -154,17 +196,12 @@ void read_heredoc(char *delimiter, int *pip, t_env *env)
 		line = readline("> ");
 		if (!line)
         {
+			close(pip[1]);
+			close(pip[0]);
             free(s);
             exit(130);
         }
-		// line = expand_heredoc(&line, env);
-		line = ft_strjoin(line, "\n");
-		if (line[0] == '$')
-		{
-			env_var = ft_expand(env, &line[1]);
-			free(line);
-			line = env_var;
-		}
+		line = expand_heredoc(&line, env);
 	}
 	close(pip[1]);
 	close(pip[0]);
@@ -298,9 +335,7 @@ bool	open_redir_out(t_exec *cmd, int *fds)
 int *open_redir(t_exec *cmd)
 {
 	int *fds;
-	int i;
 
-	i = -1;
 	fds = malloc(sizeof(int) * 2);
 	fds[1] = -1;
 	fds[0] = -1;
