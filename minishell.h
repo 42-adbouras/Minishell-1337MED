@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:29:28 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 16:18:44 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_exec
 	bool			heredoc;			// last <<
 	bool			exed;
 	bool			run;
+	bool			expand_heredoc;
 	struct s_exec	*next;
 	struct s_env	*env;
 }	t_exec;
@@ -165,7 +166,7 @@ char	*ft_expand(t_env *env, char *var);
 /***	redir_utils.c		***********************************************/
 int		count_red(t_elem *tokens, t_token type);
 char 	*get_redire(t_elem **token, t_env *env);
-char	*get_heredoc(t_elem **token);
+char	*get_heredoc(t_elem **token, bool *heredoc);
 bool	last_heredoc(t_elem *token);
 
 /***	signals.c			***********************************************/

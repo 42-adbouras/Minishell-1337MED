@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:27:24 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:29:16 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 16:18:20 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,11 @@ bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int *j)
 
 void	heredoc_getter(t_exec ***new, t_elem *temp, int *l)
 {
-	(**new)->heredoc_end[(*l)++] = get_heredoc(&temp);
+	bool	heredoc;
+	
+	heredoc = false;
+	(**new)->heredoc_end[(*l)++] = get_heredoc(&temp, &heredoc);
 	(**new)->heredoc = last_heredoc(temp);
+	if (heredoc)
+		(**new)->expand_heredoc = true;
 }
