@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:20:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 19:30:34 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 19:46:53 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ t_elem	*new_token(char *content, int i, t_token type, t_state state)
 
 	new = malloc(sizeof(t_elem));
 	if (!new)
-		printf("malloc!\n");
+	{
+		ft_error("malloc failed!\n");
+		return (NULL);
+	}
 	new->content = ft_strndup(content, i);
 	new->len = i;
 	new->type = type;
@@ -46,6 +49,11 @@ void	token_add_back(t_data *tokens, t_elem *new)
 
 	if (!tokens && !new)
 		return ;
+	if (!new)
+	{
+		free_tokens(&tokens->head);
+		exit(1);
+	}
 	if (!tokens->head)
 	{
 		tokens->head = new;

@@ -6,11 +6,54 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/02 16:42:54 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 20:48:46 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	init_exec_struct(t_data **data, t_env *env)
+{
+	t_exec	*new;
+	t_elem	*temp;
+
+	temp = (*data)->head;
+	while (temp)
+	{
+		new = new_exec(temp, env);
+		if (!new)
+		{
+			ft_error("malloc failed!\n");
+			free_data(data, NULL, 1);
+			exit(1);
+		}
+		new->expand_heredoc = false;
+		exec_add_back(&(*data)->exec, new);
+		while (temp && (temp->type != PIPE
+				|| (temp->type == PIPE && temp->state != GENERAL)))
+			temp = temp->next;
+		if (temp)
+			temp = temp->next;
+	}
+}
+
+void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env)
+{
+	int	n;
+	int	out;
+
+	n = count_words(tokens);
+	out = (count_red(tokens, REDIR_OUT) + count_red(tokens, REDIR_APP));
+	(*new)->path_option_args[n] = NULL;
+	(*new)->redir_in[count_red(tokens, REDIR_IN)] = NULL; 
+	(*new)->redir_out[out] = NULL; 
+	(*new)->heredoc_end[count_red(tokens, REDIR_AND)] = NULL;
+	(*new)->env = env;
+	(*new)->exed = false;
+	(*new)->append = false;
+	(*new)->heredoc = false;
+	(*new)->next = NULL;
+}
 
 t_exec	*new_exec(t_elem *tokens, t_env *env)
 {
@@ -20,7 +63,8 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 
 	i = 0;
 	temp = tokens;
-	new_exec_node(&new, tokens, env);
+	new_exec_node(&new, tokens);
+	init_exec_node(&new, tokens, env);
 	while (temp && temp->type != PIPE)
 	{
 		if (cmd_getter(temp, new))
@@ -40,7 +84,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 	return (new);
 }
 
-void	new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
+void	new_exec_node(t_exec **new, t_elem *tokens)
 {
 	int	n;
 	int	out;
@@ -48,6 +92,8 @@ void	new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 	n = count_words(tokens);
 	out = (count_red(tokens, REDIR_OUT) + count_red(tokens, REDIR_APP));
 	(*new) = malloc(sizeof(t_exec));
+	if (!(*new))
+		return ;
 	if (!n)
 		(*new)->run = false;
 	else
@@ -58,15 +104,6 @@ void	new_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 	(*new)->redir_out = malloc(sizeof(char *) * (out + 1));
 	(*new)->heredoc_end = malloc(sizeof(char *)
 			* (count_red(tokens, REDIR_AND) + 1));
-	(*new)->path_option_args[n] = NULL;
-	(*new)->redir_in[count_red(tokens, REDIR_IN)] = NULL; 
-	(*new)->redir_out[out] = NULL; 
-	(*new)->heredoc_end[count_red(tokens, REDIR_AND)] = NULL;
-	(*new)->exed = false;
-	(*new)->append = false;
-	(*new)->heredoc = false;
-	(*new)->env = env;
-	(*new)->next = NULL;
 }
 
 t_exec	*ft_last_exec(t_exec *exec)
@@ -93,21 +130,3 @@ void	exec_add_back(t_exec **exec, t_exec *new)
 	last->next = new;
 }
 
-void	init_exec_struct(t_data **data, t_env *env)
-{
-	t_exec	*new;
-	t_elem	*temp;
-
-	temp = (*data)->head;
-	while (temp)
-	{
-		new = new_exec(temp, env);
-		new->expand_heredoc = false;
-		exec_add_back(&(*data)->exec, new);
-		while (temp && (temp->type != PIPE
-				|| (temp->type == PIPE && temp->state != GENERAL)))
-			temp = temp->next;
-		if (temp)
-			temp = temp->next;
-	}
-}

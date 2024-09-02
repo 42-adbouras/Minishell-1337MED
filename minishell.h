@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 18:11:29 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 20:46:54 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char	*get_arg(t_elem **token, t_env *env, bool exec);
 
 /***	parse_list_utils.c			***************************************/
 t_exec	*new_exec(t_elem *tokens, t_env *env);
-void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env);
+void    new_exec_node(t_exec **new, t_elem *tokens);
 void	init_exec_struct(t_data **data, t_env *env);
 void	exec_add_back(t_exec **exec, t_exec *new);
 
