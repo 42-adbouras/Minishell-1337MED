@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 13:09:06 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 13:12:10 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,24 +120,24 @@ bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos)
 	return (true);
 }
 
-char *expand_heredoc(char **line ,t_env *env)
-{
-	char *env_var;
-	char *temp;
+// char *expand_heredoc(char **line ,t_env *env)
+// {
+// 	char *env_var;
+// 	char *temp;
 	
-	temp = ft_strjoin(*line, "\n");
-	if (temp[0] == '$')
-	{
-		if(temp[1] == '?')
-			temp = ft_itoa(g_status);
-		else
-			env_var = ft_expand(env, &temp[1]);
-		free(temp);
-		temp = env_var;
-	}
-	free(*line);
-	return (temp);
-}
+// 	temp = ft_strjoin(*line, "\n");
+// 	if (temp[0] == '$')
+// 	{
+// 		if(temp[1] == '?')
+// 			temp = ft_itoa(g_status);
+// 		else
+// 			env_var = ft_expand(env, &temp[1]);
+// 		free(temp);
+// 		temp = env_var;
+// 	}
+// 	free(*line);
+// 	return (temp);
+// }
 
 void read_heredoc(char *delimiter, int *pip, t_env *env)
 {
