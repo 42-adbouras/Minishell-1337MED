@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 10:51:04 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 13:01:33 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,11 @@ bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos)
 }
 
 
-void read_heredoc(char *delimiter, int *pip)
+void read_heredoc(char *delimiter, int *pip, t_env *env)
 {
 	char *s;
 	char *line;
+	char *env_var;
 	
 	s = ft_strjoin(delimiter, "\n");
 	line = ft_strdup("");
@@ -135,11 +136,16 @@ void read_heredoc(char *delimiter, int *pip)
 		line = readline("> ");
 		if (!line)
         {
-            // Handle SIGINT signal
             free(s);
             exit(130);
         }
 		line = ft_strjoin(line, "\n");
+		if (line[0] == '$')
+		{
+			env_var = ft_expand(env, &line[1]);
+			free(line);
+			line = env_var;
+		}
 	}
 	close(pip[1]);
 	close(pip[0]);
@@ -175,7 +181,7 @@ bool wait_heredoc(int pid, int *pip, char **delimiters, int i)
 	return (true);
 }
 
-void if_herdoc(char **delimiters, int *fd_heredoc)
+void if_herdoc(char **delimiters, int *fd_heredoc, t_env *env)
 {
 	int i;
 	int *pip;
@@ -195,7 +201,7 @@ void if_herdoc(char **delimiters, int *fd_heredoc)
 		if (pid == 0)
 		{
 			signal(SIGINT, herdoc_signal);
-			read_heredoc(delimiters[i], pip);
+			read_heredoc(delimiters[i], pip, env);
 		}
 		if (!wait_heredoc(pid, pip, delimiters, i))
 			break ;
@@ -342,7 +348,7 @@ int *ft_open(t_exec *cmd)
 
 	heredoc = 0;
 	if (cmd->heredoc_end)
-		if_herdoc(cmd->heredoc_end, &heredoc);
+		if_herdoc(cmd->heredoc_end, &heredoc , cmd->env);
 	fds = open_redir(cmd);
 	if (!fds)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 08:59:23 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 13:01:20 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,8 +225,8 @@ void	ft_close(int cmd_num, int **pipes, int *fds);
 void	ft_stdin(int **pipes, int pid, int *fds);
 void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds);
 bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos);
-void read_heredoc(char *delimiter, int *pip);
-void if_herdoc(char **delimiters, int *fd_heredoc);
+void read_heredoc(char *delimiter, int *pip, t_env *env);
+void if_herdoc(char **delimiters, int *fd_heredoc, t_env *env);
 int *open_redir(t_exec *cmd);
 bool if_builtin(char *cmd);
 void ft_clear(int cmd_num, t_fd *fd, int *pids);
