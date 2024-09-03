@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 10:13:23 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:15:40 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_data(t_data **tokens)
+void	init_data(t_data **tokens, char *rl)
 {
 	*tokens = malloc(sizeof(t_data));
 	if (!(*tokens))
@@ -22,6 +22,7 @@ void	init_data(t_data **tokens)
 	}
 	(*tokens)->head = NULL;
 	(*tokens)->exec = NULL;
+	ft_lexing(rl, tokens);
 }
 
 char	*ft_strndup(const char *s1, int n)

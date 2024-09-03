@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:50:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 13:29:39 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:41:00 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*process_expander(t_elem **temp, t_env *env, bool exec)
 char	*process_expander(t_elem **temp, t_env *env, bool exec)
 {
 	char	*arg;
@@ -36,11 +35,8 @@ char	*process_expander(t_elem **temp, t_env *env, bool exec)
 		free(arg);
 		arg = ft_strdup(join2);
 		free(join2);
-		// free(join);
-		// free(join);
 		*temp = (*temp)->next;
 	}
-	return (check_exec(exec, &arg, &join, env));
 	return (check_exec(exec, &arg, &join, env));
 }
 

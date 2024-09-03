@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 13:30:47 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:15:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ char	*ft_getcwd();
 int		ft_readline(char **rl);
 
 /***	utils.c				***********************************************/
-void	init_data(t_data **tokens);
+void	init_data(t_data **tokens, char *rl);
 char	*ft_strndup(const char *s1, int n);
 
 /***	arg_utils.c			***********************************************/
@@ -160,7 +160,6 @@ void	init_exec_struct(t_data **data, t_env *env);
 void	exec_add_back(t_exec **exec, t_exec *new);
 
 /***	expand_utils.c		***********************************************/
-char	*process_expander(t_elem **temp, t_env *env, bool exec);
 char	*arg_expand(t_elem *token, t_env *env, char **arg);
 char	*check_exec(bool exec, char **arg, char **join, t_env *env);
 char	*ft_expand(t_env *env, char *var);
@@ -226,6 +225,11 @@ char	*get_var(char *var);
 char	*arg_join(t_elem *token, char **arg, char *join);
 void	herdoc_signal(int sig);
 
+/***	word_count_utils.c			***********************************************/
+bool	not_pipe(t_elem *tokens);
+bool	should_skip(t_elem *tokens);
+bool	is_word(t_elem *tokens);
+bool	increment(t_elem *tokens);
 
 void	skip_redir(t_elem **token);
 /****************************		eismail		****************************/

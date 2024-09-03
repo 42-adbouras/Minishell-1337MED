@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 13:29:07 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:47:21 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ bool	update_var(t_env **env, char *arg, char *new_var)
 	return (false);
 }
 
-bool if_builtin(char *cmd)
+bool	if_builtin(char *cmd)
 {
 	if (!cmd)
 		return (false);

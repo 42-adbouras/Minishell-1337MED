@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 13:32:45 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:40:29 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ bool	pipe_syntax(t_elem *token)
 	if (!next || !prev)
 		return (false);
 	if (next->type != WORD && !is_red(next->type)
-		&& prev->type != D_QUOTE && prev->type != S_QUOTE && next->type != ENV)
 		&& prev->type != D_QUOTE && prev->type != S_QUOTE && next->type != ENV)
 		return (false);
 	if (prev->type != WORD && prev->type != D_QUOTE 

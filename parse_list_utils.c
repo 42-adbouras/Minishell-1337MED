@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 13:31:10 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:13:06 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	init_exec_struct(t_data **data, t_env *env)
 		if (temp)
 			temp = temp->next;
 	}
-	if ((*data) && (*data)->exec && (*data)->exec->run)
-		ft_exic((*data)->exec, &env);
+	// if ((*data) && (*data)->exec && (*data)->exec->run)
+	// 	ft_exic((*data)->exec, &env);
 }
 
 void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env)

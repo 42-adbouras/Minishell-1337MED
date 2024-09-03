@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 13:30:21 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:18:43 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,24 @@ int main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	atexit(_lks);
 	signals_init();
 	envi = set_env(env);
 	while (1)
 	{
 		if (ft_readline(&rl))
 		{
-			init_data(&tokens);
-			ft_lexing(rl, &tokens);
+			init_data(&tokens, rl);
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
-				// if (tokens && tokens->exec && tokens->exec->run)
-				// 	ft_exic(tokens->exec, &envi);
+				if (tokens && tokens->exec && tokens->exec->run)
+					ft_exic(tokens->exec, &envi);
 			}
 			free_data(&tokens, &rl, 1);
 		}
 		else
 			free_data(&tokens, &rl, 0);
 	}
-	clear_history();
-	return (0);
+	return (clear_history(),0);
 }

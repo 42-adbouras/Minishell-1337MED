@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 11:35:47 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:08:53 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	count_words(t_elem *tokens)
 			if (!skip_space(&tokens, &count))
 				break ;
 		}
-		else if (is_word(temp))
+		else if (is_word(tokens))
 			count++;
 		if (increment(tokens))
 			tokens = tokens->next;
