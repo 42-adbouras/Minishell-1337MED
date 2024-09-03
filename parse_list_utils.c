@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/02 16:42:54 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 17:20:47 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 	i = 0;
 	temp = tokens;
 	new_exec_node(&new, tokens, env);
+	new->expand_heredoc = false;
 	while (temp && temp->type != PIPE)
 	{
 		if (cmd_getter(temp, new))
@@ -102,7 +103,6 @@ void	init_exec_struct(t_data **data, t_env *env)
 	while (temp)
 	{
 		new = new_exec(temp, env);
-		new->expand_heredoc = false;
 		exec_add_back(&(*data)->exec, new);
 		while (temp && (temp->type != PIPE
 				|| (temp->type == PIPE && temp->state != GENERAL)))

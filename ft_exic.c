@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 16:40:43 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/02 21:03:20 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,151 +119,15 @@ bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos)
 	ft_close(cmd_num, fd, fds);
 	return (true);
 }
-
-char *expand_heredoc(char **line ,t_env *env)
+bool ft_skip(int *index, char *delimi, char *temp)
 {
-	char *env_var;
-	char *temp;
-	char *temp2;
-	char *join;
-	char *join2;
-	char *sub;
-	int i;
-	int j;
-	
-	i = -1;
-	j = 0;
-	env_var = NULL;
-	temp = ft_strjoin(*line, "\n");
-	while (temp[j] && temp[j] != '$')
-		j++;
-	if (temp[j] && temp[j] != '$')
-		j--;
-	while (temp[++i])
-	{
-		join2 = ft_strdup(env_var);
-		if (temp[i] == '$')
-		{
-			j = i + 1;
-			while (temp[j] && temp[j] != '$')
-				j++;
-			sub = ft_substr(&temp[i+1], 0, (j - i)-1);
-			int l = 0;
-			if(sub[l + 1] == '?')
-			{
-				temp2 = ft_itoa(g_status);
-				env_var = ft_strjoin(temp2, "\n");
-				free (temp2);
-			}
-			else if (sub[l + 1] && sub[l + 1] != '\n')
-			{
-				env_var = ft_expand(env, sub);
-			}
-			else 
-				env_var = ft_strdup("$\n");
-			i++;
-			join = ft_strjoin(join2, env_var);
-			free(env_var);
-			env_var = ft_strdup(join);
-			free(join2);
-			free(join);
-		}
-		else
-			env_var = ft_substr(temp, 0, j);
-		while (temp[i] && temp[i] != '$')
-			i++;
-		if (temp[i] == '$')
-			i--;
-	}
-	free(temp);
-	temp = env_var;
-	free(*line);
-	return (temp);
-}
-
-void read_heredoc(char *delimiter, int *pip, t_env *env)
-{
-	char *s;
-	char *line;
-	// char *env_var;
-	
-	s = ft_strjoin(delimiter, "\n");
-	line = ft_strdup("");
-	while (ft_strncmp(line, s, ft_strlen(s) + 1) != 0)
-	{
-		ft_putstr_fd(line, pip[1]);
-		free(line);
-		line = readline("> ");
-		if (!line)
-        {
-			close(pip[1]);
-			close(pip[0]);
-            free(s);
-            exit(130);
-        }
-		line = expand_heredoc(&line, env);
-	}
-	close(pip[1]);
-	close(pip[0]);
-	free(line);
-	free(s);
-	exit(0);
-}
-
-void herdoc_signal(int sig)
-{
-	if (sig == SIGINT)
-		exit(1);
-}
-bool wait_heredoc(int pid, int *pip, char **delimiters, int i)
-{
-	int status;
-	int exit_status;
-	
-	exit_status = 0;
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		exit_status = WEXITSTATUS(status);
-	if (exit_status == 1)
-	{
-		g_status = 300;
-		close(pip[1]);
-		close(pip[0]);
-		return (false);
-	}
-	if (delimiters[i + 1])
-		close(pip[0]);
-	close(pip[1]);	
-	return (true);
-}
-
-void if_herdoc(char **delimiters, int *fd_heredoc, t_env *env)
-{
-	int i;
-	int *pip;
-	int pid;
-
-	// signal(SIGINT, SIG_IGN);
-	i = -1;
-	*(fd_heredoc) = -1;
-	if (!delimiters || !(*delimiters))
-		return ;
-	pip = malloc(sizeof(int) * 2);
-	while (delimiters[++i])
-	{
-		if (pipe(pip) == -1)
-			return ;
-		pid = fork();
-		if (pid == 0)
-		{
-			signal(SIGINT, herdoc_signal);
-			read_heredoc(delimiters[i], pip, env);
-		}
-		if (!wait_heredoc(pid, pip, delimiters, i))
-			break ;
-	}
-	*(fd_heredoc) = pip[0];
-	free(pip);
+	if (!ft_strncmp(temp, delimi, ft_strlen(delimi) + 1))
+		return (true);
+	while (temp[(*index)] && temp[(*index)] != '$')
+		(*index)++;
+	if (temp[(*index)] && temp[(*index)] != '$')
+		(*index)--;
+	return (false);
 }
 
 bool check_ambiguous(char *file)
@@ -399,10 +263,14 @@ int *ft_open(t_exec *cmd)
 {
 	int heredoc;
 	int *fds;
+	int *pip;
 
 	heredoc = 0;
+	pip = malloc(sizeof(int) * 2);
+	if (!pip)
+		return (NULL);
 	if (cmd->heredoc_end)
-		if_herdoc(cmd->heredoc_end, &heredoc , cmd->env);
+		if_herdoc(cmd->heredoc_end, &heredoc , cmd, pip);
 	fds = open_redir(cmd);
 	if (!fds)
 		return (NULL);

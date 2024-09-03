@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:35:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:36:45 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 21:39:18 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ void	sig_handler(int sig, siginfo_t *siginfo, void *ptr)
 	}
 }
 
+	void herdoc_signal(int sig)
+{
+	if (sig == SIGINT)
+		exit(1);
+}
 void	signals_init(void)
 {
 	t_sa	sa;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:46:07 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:12:16 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 19:03:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_readline(char **rl)
 		free(prompt);
 		clear_history();
 		printf("exit\n");
-		exit (0);
+		exit (g_status);
 	}
 	if (!*rl[0])
 		return (free(prompt), 0);

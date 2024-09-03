@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 16:46:36 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 08:52:12 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 				return (false);
 		}
 		else if (temp->type == REDIR_AND && temp->state == GENERAL)
-			heredoc_getter(&new, temp, &l);
+			heredoc_getter(&new, temp, &l); //<<$a cat -e leak "a"
 		if (redir_conditions(temp, 2))
 			temp = temp->next;
 	}

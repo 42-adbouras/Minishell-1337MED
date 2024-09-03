@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 16:18:44 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 21:32:34 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,7 @@ void 	handle_sigint(int sig);
 char	*get_after(char *var);
 char	*get_var(char *var);
 char	*arg_join(t_elem *token, char **arg, char *join);
+void	herdoc_signal(int sig);
 
 
 void	skip_redir(t_elem **token);
@@ -247,8 +248,8 @@ void	ft_close(int cmd_num, int **pipes, int *fds);
 void	ft_stdin(int **pipes, int pid, int *fds);
 void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds);
 bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos);
-void read_heredoc(char *delimiter, int *pip, t_env *env);
-void if_herdoc(char **delimiters, int *fd_heredoc, t_env *env);
+void read_heredoc(char *delimiter, int *pip, t_env *env, bool expand);
+void if_herdoc(char **delimiters, int *fd_heredoc, t_exec *cmd, int *pip);
 int *open_redir(t_exec *cmd);
 bool if_builtin(char *cmd);
 void ft_clear(int cmd_num, t_fd *fd, int *pids);
@@ -257,5 +258,12 @@ bool ft_export(t_env **env, char **arg, int fd_out);
 char **env_to_str(t_env *env);
 char *arg_expand(t_elem *token, t_env *env, char **arg);
 void if_redir(t_elem **token);
+/***	heredoc.c			***********************************************/
+bool ft_skip(int *index, char *delimi, char *temp);
+char *get_expand_heredoc(char *temp, t_env *env, int i , char **join);
+char *expand_heredoc(char **line , t_env *env, bool expand, char *delimi);
+void read_heredoc(char *delimiter, int *pip, t_env *env, bool expand);
+bool wait_heredoc(int pid, int *pip, char **delimiters, int i);
+void if_herdoc(char **delimiters, int *fd_heredoc, t_exec *cmd, int *pip);
 
 #endif

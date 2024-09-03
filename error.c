@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:05:46 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:11:06 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 19:02:43 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 bool	ft_error(char *err)
 {
-	write(2, BRED, ft_strlen(BRED));
+	// write(2, BRED, ft_strlen(BRED));
 	write(2, err, ft_strlen(err));
-	write(2, RSET, ft_strlen(RSET));
+	// write(2, RSET, ft_strlen(RSET));
+	g_status = 258;
 	return (EXIT_FAILURE);
 }
 

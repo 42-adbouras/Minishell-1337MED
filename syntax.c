@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/01 19:37:24 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/02 18:40:36 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ bool	if_syntax_err(t_data *tokens)
 		if (tmp->type == D_QUOTE || tmp->type == S_QUOTE)
 		{
 			if (!if_closed_quotes(&tmp, tmp->type))
-				return (ft_error("[syntax error detected unclosed ' or \"]\n"));
+				return (ft_error("minishell: unexpected EOF while looking for matching\n"));
 		}
 		if (is_red(tmp->type))
 		{
 			if (!red_syntax(tmp))
 				return (ft_error(
-						"[syntax error near unexpected token `newline']\n"));
+						"minishell: syntax error\n"));
 		}
 		if (tmp->type == PIPE)
 		{
 			if (!pipe_syntax(tmp))
-				return (ft_error("[syntax error near unexpected token `|']\n"));
+				return (ft_error("minishell: syntax error\n"));
 		}
 		tmp = tmp->next;
 	}
