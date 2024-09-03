@@ -6,22 +6,22 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 08:52:12 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 09:29:00 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	redirect_out(t_elem *tokens, t_exec ***new, t_env *env)
-{
-	(*(*new))->append = false;
-	if (tokens->type == REDIR_APP)
-		(*(*new))->append = true;
-	*((*(*new))->redir_out)++ = get_redire(&tokens, env);
-	if ((*(*new))->redir_in)
-		return (false);
-	return (true);
-}
+// bool	redirect_out(t_elem *tokens, t_exec ***new, t_env *env)
+// {
+// 	(*(*new))->append = false;
+// 	if (tokens->type == REDIR_APP)
+// 		(*(*new))->append = true;
+// 	*((*(*new))->redir_out)++ = get_redire(&tokens, env);
+// 	if ((*(*new))->redir_in)
+// 		return (false);
+// 	return (true);
+// }
 
 bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 {

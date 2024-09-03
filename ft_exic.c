@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 21:03:20 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 10:04:56 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,11 @@ bool open_redir_in(t_exec *cmd, int *fds)
 	i = -1;
 	while (cmd && cmd->redir_in && cmd->redir_in[++i])
 	{
-		if (check_ambiguous(cmd->redir_in[i])) // exit status in parsing in case its empty env variable
-			return (free(fds), false);
+		if (cmd->ambiguous)
+		{
+			if (check_ambiguous(cmd->redir_in[i])) // exit status in parsing in case its empty env variable
+				return (free(fds), false);
+		}
 		fds[0] = open(cmd->redir_in[i], O_RDONLY);
 		if (fds[0] == -1)
 		{
@@ -179,8 +182,11 @@ bool	open_redir_out(t_exec *cmd, int *fds)
 	i = -1;
 	while (cmd && cmd->redir_out && cmd->redir_out[++i])
 	{
-		if (check_ambiguous(cmd->redir_out[i]))
-			return (free(fds), false);
+		if (cmd->ambiguous)
+		{
+			if (check_ambiguous(cmd->redir_out[i]))
+				return (free(fds), false);
+		}
 		if (cmd->append)
 			fds[1] = open(cmd->redir_out[i], O_CREAT | O_RDWR | O_APPEND, 0644);
 		else
@@ -271,6 +277,7 @@ int *ft_open(t_exec *cmd)
 		return (NULL);
 	if (cmd->heredoc_end)
 		if_herdoc(cmd->heredoc_end, &heredoc , cmd, pip);
+	free(pip);
 	fds = open_redir(cmd);
 	if (!fds)
 		return (NULL);
@@ -387,7 +394,6 @@ void ft_exic(t_exec *cmds, t_env **env)
 	init_fds(&pids, &fd, cmd_num);
 	while (++i < cmd_num)
 	{
-		// signals_init();
 		fd->fds = ft_open(cmds);
 		if (!fd->fds || !cmds->path_option_args[0])
 			return (free_fds(pids, &fd, cmd_num));
@@ -396,11 +402,8 @@ void ft_exic(t_exec *cmds, t_env **env)
 		pids[i] = fork();
 		if (pids[i] == -1)
 			return (free_fds(pids, &fd,cmd_num));
-		if (pids[i] == 0) 
-		{
-			// signal(SIGINT, herdoc_signal);
+		if (pids[i] == 0)
 			ft_run_cmd(cmds, &env, fd, i);
-		}
 		cmds = cmds->next;
 		close_fds(&fd);
 	}

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 20:52:03 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 08:51:55 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 10:04:28 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char *get_expand_heredoc(char *temp, t_env *env, int i , char **join)
 	free(env_var);
 	env_var = ft_strdup(join2);
     free(sub);
-	return (free(join2), free(*join), env_var);
+	return (free(join2), env_var);
 }
 
 char *expand_heredoc(char **line , t_env *env, bool expand, char *delimi)
@@ -66,8 +66,8 @@ char *expand_heredoc(char **line , t_env *env, bool expand, char *delimi)
 			i++;
 	}
 	free(temp);
-	temp = env_var;
-	return (free(*line), temp);
+	free(join2);
+	return (free(*line), env_var);
 }
 
 void read_heredoc(char *delimiter, int *pip, t_env *env, bool expand)
@@ -94,6 +94,7 @@ void read_heredoc(char *delimiter, int *pip, t_env *env, bool expand)
 	close(pip[1]);
 	close(pip[0]);
 	free(line);
+	free(pip);
 	free(s);
 	exit(0);
 }
@@ -143,5 +144,4 @@ void if_herdoc(char **delimiters, int *fd_heredoc, t_exec *cmd, int *pip)
 			break ;
 	}
 	*(fd_heredoc) = pip[0];
-	free(pip);
 }

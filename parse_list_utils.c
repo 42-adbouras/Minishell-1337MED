@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 08:54:25 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 09:01:15 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	init_exec_struct(t_data **data, t_env *env)
 			free_data(data, NULL, 1);
 			exit(1);
 		}
-		new->expand_heredoc = false;
 		exec_add_back(&(*data)->exec, new);
 		while (temp && (temp->type != PIPE
 				|| (temp->type == PIPE && temp->state != GENERAL)))
@@ -52,6 +51,8 @@ void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env)
 	(*new)->exed = false;
 	(*new)->append = false;
 	(*new)->heredoc = false;
+	(*new)->ambiguous = false;
+	(*new)->expand_heredoc = false;
 	(*new)->next = NULL;
 }
 
