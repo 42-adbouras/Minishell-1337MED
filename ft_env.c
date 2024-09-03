@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:24:07 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 10:38:31 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 15:34:34 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void add_env(t_env **head, t_env *env_new)
+void	add_env(t_env **head, t_env *env_new)
 {
-	t_env *last;
-	
+	t_env	*last;
+
 	if (*head == NULL)
 		*head = env_new;
 	else 
@@ -25,14 +25,14 @@ void add_env(t_env **head, t_env *env_new)
 	}
 }
 
-t_env *creat_var(char *var)
+t_env	*creat_var(char *var)
 {
-	int j;
-	t_env *envi;
+	int		j;
+	t_env	*envi;
 
 	envi = malloc(sizeof(t_env));
 	j = 0;
-	while(var[j] && var[j] != '=')
+	while (var[j] && var[j] != '=')
 		j++;
 	envi->var = ft_substr(var, 0, j);
 	envi->value = ft_substr(var, j, ft_strlen(var));
@@ -40,11 +40,11 @@ t_env *creat_var(char *var)
 	return (envi);
 }
 
-t_env *set_env(char **env)
+t_env	*set_env(char **env)
 {
-	int i;
-	t_env *envi;
-	t_env *new;
+	int		i;
+	t_env	*envi;
+	t_env	*new;
 
 	i = -1;
 	envi = NULL;

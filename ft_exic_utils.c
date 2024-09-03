@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exic_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:18:11 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 12:30:58 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 15:36:37 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_run_cmd(t_exec *cmd, t_env ***env, t_fd *fd, int i)
+void	ft_run_cmd(t_exec *cmd, t_env ***env, t_fd *fd, int i)
 {
-	char **strenv;
-	int cmd_num;
-	
+	char	**strenv;
+	int		cmd_num;
+
 	cmd_num = ft_count_cmd(cmd);
 	signal(SIGQUIT, child_signal);
 	if (cmd_num > 0)
@@ -32,13 +32,15 @@ void ft_run_cmd(t_exec *cmd, t_env ***env, t_fd *fd, int i)
 		else
 			exit(0);
 	}
-	else if (execve(cmd->path_option_args[0], cmd->path_option_args, strenv) == -1)
+	else if (execve(cmd->path_option_args[0],
+			cmd->path_option_args, strenv) == -1)
 	{
 		free_char_arr(strenv);
 		ft_exec_error(cmd);
 	}
 }
-bool run_one_builtin(t_exec *cmds, t_env ***env, t_fd *fd, int cmd_num)
+
+bool	run_one_builtin(t_exec *cmds, t_env ***env, t_fd *fd, int cmd_num)
 {
 	if (cmd_num == 1 && if_builtin(cmds->path_option_args[0]))
 	{
@@ -49,7 +51,8 @@ bool run_one_builtin(t_exec *cmds, t_env ***env, t_fd *fd, int cmd_num)
 	}
 	return (false);
 }
-void ft_print_error(char *message, int exit_status)
+
+void	ft_print_error(char *message, int exit_status)
 {
 	if (!message)
 		perror("minishell");
@@ -57,7 +60,8 @@ void ft_print_error(char *message, int exit_status)
 		ft_putstr_fd(message, 2);
 	exit(exit_status);
 }
-void ft_exec_error(t_exec *cmd)
+
+void	ft_exec_error(t_exec *cmd)
 {
 	if (is_directory(cmd->path_option_args[0]) == 1)
 		ft_print_error("minishell: is a directory\n", 126);
@@ -71,10 +75,10 @@ void ft_exec_error(t_exec *cmd)
 		ft_print_error(NULL, 1);
 }
 
-int ft_count_cmd(t_exec *cmd)
+int	ft_count_cmd(t_exec *cmd)
 {
-	int i;
-	t_exec *tmp;
+	int		i;
+	t_exec	*tmp;
 
 	i = 0;
 	tmp = cmd;
