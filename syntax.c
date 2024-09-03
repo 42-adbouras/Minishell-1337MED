@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 18:40:36 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 13:18:41 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,10 @@ bool	pipe_syntax(t_elem *token)
 	if (!next || !prev)
 		return (false);
 	if (next->type != WORD && !is_red(next->type)
-		&& prev->type != D_QUOTE && prev->type != S_QUOTE)
+		&& prev->type != D_QUOTE && prev->type != S_QUOTE && next->type != ENV)
 		return (false);
-	if (prev->type != WORD && prev->type != D_QUOTE && prev->type != S_QUOTE)
+	if (prev->type != WORD && prev->type != D_QUOTE 
+			&& prev->type != S_QUOTE && prev->type != ENV)
 		return (false);
 	return (true);
 }

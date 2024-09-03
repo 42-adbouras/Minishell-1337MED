@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 09:29:00 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 13:19:30 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 
 void	rest_function(t_elem **token, t_state *state)
 {
+	(*token) = (*token)->next;
 	if ((*token) && ((*token)->type == D_QUOTE
 			|| (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 	{
@@ -89,14 +90,16 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 	skip_quotes(&token, &state);
 	while ((*token) && ((*token)->state == state))
 	{
-		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)
+		if ((*token) && (*token)->type == ENV 
+			&& ((*token)->state == IN_DQUOTE || (*token)->state == GENERAL))
 		{
 			(*token) = (*token)->next;
 			arg = arg_expand(*token, env, &arg);
 		}
 		else
 			arg = arg_join(*token, &arg, join);
-		(*token) = (*token)->next;
+		if ((*token) && (*token)->type == ENV && ((*token)->state == IN_DQUOTE || (*token)->state == GENERAL))
+			continue ;
 		rest_function(token, &state);
 		if ((*token) && (((*token)->type == W_SPACE
 					|| (*token)->type == PIPE) && (*token)->state == GENERAL))

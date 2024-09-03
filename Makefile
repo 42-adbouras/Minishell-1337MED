@@ -6,7 +6,7 @@
 #    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/09/03 08:55:55 by eismail          ###   ########.fr        #
+#    Updated: 2024/09/03 10:56:58 by eismail          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,10 @@ CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 LDFLAGS = -lreadline -L/Users/eismail/.brew/opt/readline/lib
 
-SRC =  main.c utils.c print.c lexer.c parse_list_utils.c syntax.c parse_utils.c clean.c error.c env.c \
+SRC =  main.c utils.c print.c lexer.c parse_list_utils.c syntax.c parse_utils.c clean.c error.c \
 		lexer_utils.c redir_utils.c arg_utils.c lexer_list_utils.c builtins.c ft_exic.c signals.c ft_readline.c \
 		getters.c process_redir_utils.c expand_utils.c expand_utils_2.c ft_cd.c ft_echo.c ft_env.c ft_export.c ft_unset.c \
-		ft_exit.c ft_pwd.c ft_heredoc.c\
+		ft_exit.c ft_pwd.c ft_heredoc.c ft_close_utils.c ft_env_utils.c ft_exic_utils.c ft_open.c ft_redirection.c\
 
 LIBFT = libft/libft.a
 

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 09:40:33 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 10:25:12 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,26 @@ bool	update_var(t_env **env, char *arg, char *new_var)
 	return (false);
 }
 
+bool if_builtin(char *cmd)
+{
+	if (!cmd)
+		return (false);
+	if (!ft_strncmp(cmd, "cd", 3))
+		return (true);
+	if (!ft_strncmp(cmd, "pwd", 4))
+		return (true);
+	if (!ft_strncmp(cmd, "echo", 5))
+		return (true);
+	if (!ft_strncmp(cmd, "env", 4))
+		return (true);
+	if (!ft_strncmp(cmd, "export", 7))
+		return (true);
+	if (!ft_strncmp(cmd, "unset", 6))
+		return (true);
+	if (!ft_strncmp(cmd, "exit", 5))
+		return (true);
+	return (false);
+}
 
 bool	ft_builtin(t_exec *cmd, t_env **envi, int fd_out)
 {
