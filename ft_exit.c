@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:33:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 17:33:56 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 16:11:23 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void ft_exit_error(char c)
+{
+	if (!ft_isdigit(c))
+	{
+		ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
+		exit (255);
+	}
+}
 
 bool	ft_exit_built(char **arg, int cmd_num)
 {
@@ -25,11 +34,9 @@ bool	ft_exit_built(char **arg, int cmd_num)
 	}
 	while (arg && *arg && arg[0][++i])
 	{
-		if (!ft_isdigit(arg[0][i]))
-		{
-			ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
-			exit (255);
-		}
+		if (arg[0][0] == '-')
+			i++;
+		ft_exit_error(arg[0][i]);
 	}
 	if (arg && *arg && arg[1])
 	{

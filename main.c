@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 15:18:43 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 15:25:02 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	atexit(_lks);
+	// atexit(_lks);
 	signals_init();
 	envi = set_env(env);
 	while (1)

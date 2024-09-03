@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 15:15:57 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 16:27:13 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ void read_heredoc(char *delimiter, int *pip, t_env *env, bool expand);
 bool ft_pwd(int fd_out);
 char *arg_expand(t_elem *token, t_env *env, char **arg);
 void if_redir(t_elem **token);
-
+void ft_exit_error(char c);
 
 /***	ft_unset.c			***********************************************/
 bool ft_skip(int *index, char *delimi, char *temp);
