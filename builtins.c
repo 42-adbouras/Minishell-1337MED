@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 09:40:33 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 11:36:39 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ bool	cheak_var(char *var)
 	g_status = 1;
 	while (var[++i])
 	{
-		if (var[i] != '_' && !ft_isalnum(var[i])) //!@#$%^&*()-=+
+		if (var[i] != '_' && !ft_isalnum(var[i]))
 			return (export_error(), false);
 	}
 	if (var && var[0] != '\0' && var[0] != '_')
 	{
-		if (!ft_isalpha(var[0])) //123var
+		if (!ft_isalpha(var[0]))
 			return (export_error(), false);
 	}
 	else if (var && var[0] == '\0')
@@ -64,7 +64,6 @@ bool	update_var(t_env **env, char *arg, char *new_var)
 	}
 	return (false);
 }
-
 
 bool	ft_builtin(t_exec *cmd, t_env **envi, int fd_out)
 {

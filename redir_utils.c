@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:11:34 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 09:29:09 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 10:10:54 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*get_redire(t_elem **token, t_env *env, bool *ambiguous)
 			*ambiguous = true;
 			redir_in = ft_expand(env, (*token)->content);
 			if (!redir_in || (redir_in && redir_in[0] == '\0'))
-				return (ft_error("minishell: ambiguous redirect\n"), NULL);
+				return (ft_error("minishell: ambiguous redirect\n", 1), NULL);
 		}
 		else
 			redir_in = ft_strdup("$");

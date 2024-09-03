@@ -6,13 +6,13 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:50:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:01:21 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:21:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*process_expander(t_elem **temp, t_env *env)
+char	*process_expander(t_elem **temp, t_env *env, bool exec)
 {
 	char	*arg;
 	char	*join;
@@ -35,10 +35,10 @@ char	*process_expander(t_elem **temp, t_env *env)
 		free(arg);
 		arg = ft_strdup(join2);
 		free(join2);
-		free(join);
+		// free(join);
 		*temp = (*temp)->next;
 	}
-	return (arg);
+	return (check_exec(exec, &arg, &join, env));
 }
 
 char	*arg_expand(t_elem *token, t_env *env, char **arg)
@@ -66,7 +66,7 @@ char	*arg_expand(t_elem *token, t_env *env, char **arg)
 	else
 		join = ft_strdup("$");
 	join2 = ft_strjoin(temp, join);
-	return (free(join), free(temp), join2); //free(*arg)
+	return (free(join), free(temp), join2);
 }
 
 char	*check_exec(bool exec, char **arg, char **join, t_env *env)

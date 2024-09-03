@@ -3,52 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 20:52:03 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 10:04:28 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 11:43:04 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *get_expand_heredoc(char *temp, t_env *env, int i , char **join)
+char	*get_expand_heredoc(char *temp, t_env *env, int i, char **join)
 {
-	int j;
-	char *sub;
-	char *env_var;
-	char *join2;
+	int		j;
+	char	*sub;
+	char	*env_var;
+	char	*join2;
 
 	j = i + 1;
 	while (temp[j] && temp[j] != '$')
 		j++;
 	sub = ft_substr(&temp[i + 1], 0, (j - i) - 1);
 	j = 0;
-	if(sub[j] == '?')
+	if (sub[j] == '?')
 	{
 		temp = ft_itoa(g_status);
 		env_var = ft_strjoin(temp, "\n");
 		free (temp);
 	}
-	else if (sub[j+ 1] && sub[j + 1] != '\n')
+	else if (sub[j + 1] && sub[j + 1] != '\n')
 		env_var = ft_expand(env, sub);
 	else 
 		env_var = ft_strdup("$\n");
 	join2 = ft_strjoin(*join, env_var);
 	free(env_var);
 	env_var = ft_strdup(join2);
-    free(sub);
+	free (sub);
 	return (free(join2), env_var);
 }
 
-char *expand_heredoc(char **line , t_env *env, bool expand, char *delimi)
+char	*expand_heredoc(char **line, t_env *env, bool expand, char *delimi)
 {
-	char *env_var;
-	char *temp;
-	char *join2;
-	int i;
-	int j;
-	
+	char	*env_var;
+	char	*temp;
+	char	*join2;
+	int		i;
+	int		j;
+
 	i = 0;
 	j = 0;
 	env_var = NULL;
@@ -70,11 +70,11 @@ char *expand_heredoc(char **line , t_env *env, bool expand, char *delimi)
 	return (free(*line), env_var);
 }
 
-void read_heredoc(char *delimiter, int *pip, t_env *env, bool expand)
+void	read_heredoc(char *delimiter, int *pip, t_env *env, bool expand)
 {
-	char *s;
-	char *line;
-	
+	char	*s;
+	char	*line;
+
 	s = ft_strjoin(delimiter, "\n");
 	line = ft_strdup("");
 	while (ft_strncmp(line, s, ft_strlen(s) + 1) != 0)
@@ -83,12 +83,12 @@ void read_heredoc(char *delimiter, int *pip, t_env *env, bool expand)
 		free(line);
 		line = readline("> ");
 		if (!line)
-        {
+		{
 			close(pip[1]);
 			close(pip[0]);
-            free(s);
-            exit(130);
-        }
+			free(s);
+			exit(130);
+		}
 		line = expand_heredoc(&line, env, expand, s);
 	}
 	close(pip[1]);
@@ -99,11 +99,11 @@ void read_heredoc(char *delimiter, int *pip, t_env *env, bool expand)
 	exit(0);
 }
 
-bool wait_heredoc(int pid, int *pip, char **delimiters, int i)
+bool	wait_heredoc(int pid, int *pip, char **delimiters, int i)
 {
-	int status;
-	int exit_status;
-	
+	int		status;
+	int		exit_status;
+
 	exit_status = 0;
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
@@ -117,14 +117,14 @@ bool wait_heredoc(int pid, int *pip, char **delimiters, int i)
 	}
 	if (delimiters[i + 1])
 		close(pip[0]);
-	close(pip[1]);	
+	close(pip[1]);
 	return (true);
 }
 
-void if_herdoc(char **delimiters, int *fd_heredoc, t_exec *cmd, int *pip)
+void	if_herdoc(char **delimiters, int *fd_heredoc, t_exec *cmd, int *pip)
 {
-	int i;
-	int pid;
+	int	i;
+	int	pid;
 
 	i = -1;
 	*(fd_heredoc) = -1;

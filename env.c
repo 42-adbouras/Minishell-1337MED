@@ -6,11 +6,11 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/02 17:06:31 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 10:20:26 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec_head.h"
+#include "minishell.h"
 
 t_env	*ft_last(t_env *env)
 {

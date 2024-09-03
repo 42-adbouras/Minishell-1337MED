@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 09:29:00 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 13:13:13 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// bool	redirect_out(t_elem *tokens, t_exec ***new, t_env *env)
-// {
-// 	(*(*new))->append = false;
-// 	if (tokens->type == REDIR_APP)
-// 		(*(*new))->append = true;
-// 	*((*(*new))->redir_out)++ = get_redire(&tokens, env);
-// 	if ((*(*new))->redir_in)
-// 		return (false);
-// 	return (true);
-// }
 
 bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 {
@@ -44,15 +33,39 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 				return (false);
 		}
 		else if (temp->type == REDIR_AND && temp->state == GENERAL)
-			heredoc_getter(&new, temp, &l); //<<$a cat -e leak "a"
+			heredoc_getter(&new, temp, &l);
 		if (redir_conditions(temp, 2))
 			temp = temp->next;
 	}
 	return (true);
 }
 
+bool	redir_conditions(t_elem *temp, int flag)
+{
+	if (flag == 0)
+	{
+		if (temp && (temp->type != PIPE
+				|| ((temp->type == PIPE && temp->state != GENERAL))))
+			return (true);
+	}
+	else if (flag == 1)
+	{
+		if ((temp->type == REDIR_OUT || temp->type == REDIR_APP)
+			&& temp->state == GENERAL)
+			return (true);
+	}
+	else if (flag == 2)
+	{
+		if (temp && (temp->type != PIPE
+				|| (temp->type == PIPE && temp->state != GENERAL)))
+			return (true);
+	}
+	return (false);
+}
+
 void	rest_function(t_elem **token, t_state *state)
 {
+	(*token) = (*token)->next;
 	if ((*token) && ((*token)->type == D_QUOTE
 			|| (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 	{
@@ -89,14 +102,15 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 	skip_quotes(&token, &state);
 	while ((*token) && ((*token)->state == state))
 	{
-		if ((*token) && (*token)->type == ENV && (*token)->state == IN_DQUOTE)
+		if ((*token) && (*token)->type == ENV && ((*token)->state == IN_DQUOTE || (*token)->state == GENERAL))
 		{
 			(*token) = (*token)->next;
 			arg = arg_expand(*token, env, &arg);
 		}
 		else
 			arg = arg_join(*token, &arg, join);
-		(*token) = (*token)->next;
+		if ((*token) && (*token)->type == ENV && ((*token)->state == IN_DQUOTE || (*token)->state == GENERAL))
+			continue ;
 		rest_function(token, &state);
 		if ((*token) && (((*token)->type == W_SPACE
 					|| (*token)->type == PIPE) && (*token)->state == GENERAL))

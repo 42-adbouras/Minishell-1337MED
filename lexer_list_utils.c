@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:20:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 19:46:53 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 10:10:26 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_elem	*new_token(char *content, int i, t_token type, t_state state)
 	new = malloc(sizeof(t_elem));
 	if (!new)
 	{
-		ft_error("malloc failed!\n");
+		ft_error("malloc failed!\n", 1);
 		return (NULL);
 	}
 	new->content = ft_strndup(content, i);

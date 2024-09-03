@@ -3,37 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   process_redir_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:27:24 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 09:36:45 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 11:46:55 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-bool	redir_conditions(t_elem *temp, int flag)
-{
-	if (flag == 0)
-	{
-		if (temp && (temp->type != PIPE
-				|| ((temp->type == PIPE && temp->state != GENERAL))))
-			return (true);
-	}
-	else if (flag == 1)
-	{
-		if ((temp->type == REDIR_OUT || temp->type == REDIR_APP)
-			&& temp->state == GENERAL)
-			return (true);
-	}
-	else if (flag == 2)
-	{
-		if (temp && (temp->type != PIPE
-				|| (temp->type == PIPE && temp->state != GENERAL)))
-			return (true);
-	}
-	return (false);
-}
 
 void	if_redir(t_elem **token)
 {
@@ -54,8 +31,8 @@ void	if_redir(t_elem **token)
 
 bool	get_redir_in(t_exec ***new, t_elem *temp, t_env *env, int *i)
 {
-	bool ambiguous;
-	
+	bool	ambiguous;
+
 	if (temp->type == REDIR_IN && temp->state == GENERAL)
 	{
 		ambiguous = false;
@@ -75,8 +52,8 @@ bool	get_redir_in(t_exec ***new, t_elem *temp, t_env *env, int *i)
 
 bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int *j)
 {
-	bool ambiguous;
-	
+	bool	ambiguous;
+
 	ambiguous = false;
 	(**new)->append = false;
 	if (temp->type == REDIR_APP)
@@ -95,7 +72,7 @@ bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int *j)
 void	heredoc_getter(t_exec ***new, t_elem *temp, int *l)
 {
 	bool	heredoc;
-	
+
 	heredoc = false;
 	(**new)->heredoc_end[(*l)++] = get_heredoc(&temp, &heredoc);
 	(**new)->heredoc = last_heredoc(temp);

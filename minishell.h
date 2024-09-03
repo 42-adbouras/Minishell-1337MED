@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 09:47:50 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 13:22:36 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ bool	red_syntax(t_elem *token);
 
 /***	parse_utils.c			*******************************************/
 bool	process_redir(t_elem *tokens, t_exec **new, t_env *env);
-char 	*process_expander(t_elem **temp, t_env *env);
+char 	*process_expander(t_elem **temp, t_env *env, bool exec);
 char	*ft_expand(t_env *env, char *var);
 char	*get_arg(t_elem **token, t_env *env, bool exec);
 
@@ -159,7 +159,6 @@ void	init_exec_struct(t_data **data, t_env *env);
 void	exec_add_back(t_exec **exec, t_exec *new);
 
 /***	expand_utils.c		***********************************************/
-char	*process_expander(t_elem **temp, t_env *env);
 char	*arg_expand(t_elem *token, t_env *env, char **arg);
 char	*check_exec(bool exec, char **arg, char **join, t_env *env);
 char	*ft_expand(t_env *env, char *var);
@@ -189,6 +188,11 @@ bool	redir_conditions(t_elem *temp, int flag);
 bool	get_redir_in(t_exec ***new, t_elem *temp, t_env *env, int *i);
 void	if_redir(t_elem **token);
 
+/***	word_count_utils.c 		*******************************************/
+bool    not_pipe(t_elem *tokens);
+bool	should_skip(t_elem *tokens);
+bool    is_word(t_elem *tokens);
+bool    increment(t_elem *tokens);
 
 /***	getters.c			***********************************************/
 bool	cmd_getter(t_elem *temp, t_exec *new);
@@ -198,7 +202,7 @@ void	heredoc_getter(t_exec ***new, t_elem *temp, int *l);
 
 /***	error.c				***********************************************/
 void	ft_exit(t_data **tokens, char *err);
-bool	ft_error(char *err);
+bool	ft_error(char *err, int exit);
 
 /***	print.c				***********************************************/
 void	print_tokens(t_data *tokens);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 09:01:15 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 13:22:15 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_exec_struct(t_data **data, t_env *env)
 		new = new_exec(temp, env);
 		if (!new)
 		{
-			ft_error("malloc failed!\n");
+			ft_error("malloc failed!\n", 1);
 			free_data(data, NULL, 1);
 			exit(1);
 		}
@@ -34,6 +34,8 @@ void	init_exec_struct(t_data **data, t_env *env)
 		if (temp)
 			temp = temp->next;
 	}
+	if ((*data) && (*data)->exec && (*data)->exec->run)
+		ft_exic((*data)->exec, &env);
 }
 
 void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env)
@@ -73,7 +75,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 		else if (arg_getter(temp))
 			new->path_option_args[i++] = get_arg(&temp, env, new->exed);
 		else if (temp && temp->type == ENV)
-			new->path_option_args[i++] = process_expander(&temp, env);
+			new->path_option_args[i++] = process_expander(&temp, env, new->exed);
 		else if (temp && is_red(temp->type) && temp->state == GENERAL)
 			if_redir(&temp);
 		if (temp && temp->type != PIPE)
@@ -130,4 +132,3 @@ void	exec_add_back(t_exec **exec, t_exec *new)
 	last = ft_last_exec(*exec);
 	last->next = new;
 }
-

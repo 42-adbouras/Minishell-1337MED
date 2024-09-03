@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 18:40:36 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 13:27:04 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ bool	if_syntax_err(t_data *tokens)
 		if (tmp->type == D_QUOTE || tmp->type == S_QUOTE)
 		{
 			if (!if_closed_quotes(&tmp, tmp->type))
-				return (ft_error("minishell: unexpected EOF while looking for matching\n"));
+				return (ft_error("minishell: unexpected EOF!\n", 258));
 		}
 		if (is_red(tmp->type))
 		{
 			if (!red_syntax(tmp))
 				return (ft_error(
-						"minishell: syntax error\n"));
+						"minishell: syntax error redirection!\n", 258));
 		}
 		if (tmp->type == PIPE)
 		{
 			if (!pipe_syntax(tmp))
-				return (ft_error("minishell: syntax error\n"));
+				return (ft_error("minishell: syntax error near `|'\n", 258));
 		}
 		tmp = tmp->next;
 	}
@@ -50,9 +50,10 @@ bool	pipe_syntax(t_elem *token)
 	if (!next || !prev)
 		return (false);
 	if (next->type != WORD && !is_red(next->type)
-		&& prev->type != D_QUOTE && prev->type != S_QUOTE)
+		&& prev->type != D_QUOTE && prev->type != S_QUOTE && next->type != ENV)
 		return (false);
-	if (prev->type != WORD && prev->type != D_QUOTE && prev->type != S_QUOTE)
+	if (prev->type != WORD && prev->type != D_QUOTE 
+		&& prev->type != S_QUOTE && prev->type != ENV)
 		return (false);
 	return (true);
 }
