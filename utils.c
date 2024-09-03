@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 15:15:40 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 17:31:39 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,12 @@ char	*ft_strndup(const char *s1, int n)
 	}
 	ptr[i] = '\0';
 	return (ptr);
+}
+
+void	skip_quotes(t_elem ***token, t_state *state)
+{
+	if ((**token) && ((**token)->type == D_QUOTE || (**token)->type == S_QUOTE))
+		(**token) = (**token)->next;
+	if (**token)
+		*state = (**token)->state;
 }

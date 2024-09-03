@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 16:38:33 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 16:51:52 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ bool	red_syntax(t_elem *token);
 
 /***	parse_utils.c			*******************************************/
 bool	process_redir(t_elem *tokens, t_exec **new, t_env *env);
-char	*process_expander(t_elem **temp, t_env *env, bool exec);
+char	*ft_expander(t_elem **temp, t_env *env, bool exec);
 char	*ft_expand(t_env *env, char *var);
 char	*get_arg(t_elem **token, t_env *env, bool exec);
 

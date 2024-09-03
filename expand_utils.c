@@ -6,13 +6,13 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:50:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 14:41:00 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 16:51:52 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*process_expander(t_elem **temp, t_env *env, bool exec)
+char	*ft_expander(t_elem **temp, t_env *env, bool exec)
 {
 	char	*arg;
 	char	*join;

@@ -6,13 +6,13 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:33:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 16:11:23 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 16:56:04 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_exit_error(char c)
+void	ft_exit_error(char c)
 {
 	if (!ft_isdigit(c))
 	{

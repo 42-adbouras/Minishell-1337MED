@@ -6,14 +6,13 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 10:49:56 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 16:55:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdbool.h>
 
-bool ft_skip(int *index, char *delimi, char *temp)
+bool	ft_skip(int *index, char *delimi, char *temp)
 {
 	if (!ft_strncmp(temp, delimi, ft_strlen(delimi) + 1))
 		return (true);
@@ -24,16 +23,16 @@ bool ft_skip(int *index, char *delimi, char *temp)
 	return (false);
 }
 
-int is_directory(const char *path)
+int	is_directory(const char *path)
 {
-    struct stat statbuf;
-	
-    if (stat(path, &statbuf) != 0)
-        return 0;
-    return S_ISDIR(statbuf.st_mode);
+	struct stat	statbuf;
+
+	if (stat(path, &statbuf) != 0)
+		return (0);
+	return (S_ISDIR(statbuf.st_mode));
 }
 
-bool ft_path(t_env *env)
+bool	ft_path(t_env *env)
 {
 	while (env)
 	{
@@ -44,7 +43,7 @@ bool ft_path(t_env *env)
 	return (false);
 }
 
-void init_fds(int **pids, t_fd **fd, int cmd_num)
+void	init_fds(int **pids, t_fd **fd, int cmd_num)
 {
 	*pids = malloc(sizeof(int) * cmd_num);
 	*fd = malloc(sizeof(t_fd));
@@ -53,12 +52,12 @@ void init_fds(int **pids, t_fd **fd, int cmd_num)
 		return (free(*pids), free(*fd));
 }
 
-void ft_exic(t_exec *cmds, t_env **env)
+void	ft_exic(t_exec *cmds, t_env **env)
 {
-	int cmd_num;
-	int i;
-	int *pids;
-	t_fd *fd;
+	int		cmd_num;
+	int		i;
+	int		*pids;
+	t_fd	*fd;
 
 	cmd_num = ft_count_cmd(cmds);
 	i = -1;
@@ -73,11 +72,11 @@ void ft_exic(t_exec *cmds, t_env **env)
 			break ;
 		pids[i] = fork();
 		if (pids[i] == -1)
-			return (free_fds(pids, &fd,cmd_num));
+			return (free_fds(pids, &fd, cmd_num));
 		if (pids[i] == 0)
 			ft_run_cmd(cmds, &env, fd, i);
 		cmds = cmds->next;
 		close_fds(&fd);
 	}
-	ft_clear(cmd_num ,fd, pids);
+	ft_clear(cmd_num, fd, pids);
 }

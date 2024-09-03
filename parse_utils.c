@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 14:41:30 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 17:31:34 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,10 @@ void	rest_function(t_elem **token, t_state *state)
 			&& !is_red((*token)->type) && (*token)->type != PIPE)
 		{
 			*state = (*token)->state;
-			if ((*token)->type != WORD)
+			if ((*token)->type != WORD && (*token)->type != ENV)
 				(*token) = (*token)->next;
 		}
 	}
-}
-
-void	skip_quotes(t_elem ***token, t_state *state)
-{
-	if ((**token) && ((**token)->type == D_QUOTE || (**token)->type == S_QUOTE))
-		(**token) = (**token)->next;
-	if (**token)
-		*state = (**token)->state;
 }
 
 char	*get_arg(t_elem **token, t_env *env, bool exec)
@@ -102,14 +94,14 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 	skip_quotes(&token, &state);
 	while ((*token) && ((*token)->state == state))
 	{
-		if ((*token) && (*token)->type == ENV && ((*token)->state == IN_DQUOTE || (*token)->state == GENERAL))
+		if ((*token) && (*token)->type == ENV && (*token)->state != IN_SQUOTE)
 		{
 			(*token) = (*token)->next;
 			arg = arg_expand(*token, env, &arg);
 		}
 		else
 			arg = arg_join(*token, &arg, join);
-		if ((*token) && (*token)->type == ENV && ((*token)->state == IN_DQUOTE || (*token)->state == GENERAL))
+		if ((*token) && (*token)->type == ENV && (*token)->state != IN_SQUOTE)
 			continue ;
 		rest_function(token, &state);
 		if ((*token) && (((*token)->type == W_SPACE
@@ -117,4 +109,24 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 			break ;
 	}
 	return (check_exec(exec, &arg, &join, env));
+}
+
+void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env)
+{
+	int	n;
+	int	out;
+
+	n = count_words(tokens);
+	out = (count_red(tokens, REDIR_OUT) + count_red(tokens, REDIR_APP));
+	(*new)->path_option_args[n] = NULL;
+	(*new)->redir_in[count_red(tokens, REDIR_IN)] = NULL; 
+	(*new)->redir_out[out] = NULL; 
+	(*new)->heredoc_end[count_red(tokens, REDIR_AND)] = NULL;
+	(*new)->env = env;
+	(*new)->exed = false;
+	(*new)->append = false;
+	(*new)->heredoc = false;
+	(*new)->ambiguous = false;
+	(*new)->expand_heredoc = false;
+	(*new)->next = NULL;
 }

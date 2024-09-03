@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:12:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 10:13:51 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 17:02:24 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds)
 	}
 }
 
-bool fd_hindler(int cmd_num, int **fd, int  *fds, int pos)
-{	
+bool	fd_hindler(int cmd_num, int **fd, int *fds, int pos)
+{
 	ft_stdin(fd, pos, fds);
 	ft_stdout(cmd_num, fd, pos, fds);
 	ft_close(cmd_num, fd, fds);

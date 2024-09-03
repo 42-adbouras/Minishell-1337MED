@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 15:13:06 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 17:30:59 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,6 @@ void	init_exec_struct(t_data **data, t_env *env)
 		if (temp)
 			temp = temp->next;
 	}
-	// if ((*data) && (*data)->exec && (*data)->exec->run)
-	// 	ft_exic((*data)->exec, &env);
-}
-
-void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env)
-{
-	int	n;
-	int	out;
-
-	n = count_words(tokens);
-	out = (count_red(tokens, REDIR_OUT) + count_red(tokens, REDIR_APP));
-	(*new)->path_option_args[n] = NULL;
-	(*new)->redir_in[count_red(tokens, REDIR_IN)] = NULL; 
-	(*new)->redir_out[out] = NULL; 
-	(*new)->heredoc_end[count_red(tokens, REDIR_AND)] = NULL;
-	(*new)->env = env;
-	(*new)->exed = false;
-	(*new)->append = false;
-	(*new)->heredoc = false;
-	(*new)->ambiguous = false;
-	(*new)->expand_heredoc = false;
-	(*new)->next = NULL;
 }
 
 t_exec	*new_exec(t_elem *tokens, t_env *env)
@@ -75,7 +53,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 		else if (arg_getter(temp))
 			new->path_option_args[i++] = get_arg(&temp, env, new->exed);
 		else if (temp && temp->type == ENV)
-			new->path_option_args[i++] = process_expander(&temp, env, new->exed);
+			new->path_option_args[i++] = ft_expander(&temp, env, new->exed);
 		else if (temp && is_red(temp->type) && temp->state == GENERAL)
 			if_redir(&temp);
 		if (temp && temp->type != PIPE)

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 18:58:03 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 15:57:10 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 16:48:59 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 long long	ft_atoi(const char *str)
 {
-	int	i;
-	int	sign;
+	int			i;
+	int			sign;
 	long long	result;
 
 	i = 0;
