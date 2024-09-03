@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 21:32:34 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/03 08:54:00 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char	*get_arg(t_elem **token, t_env *env, bool exec);
 
 /***	parse_list_utils.c			***************************************/
 t_exec	*new_exec(t_elem *tokens, t_env *env);
-void    new_exec_node(t_exec **new, t_elem *tokens, t_env *env);
+void    new_exec_node(t_exec **new, t_elem *tokens);
 void	init_exec_struct(t_data **data, t_env *env);
 void	exec_add_back(t_exec **exec, t_exec *new);
 
@@ -224,6 +224,10 @@ void	skip_redir(t_elem **token);
 int g_status;
 
 # define MAX_PATH 1024
+
+/***	builtins_utils.c	***********************************************/
+bool	free_new_var(char **s);
+void	remove_var(t_env **prev, t_env **var, t_env ***env);
 
 t_env *creat_var(char *var);
 t_env *set_env(char **env);

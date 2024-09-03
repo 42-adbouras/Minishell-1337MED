@@ -6,7 +6,7 @@
 #    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/09/02 21:33:21 by eismail          ###   ########.fr        #
+#    Updated: 2024/09/03 08:54:39 by eismail          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,11 +19,12 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
-LDFLAGS = -lreadline -L/Users/eismail/.brew/opt/readline/lib
+LDFLAGS = -lreadline -L/Users/adbouras/.brew/opt/readline/lib
 
 SRC =  main.c utils.c print.c lexer.c parse_list_utils.c syntax.c parse_utils.c clean.c error.c env.c \
 		lexer_utils.c redir_utils.c arg_utils.c lexer_list_utils.c builtins.c ft_exic.c signals.c ft_readline.c \
-		getters.c process_redir_utils.c expand_utils.c expand_utils_2.c ft_heredoc.c \
+		getters.c process_redir_utils.c expand_utils.c expand_utils_2.c ft_cd.c ft_echo.c ft_env.c ft_export.c ft_unset.c \
+		ft_exit.c ft_pwd.c\
 
 LIBFT = libft/libft.a
 
@@ -31,7 +32,7 @@ OBJ_DIR = objects/
 
 HDR = minishell.h
 
-NCLD = -I/Users/eismail/.brew/opt/readline/include
+NCLD = -I/Users/adbouras/.brew/opt/readline/include
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

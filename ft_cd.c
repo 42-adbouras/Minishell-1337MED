@@ -1,47 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/02 19:22:18 by adbouras         ###   ########.fr       */
+/*   Created: 2024/09/02 17:16:37 by adbouras          #+#    #+#             */
+/*   Updated: 2024/09/02 17:16:55 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_data(t_data **tokens)
+bool	ft_cd(char *path, t_env *env)
 {
-	*tokens = malloc(sizeof(t_data));
-	if (!(*tokens))
-	{
-		ft_error("malloc failed!\n");
-		exit(1);
-	}
-	(*tokens)->head = NULL;
-	(*tokens)->exec = NULL;
-}
+	t_env	*home_env;
 
-char	*ft_strndup(const char *s1, int n)
-{
-	char	*ptr;
-	int		len;
-	int		i;
-
-	if (!s1)
-		return (NULL);
-	len = ft_strlen(s1);
-	ptr = malloc(len + 1);
-	i = 0;
-	if (!ptr)
-		return (NULL);
-	while (i < len && i < n)
+	home_env = env;
+	while (home_env && ft_strncmp(home_env->var, "HOME", 5))
+		home_env = home_env->next;
+	if (path == NULL)
 	{
-		ptr[i] = s1[i];
-		i++;
+		path = &home_env->value[1];
+		chdir(path);
 	}
-	ptr[i] = '\0';
-	return (ptr);
+	if (chdir(path) != 0)
+	{
+		if (errno != ENOENT)
+			fprintf(stderr, "minishell: cd : Permission denied\n");
+		else
+			perror("minishell: cd ");
+		g_status = 1;
+		return (true);
+	}
+	g_status = 0;
+	return (true);
 }
