@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 11:36:39 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:29:07 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,27 @@ bool	update_var(t_env **env, char *arg, char *new_var)
 		}
 		temp = temp->next;
 	}
+	return (false);
+}
+
+bool if_builtin(char *cmd)
+{
+	if (!cmd)
+		return (false);
+	if (!ft_strncmp(cmd, "cd", 3))
+		return (true);
+	if (!ft_strncmp(cmd, "pwd", 4))
+		return (true);
+	if (!ft_strncmp(cmd, "echo", 5))
+		return (true);
+	if (!ft_strncmp(cmd, "env", 4))
+		return (true);
+	if (!ft_strncmp(cmd, "export", 7))
+		return (true);
+	if (!ft_strncmp(cmd, "unset", 6))
+		return (true);
+	if (!ft_strncmp(cmd, "exit", 5))
+		return (true);
 	return (false);
 }
 

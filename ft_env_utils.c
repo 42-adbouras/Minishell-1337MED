@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_env_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 10:20:26 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:30:05 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,49 +21,6 @@ t_env	*ft_last(t_env *env)
 	return (env); 
 }
 
-void add_env(t_env **head, t_env *env_new)
-{
-	t_env *last;
-	
-	if (*head == NULL)
-		*head = env_new;
-	else 
-	{
-		last = ft_last(*head);
-		last->next = env_new;
-	}
-}
-
-t_env *creat_var(char *var)
-{
-	int j;
-	t_env *envi;
-
-	envi = malloc(sizeof(t_env));
-	j = 0;
-	while(var[j] && var[j] != '=')
-		j++;
-	envi->var = ft_substr(var, 0, j);
-	envi->value = ft_substr(var, j, ft_strlen(var));
-	envi->next = NULL;
-	return (envi);
-}
-
-t_env *set_env(char **env)
-{
-	int i;
-	t_env *envi;
-	t_env *new;
-
-	i = -1;
-	envi = NULL;
-	while (env[++i])
-	{
-		new = creat_var(env[i]);
-		add_env(&envi, new);
-	}
-	return (envi);
-}
 
 void free_env(t_env **env)
 {

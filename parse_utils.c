@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 13:13:13 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:31:48 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ bool	redir_conditions(t_elem *temp, int flag)
 void	rest_function(t_elem **token, t_state *state)
 {
 	(*token) = (*token)->next;
+	(*token) = (*token)->next;
 	if ((*token) && ((*token)->type == D_QUOTE
 			|| (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 	{
@@ -109,6 +110,8 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 		}
 		else
 			arg = arg_join(*token, &arg, join);
+		if ((*token) && (*token)->type == ENV && ((*token)->state == IN_DQUOTE || (*token)->state == GENERAL))
+			continue ;
 		if ((*token) && (*token)->type == ENV && ((*token)->state == IN_DQUOTE || (*token)->state == GENERAL))
 			continue ;
 		rest_function(token, &state);
