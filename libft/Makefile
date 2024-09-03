@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adbouras <adbouras@student.42.fr>          +#+  +:+       +#+         #
+#    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/14 21:48:50 by adbouras          #+#    #+#              #
-#    Updated: 2024/08/06 17:13:08 by adbouras         ###   ########.fr        #
+#    Updated: 2024/09/03 16:29:34 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,11 +75,11 @@ BNS_OBJC = $(addprefix $(OBJ_DIR), $(BNS:.c=.o))
 
 OBJECT = $(addprefix $(OBJ_DIR), $(SOURCE:.c=.o))
 
-$(OBJ_DIR)%.o:%.c
+$(OBJ_DIR)%.o:%.c $(HEADER)
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
  
-$(NAME): $(OBJECT) $(HEADER) 
+$(NAME): $(OBJECT)
 	@ar -cr $(NAME) $(OBJECT)
 	
 all: $(NAME)

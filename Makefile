@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eismail <eismail@student.42.fr>            +#+  +:+       +#+         #
+#    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/09/03 15:10:00 by eismail          ###   ########.fr        #
+#    Updated: 2024/09/03 16:35:39 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
-LDFLAGS = -lreadline -L/Users/eismail/.brew/opt/readline/lib
+LDFLAGS = -lreadline -L/Users/adbouras/.brew/opt/readline/lib
 
 SRC =  main.c utils.c print.c lexer.c parse_list_utils.c syntax.c parse_utils.c clean.c error.c \
 		lexer_utils.c redir_utils.c arg_utils.c lexer_list_utils.c builtins.c ft_exic.c signals.c ft_readline.c \
@@ -32,7 +32,9 @@ OBJ_DIR = objects/
 
 HDR = minishell.h
 
-NCLD = -I/Users/eismail/.brew/opt/readline/include
+LIBFT_HDR = ./libft/libft.h
+
+NCLD = -I/Users/adbouras/.brew/opt/readline/include
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
@@ -40,7 +42,7 @@ NAME = minishell
 
 all: $(NAME)
 
-$(OBJ_DIR)%.o:%.c $(HDR)
+$(OBJ_DIR)%.o:%.c $(HDR) $(LIBFT_HDR)
 	@echo "$(YLW)[Creating Object $@]$(RST)"
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(NCLD) -c $< -o $@
@@ -48,7 +50,7 @@ $(OBJ_DIR)%.o:%.c $(HDR)
 $(NAME): $(OBJ)
 	@echo "$(YLW)[Compiling libft]$(RST)"
 	@make -C libft
-	@echo "$(GRN)[libft Compiled]$(RST)" && sleep 1
+	@echo "$(GRN)[libft Compiled]$(RST)"
 	@echo "$(YLW)[Compiling ...]$(RST)"
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LDFLAGS) -o $(NAME)
 	@echo "$(GRN)[Compiled]$(RST)"

@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 10:28:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 13:30:05 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:33:10 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,28 @@ t_env	*ft_last(t_env *env)
 	return (env); 
 }
 
-
-void free_env(t_env **env)
+void	free_env(t_env **env)
 {
-    t_env *current;
-    t_env *temp;
+	t_env	*current;
+	t_env	*temp;
 
 	current = *env;
-    while (current)
-    {
+	while (current)
+	{
 		temp = current;
 		current = current->next;
-        free(temp->var);
-        free(temp->value);
-        free(temp);
-    }
+		free(temp->var);
+		free(temp->value);
+		free(temp);
+	}
 }
 
-char **env_to_str(t_env *env)
+char	**env_to_str(t_env *env)
 {
-	t_env *temp;
-	char **envstr;
-	int i;
-	
+	t_env	*temp;
+	char	**envstr;
+	int		i;
+
 	i = 0;
 	temp = env;
 	while (temp != NULL)
