@@ -6,36 +6,47 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:50:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 16:51:52 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/04 13:04:53 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	ft_swipe(char **join, char **arg)
+{
+	char	*join2;
+
+	join2 = ft_strjoin(*join, *arg);
+	if (arg && *arg)
+		free(*arg);
+	*arg = ft_strdup(join2);
+	free(join2);
+}
+
 char	*ft_expander(t_elem **temp, t_env *env, bool exec)
 {
 	char	*arg;
 	char	*join;
-	char	*join2;
 
 	arg = NULL;
-	while (temp && *temp && (*temp)->type == ENV)
+	while (temp && *temp && ((*temp)->type == ENV
+			|| (*temp)->type == D_QUOTE || (*temp)->type == S_QUOTE))
 	{
 		join = ft_strdup(arg);
 		free(arg);
 		arg = NULL;
-		if ((*temp)->next)
+		if (*temp && ((*temp)->type == D_QUOTE || (*temp)->type == S_QUOTE))
+			arg = get_arg(temp, env, true);
+		else if ((*temp) && (*temp)->next)
 		{
 			(*temp) = (*temp)->next;
 			arg = arg_expand(*temp, env, &arg);
 		}
 		else
 			arg = ft_strdup("$");
-		join2 = ft_strjoin(join, arg);
-		free(arg);
-		arg = ft_strdup(join2);
-		free(join2);
-		*temp = (*temp)->next;
+		ft_swipe(&join, &arg);
+		if (*temp)
+			*temp = (*temp)->next;
 	}
 	return (check_exec(exec, &arg, &join, env));
 }

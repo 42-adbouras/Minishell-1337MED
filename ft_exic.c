@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 16:55:57 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/04 15:03:08 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,19 @@ bool	ft_path(t_env *env)
 	return (false);
 }
 
-void	init_fds(int **pids, t_fd **fd, int cmd_num)
+bool	init_fds(int **pids, t_fd **fd, int cmd_num)
 {
 	*pids = malloc(sizeof(int) * cmd_num);
 	*fd = malloc(sizeof(t_fd));
 	(*fd)->pipes = ft_pip(cmd_num);
 	if (!(*fd)->pipes)
-		return (free(*pids), free(*fd));
+	{
+		ft_error("Resource temporarily unavailable\n", 1);
+		free(*pids);
+		free(*fd);
+		return (false);
+	}
+	return (true);
 }
 
 void	ft_exic(t_exec *cmds, t_env **env)
@@ -62,12 +68,17 @@ void	ft_exic(t_exec *cmds, t_env **env)
 	cmd_num = ft_count_cmd(cmds);
 	i = -1;
 	fd = NULL;
-	init_fds(&pids, &fd, cmd_num);
+	if (!init_fds(&pids, &fd, cmd_num))
+		return ;
 	while (++i < cmd_num)
 	{
 		fd->fds = ft_open(cmds);
 		if (!fd->fds || !cmds->path_option_args[0])
+		{
+			if (g_status == 300)
+				g_status = 1;
 			return (free_fds(pids, &fd, cmd_num));
+		}
 		if (run_one_builtin(cmds, &env, fd, cmd_num))
 			break ;
 		pids[i] = fork();

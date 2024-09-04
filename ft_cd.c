@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:16:37 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 17:16:55 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/04 16:40:51 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,21 @@ bool	ft_cd(char *path, t_env *env)
 		home_env = home_env->next;
 	if (path == NULL)
 	{
+		if (!home_env)
+		{
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			return (false);
+		}
 		path = &home_env->value[1];
 		chdir(path);
 	}
 	if (chdir(path) != 0)
 	{
 		if (errno != ENOENT)
-			fprintf(stderr, "minishell: cd : Permission denied\n");
+			ft_putstr_fd("minishell: cd: Permission denied\n", 2);
 		else
 			perror("minishell: cd ");
-		g_status = 1;
-		return (true);
+		return (false);
 	}
 	g_status = 0;
 	return (true);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:18:21 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 17:36:40 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/04 12:34:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	echo_option(t_exec *cmd)
 				if (cmd->path_option_args[i][j] != 'n')
 					return (i);
 			}
+			if (cmd->path_option_args[i][1] == '\0')
+				return (1);
 		}
 		else
 			break ;

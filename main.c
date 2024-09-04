@@ -6,11 +6,16 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 17:30:25 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/04 16:35:09 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void l()
+{
+	system("leaks -q minishell");
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -18,6 +23,7 @@ int	main(int ac, char **av, char **env)
 	char	*rl;
 	t_data	*tokens;
 
+	// atexit(l);
 	(void)ac;
 	(void)av;
 	signals_init();
@@ -30,10 +36,12 @@ int	main(int ac, char **av, char **env)
 			if (!if_syntax_err(tokens))
 			{
 				init_exec_struct(&tokens, envi);
+				// print_exec(tokens->exec);
 				if (tokens && tokens->exec && tokens->exec->run)
 					ft_exic(tokens->exec, &envi);
+				free_data(&tokens, &rl, 1);
+				
 			}
-			free_data(&tokens, &rl, 1);
 		}
 		else
 			free_data(&tokens, &rl, 0);

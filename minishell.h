@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 16:51:52 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/04 15:03:18 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,12 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <curses.h>
-# include <term.h>
 # include <errno.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include "libft/libft.h"
 
 # define MAX_PATH 1024
-# define BBLK "\e[1;30m"
-# define BRED "\e[1;31m"
-# define BGRN "\e[1;32m"
-# define BYEL "\e[1;33m"
-# define BBLU "\e[1;34m"
-# define BMAG "\e[1;35m"
-# define BCYN "\e[1;36m"
-# define RSET "\e[0m"
-
-# define PROMPT "~ "
 
 int							g_status;
 
@@ -118,6 +106,7 @@ int		ft_readline(char **rl);
 /***	utils.c				***********************************************/
 void	init_data(t_data **tokens, char *rl);
 char	*ft_strndup(const char *s1, int n);
+void	skip_quotes(t_elem ***token, t_state *state);
 
 /***	arg_utils.c			***********************************************/
 char	*get_cmd(t_elem *tokens, t_env *env, bool *exed);
@@ -154,6 +143,8 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env);
 char	*ft_expander(t_elem **temp, t_env *env, bool exec);
 char	*ft_expand(t_env *env, char *var);
 char	*get_arg(t_elem **token, t_env *env, bool exec);
+void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env);
+void	rest_function(t_elem **token, t_state *state);
 
 /***	parse_list_utils.c			***************************************/
 t_exec	*new_exec(t_elem *tokens, t_env *env);
@@ -175,7 +166,6 @@ bool	last_heredoc(t_elem *token);
 /***	signals.c			***********************************************/
 void	signals_init(void);
 void	sig_handler(int sig, siginfo_t *siginfo, void *ptr);
-void	child_sig_init(void);
 
 /***	clean.c				***********************************************/
 void	free_data(t_data **data, char **rl, int flag);
@@ -255,7 +245,7 @@ bool	ft_path(t_env *env);
 t_env	*ft_last(t_env *env);
 void	free_env(t_env **env);
 char	**env_to_str(t_env *env);
-void	init_fds(int **pids, t_fd **fd, int cmd_num);
+bool	init_fds(int **pids, t_fd **fd, int cmd_num);
 void	ft_exic(t_exec *cmds, t_env **env);
 
 /***	ft_unset.c			***********************************************/

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 17:31:34 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/04 16:29:56 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ bool	redir_conditions(t_elem *temp, int flag)
 
 void	rest_function(t_elem **token, t_state *state)
 {
-	(*token) = (*token)->next;
+	if ((token) && (*token))
+		(*token) = (*token)->next;
 	if ((*token) && ((*token)->type == D_QUOTE
 			|| (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:11:34 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 10:10:54 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:45:12 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,26 @@ char	*get_redire(t_elem **token, t_env *env, bool *ambiguous)
 	return (redir_in);
 }
 
+char *get_delim(t_elem **token)
+{
+	char	*arg;
+	char	*join;
+	t_state	state;
+
+	arg = NULL;
+	join = ft_strdup("");
+	skip_quotes(&token, &state);
+	while ((*token) && ((*token)->state == state))
+	{
+		arg = arg_join(*token, &arg, join);
+		rest_function(token, &state);
+		if ((*token) && (((*token)->type == W_SPACE
+					|| (*token)->type == PIPE) && (*token)->state == GENERAL))
+			break ;
+	}
+	return (check_exec(true, &arg, &join, NULL));
+}
+
 char	*get_heredoc(t_elem **token, bool *heredoc)
 {
 	char	*redir;
@@ -67,7 +87,7 @@ char	*get_heredoc(t_elem **token, bool *heredoc)
 			|| (*token)->type == D_QUOTE) && (*token)->next)
 	{
 		*heredoc = true;
-		redir = get_arg(token, NULL, true);
+		redir = get_delim(token);
 	}
 	else if ((*token)->type == ENV)
 	{

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 14:40:29 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/04 16:58:58 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ bool	if_syntax_err(t_data *tokens)
 		if (tmp->type == D_QUOTE || tmp->type == S_QUOTE)
 		{
 			if (!if_closed_quotes(&tmp, tmp->type))
-				return (ft_error("minishell: unexpected EOF!\n", 258));
+				return (ft_error("minishell: unexpected EOF while looking for matching\n", 258));
 		}
 		if (is_red(tmp->type))
 		{
 			if (!red_syntax(tmp))
 				return (ft_error(
-						"minishell: syntax error redirection!\n", 258));
+						"minishell: syntax error redirection\n", 258));
 		}
 		if (tmp->type == PIPE)
 		{
@@ -50,7 +50,7 @@ bool	pipe_syntax(t_elem *token)
 	if (!next || !prev)
 		return (false);
 	if (next->type != WORD && !is_red(next->type)
-		&& prev->type != D_QUOTE && prev->type != S_QUOTE && next->type != ENV)
+		&& next->type != D_QUOTE && next->type != S_QUOTE && next->type != ENV)
 		return (false);
 	if (prev->type != WORD && prev->type != D_QUOTE 
 		&& prev->type != S_QUOTE && prev->type != ENV)

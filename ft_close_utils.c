@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_close_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:23:42 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 16:34:22 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/04 15:27:26 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,11 @@ void	free_fds(int *pids, t_fd **fd, int cmd_num)
 {
 	free(pids);
 	free_int((*fd)->pipes, cmd_num);
+	if (fd && *fd && (*fd)->fds)
+	{
+		close ((*fd)->fds[0]);
+		close ((*fd)->fds[1]);
+	}
 	free((*fd)->fds);
 	free(*fd);
 }

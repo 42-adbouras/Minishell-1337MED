@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exic_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:18:11 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 15:36:37 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/04 16:50:35 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ void	ft_exec_error(t_exec *cmd)
 		ft_print_error("minishell: is a directory\n", 126);
 	else if (errno == EACCES)
 		ft_print_error(NULL, 126);
-	else if (!ft_path(cmd->env))
-		ft_print_error("minishell :No such file or directory\n", 127);
+	else if (!ft_path(cmd->env) || ft_strncmp(cmd->path_option_args[0], "./",2) == 0)
+		ft_print_error("minishell: No such file or directory\n", 127);
 	else if (errno == ENOENT)
-		ft_print_error("minishell :command not found\n", 127);
+		ft_print_error("minishell: command not found\n", 127);
 	else
 		ft_print_error(NULL, 1);
 }
