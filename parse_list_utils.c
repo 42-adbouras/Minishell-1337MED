@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/03 17:30:59 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/05 16:47:29 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 		if (cmd_getter(temp, new))
 			new->path_option_args[i++] = get_cmd(temp, env, &new->exed);
 		else if (arg_getter(temp))
+		{
 			new->path_option_args[i++] = get_arg(&temp, env, new->exed);
+		}
 		else if (temp && temp->type == ENV)
 			new->path_option_args[i++] = ft_expander(&temp, env, new->exed);
 		else if (temp && is_red(temp->type) && temp->state == GENERAL)

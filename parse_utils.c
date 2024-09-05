@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/04 16:29:56 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/05 17:13:21 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,10 @@ void	rest_function(t_elem **token, t_state *state)
 		if ((*token) && ((*token)->type == D_QUOTE
 				|| (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 			(*token) = (*token)->next;
-		if ((*token) && (*token)->type != W_SPACE
-			&& !is_red((*token)->type) && (*token)->type != PIPE)
+		if ((*token) && (((*token)->type != W_SPACE && !is_red((*token)->type)  && (*token)->type != PIPE) ||  (*token)->state != GENERAL))
 		{
 			*state = (*token)->state;
-			if ((*token)->type != WORD && (*token)->type != ENV)
+			if ((*token)->type != WORD && (*token)->type != ENV && !is_red((*token)->type) && (*token)->type != PIPE && (*token)->state == GENERAL)
 				(*token) = (*token)->next;
 		}
 	}
