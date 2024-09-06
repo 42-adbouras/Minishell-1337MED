@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/04 15:11:07 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 17:05:53 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ char	*get_access(char *cmd, t_env *env)
 	i = 0;
 	while (env && ft_strncmp(env->var, "PATH", 5))
 		env = env->next;
-	if (ft_strncmp(cmd,"./",2) == 0 || cmd[0] == '\0' || !access(cmd, X_OK) || !env)
+	if (ft_strncmp(cmd,"/",1) == 0 || ft_strncmp(cmd,"./",2) == 0 || cmd[0] == '\0'
+			|| !access(cmd, X_OK) || !env)
 		return (ft_strdup(cmd));
 	paths = ft_split(env->value, ':');
 	while (paths[i])

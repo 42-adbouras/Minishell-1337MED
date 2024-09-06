@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 20:52:03 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/04 16:05:56 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 12:00:56 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	read_heredoc(char *delimiter, int *pip, t_env *env, bool expand)
 			close(pip[1]);
 			close(pip[0]);
 			free(s);
-			exit(130);
+			exit(0);
 		}
 		line = expand_heredoc(&line, env, expand, s);
 	}
@@ -126,6 +126,12 @@ bool	wait_heredoc(int pid, int *pip, char **delimiters, int i)
 		close(pip[1]);
 		close(pip[0]);
 		return (false);
+	}
+	else if (exit_status == 0)
+	{
+		g_status = 0;
+		close(pip[1]);
+		return (true);
 	}
 	if (delimiters[i + 1])
 		close(pip[0]);

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/05 16:47:29 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 16:29:16 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_exec_struct(t_data **data, t_env *env)
 		if (!new)
 		{
 			ft_error("malloc failed!\n", 1);
-			free_data(data, NULL, 1);
+			// free_data(data, NULL, 1);
 			exit(1);
 		}
 		exec_add_back(&(*data)->exec, new);
@@ -62,8 +62,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 			temp = temp->next;
 	}
 	new->path_option_args[i] = NULL;
-	if (!process_redir(tokens, &new, env))
-		return (free_exec(&new), NULL);
+	process_redir(tokens, &new, env);
 	return (new);
 }
 

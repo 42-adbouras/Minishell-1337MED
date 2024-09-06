@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/04 15:03:18 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 14:37:11 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ t_env	*set_env(char **env);
 bool	ft_env(t_env *env, int fd_out);
 
 /***	ft_open.c			***********************************************/
-bool	check_ambiguous(char *file);
+bool	check_ambiguous(char *file, bool ambiguous);
 bool	open_redir_out(t_exec *cmd, int *fds);
 bool	open_redir_in(t_exec *cmd, int *fds);
 int		*open_redir(t_exec *cmd);

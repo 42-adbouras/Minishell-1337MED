@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:50:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/04 13:04:53 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 17:45:44 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,16 @@ void	ft_swipe(char **join, char **arg)
 	char	*join2;
 
 	join2 = ft_strjoin(*join, *arg);
+	if (join && *join)
+	{
+		free(*join);
+		*join = NULL;
+	}
 	if (arg && *arg)
+	{
 		free(*arg);
+		*arg = NULL;
+	}
 	*arg = ft_strdup(join2);
 	free(join2);
 }
@@ -29,6 +37,7 @@ char	*ft_expander(t_elem **temp, t_env *env, bool exec)
 	char	*join;
 
 	arg = NULL;
+	join = NULL;
 	while (temp && *temp && ((*temp)->type == ENV
 			|| (*temp)->type == D_QUOTE || (*temp)->type == S_QUOTE))
 	{

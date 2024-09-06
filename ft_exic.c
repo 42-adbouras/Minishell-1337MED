@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/04 15:03:08 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 18:06:00 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,13 @@ void	ft_exic(t_exec *cmds, t_env **env)
 
 	cmd_num = ft_count_cmd(cmds);
 	i = -1;
-	fd = NULL;
 	if (!init_fds(&pids, &fd, cmd_num))
 		return ;
 	while (++i < cmd_num)
 	{
 		fd->fds = ft_open(cmds);
 		if (!fd->fds || !cmds->path_option_args[0])
-		{
-			if (g_status == 300)
-				g_status = 1;
 			return (free_fds(pids, &fd, cmd_num));
-		}
 		if (run_one_builtin(cmds, &env, fd, cmd_num))
 			break ;
 		pids[i] = fork();

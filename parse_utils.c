@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/05 17:13:21 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 12:17:00 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,12 @@ void	rest_function(t_elem **token, t_state *state)
 		if ((*token) && ((*token)->type == D_QUOTE
 				|| (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 			(*token) = (*token)->next;
-		if ((*token) && (((*token)->type != W_SPACE && !is_red((*token)->type)  && (*token)->type != PIPE) ||  (*token)->state != GENERAL))
+		if ((*token) && (((*token)->type != W_SPACE && !is_red((*token)->type) 
+				&& (*token)->type != PIPE) ||  (*token)->state != GENERAL))
 		{
 			*state = (*token)->state;
-			if ((*token)->type != WORD && (*token)->type != ENV && !is_red((*token)->type) && (*token)->type != PIPE && (*token)->state == GENERAL)
+			if ((*token)->type != WORD && (*token)->type != ENV && !is_red((*token)->type)
+					&& (*token)->type != PIPE && (*token)->state == GENERAL)
 				(*token) = (*token)->next;
 		}
 	}
@@ -94,14 +96,14 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 	skip_quotes(&token, &state);
 	while ((*token) && ((*token)->state == state))
 	{
-		if ((*token) && (*token)->type == ENV && (*token)->state != IN_SQUOTE)
+		if ((*token) && (*token)->type == ENV && env && (*token)->state != IN_SQUOTE)
 		{
 			(*token) = (*token)->next;
 			arg = arg_expand(*token, env, &arg);
 		}
 		else
 			arg = arg_join(*token, &arg, join);
-		if ((*token) && (*token)->type == ENV && (*token)->state != IN_SQUOTE)
+		if ((*token) && (*token)->type == ENV && env && (*token)->state != IN_SQUOTE)
 			continue ;
 		rest_function(token, &state);
 		if ((*token) && (((*token)->type == W_SPACE

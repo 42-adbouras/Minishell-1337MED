@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:23:42 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/04 15:27:26 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 11:42:23 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	close_fds(t_fd **fd)
 
 void	free_fds(int *pids, t_fd **fd, int cmd_num)
 {
+	if (g_status == 300)
+		g_status = 1;
 	free(pids);
 	free_int((*fd)->pipes, cmd_num);
 	if (fd && *fd && (*fd)->fds)
