@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:35:09 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 17:35:34 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/06 21:27:11 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ bool	ft_pwd(int fd_out)
 	if (getcwd(s, MAX_PATH) == NULL)
 	{
 		g_status = 1;
-		return (true);
+		perror("minishell: ");
+		return (false);
 	}
 	ft_putstr_fd(s, fd_out);
 	ft_putstr_fd("\n", fd_out);

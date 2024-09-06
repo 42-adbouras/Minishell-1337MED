@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:46:07 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 11:47:37 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 18:54:22 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_readline(char **rl)
 	char	*prompt;
 
 	prompt = get_prompt();
-	*rl = readline(prompt);
+	*rl = readline("minishell> ");
 	if (!*rl)
 	{
 		free(prompt);

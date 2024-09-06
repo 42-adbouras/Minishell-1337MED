@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/06 16:29:16 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 18:46:38 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 			new->path_option_args[i++] = get_arg(&temp, env, new->exed);
 		}
 		else if (temp && temp->type == ENV)
+		{
 			new->path_option_args[i++] = ft_expander(&temp, env, new->exed);
+		}
 		else if (temp && is_red(temp->type) && temp->state == GENERAL)
 			if_redir(&temp);
 		if (temp && temp->type != PIPE)

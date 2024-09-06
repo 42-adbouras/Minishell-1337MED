@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:17:59 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/03 13:47:21 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 21:38:18 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	export_error(void)
 {
-	ft_putstr_fd("minishell: export: not a valid identifier\n", 2);
+	ft_putstr_fd("minishell: not a valid identifier\n", 2);
 }
 
 bool	cheak_var(char *var)

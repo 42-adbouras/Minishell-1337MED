@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:50:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 17:45:44 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/06 21:24:04 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_expander(t_elem **temp, t_env *env, bool exec)
 		else
 			arg = ft_strdup("$");
 		ft_swipe(&join, &arg);
-		if (*temp)
+		if (*temp && (*temp)->type != W_SPACE && (*temp)->state == GENERAL)
 			*temp = (*temp)->next;
 	}
 	return (check_exec(exec, &arg, &join, env));
@@ -113,6 +113,7 @@ char	*ft_expand(t_env *env, char *var)
 	char	*re;
 
 	temp = env;
+	re = NULL;
 	after = get_after(var);
 	variable = get_var(var);
 	while (temp)
@@ -124,17 +125,30 @@ char	*ft_expand(t_env *env, char *var)
 		}
 		temp = temp->next;
 	}
+	if (after && !re)
+		return (free(variable), after);
 	return (free(after), free(variable), NULL);
 }
 
 char	*get_after(char *var)
 {
 	char	*after;
-	int		i;
+	size_t		i;
+	int		count;
 
 	i = 0;
-	while (var[i] && (var[i] == '_' || ft_isalnum(var[i])))
+	count = 0;
+	after = NULL;
+	if (var[0] && !ft_isalpha(var[0]) && var[0] != '_')
+	{
+		after = ft_substr(var, 1, ft_strlen(var));
+		return (after);
+	}
+	while (var[i] && (ft_isalnum(var[i]) || var[i] == '_'))
+	{
 		i++;
-	after = ft_substr(var, i, ft_strlen(var));
+	}
+	if (i > 0 )
+		after = ft_substr(var, i, ft_strlen(var));
 	return (after);
 }
