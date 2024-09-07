@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:46:07 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 18:07:38 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:58:20 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,16 @@
 
 int	ft_readline(char **rl)
 {
-	char	*prompt;
-
-	prompt = get_prompt();
 	*rl = readline("minishell> ");
 	if (!*rl)
 	{
-		free(prompt);
 		clear_history();
 		printf("exit\n");
 		exit (g_status);
 	}
 	if (!*rl[0])
-		return (free(prompt), 0);
+		return (0);
 	add_history(*rl);
-	free(prompt);
 	return (1);
 }
 

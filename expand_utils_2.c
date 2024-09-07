@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:02:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 15:55:57 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:37:53 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,8 @@ char	*get_after(char *var)
 {
 	char	*after;
 	size_t	i;
-	int		count;
 
 	i = 0;
-	count = 0;
 	after = NULL;
 	if (var[0] && !ft_isalpha(var[0]) && var[0] != '_')
 	{

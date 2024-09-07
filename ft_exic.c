@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/07 15:49:51 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 19:00:08 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ bool	init_fds(int **pids, t_fd **fd, int cmd_num)
 	if (!(*fd)->pipes)
 	{
 		ft_error("Resource temporarily unavailable\n", 1);
+		free_int((*fd)->fds, cmd_num);
 		free(*pids);
 		free(*fd);
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/07 15:50:46 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 19:08:50 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **env)
 	envi = set_env(env);
 	while (1)
 	{
-		if (ft_readline(&rl))
+		if (ft_readline(&rl) && rl[0])
 		{
 			init_data(&tokens, rl);
 			if (!if_syntax_err(tokens))
@@ -36,7 +36,7 @@ int	main(int ac, char **av, char **env)
 			free_data(&tokens, &rl, 1);
 		}
 		else
-			free_data(&tokens, &rl, 0);
+			free(rl);
 	}
 	return (clear_history(), 0);
 }
