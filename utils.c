@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/06 10:34:33 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:50:24 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,23 @@ void	skip_quotes(t_elem ***token, t_state *state)
 		(**token) = (**token)->next;
 	if (**token)
 		*state = (**token)->state;
+}
+
+bool	last_heredoc(t_elem *token)
+{
+	while (token && token->type == W_SPACE)
+		token = token->next;
+	if (token && token->type == WORD)
+		return (true);
+	return (false);
+}
+
+bool	skip_cmd(t_exec **cmd, int *arry)
+{
+	if (*cmd && (!arry || !(*cmd)->path_option_args[0]))
+	{
+		*cmd = (*cmd)->next;
+		return (true);
+	}
+	return (false);
 }

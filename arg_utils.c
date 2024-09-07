@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 17:05:53 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 16:05:21 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,22 @@ int	count_words(t_elem *tokens)
 	return (count);
 }
 
+char	*get_executeble(char *s)
+{
+	char	*temp;
+
+	if (!ft_strncmp(s, "./", 2))
+	{
+		temp = ft_substr(s, 2, ft_strlen(s));
+		if (!access(temp, X_OK))
+			return (free(s), temp);
+		else
+			return (free(temp), ft_strdup(s));
+	}
+	else
+		return (ft_strdup(s));
+}
+
 char	*get_access(char *cmd, t_env *env)
 {
 	char	*temp;
@@ -73,9 +89,10 @@ char	*get_access(char *cmd, t_env *env)
 	i = 0;
 	while (env && ft_strncmp(env->var, "PATH", 5))
 		env = env->next;
-	if (ft_strncmp(cmd,"/",1) == 0 || ft_strncmp(cmd,"./",2) == 0 || cmd[0] == '\0'
-			|| !access(cmd, X_OK) || !env)
-		return (ft_strdup(cmd));
+	if (!ft_strncmp(cmd, "../", 3) || !ft_strncmp(cmd, "/", 1)
+		|| !ft_strncmp(cmd, "./", 2) || cmd[0] == '\0'
+		|| !env)
+		return (get_executeble(cmd));
 	paths = ft_split(env->value, ':');
 	while (paths[i])
 	{

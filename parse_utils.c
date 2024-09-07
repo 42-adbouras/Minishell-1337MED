@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 12:17:00 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:39:46 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,19 @@ void	rest_function(t_elem **token, t_state *state)
 		if ((*token) && ((*token)->type == D_QUOTE
 				|| (*token)->type == S_QUOTE) && (*token)->state == GENERAL)
 			(*token) = (*token)->next;
-		if ((*token) && (((*token)->type != W_SPACE && !is_red((*token)->type) 
-				&& (*token)->type != PIPE) ||  (*token)->state != GENERAL))
+		if ((*token) && (((*token)->type != W_SPACE && !is_red((*token)->type)
+					&& (*token)->type != PIPE) || (*token)->state != GENERAL))
 		{
 			*state = (*token)->state;
-			if ((*token)->type != WORD && (*token)->type != ENV && !is_red((*token)->type)
-					&& (*token)->type != PIPE && (*token)->state == GENERAL)
+			if ((*token)->type != WORD && (*token)->type != ENV
+				&& !is_red((*token)->type) && (*token)->type != PIPE
+				&& (*token)->state == GENERAL)
 				(*token) = (*token)->next;
 		}
 	}
 }
 
-char	*get_arg(t_elem **token, t_env *env, bool exec)
+char	*get_arg(t_elem **t, t_env *env, bool exec)
 {
 	char	*arg;
 	char	*join;
@@ -93,21 +94,21 @@ char	*get_arg(t_elem **token, t_env *env, bool exec)
 
 	arg = NULL;
 	join = ft_strdup("");
-	skip_quotes(&token, &state);
-	while ((*token) && ((*token)->state == state))
+	skip_quotes(&t, &state);
+	while ((*t) && ((*t)->state == state))
 	{
-		if ((*token) && (*token)->type == ENV && env && (*token)->state != IN_SQUOTE)
+		if ((*t) && (*t)->type == ENV && env && (*t)->state != IN_SQUOTE)
 		{
-			(*token) = (*token)->next;
-			arg = arg_expand(*token, env, &arg);
+			(*t) = (*t)->next;
+			arg = arg_expand(*t, env, &arg);
 		}
 		else
-			arg = arg_join(*token, &arg, join);
-		if ((*token) && (*token)->type == ENV && env && (*token)->state != IN_SQUOTE)
+			arg = arg_join(*t, &arg, join);
+		if ((*t) && (*t)->type == ENV && env && (*t)->state != IN_SQUOTE)
 			continue ;
-		rest_function(token, &state);
-		if ((*token) && (((*token)->type == W_SPACE
-					|| (*token)->type == PIPE) && (*token)->state == GENERAL))
+		rest_function(t, &state);
+		if ((*t) && (((*t)->type == W_SPACE
+					|| (*t)->type == PIPE) && (*t)->state == GENERAL))
 			break ;
 	}
 	return (check_exec(exec, &arg, &join, env));

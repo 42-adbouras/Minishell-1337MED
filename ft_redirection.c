@@ -6,25 +6,13 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:12:05 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/06 11:38:47 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:41:23 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_close_pip(int **pip, int i)
-{
-	int l;
-
-	l = -1;
-	while (++l < i)
-	{
-		close(pip[l][0]);
-		close(pip[l][1]);	
-	}
-}
-
-int	**ft_pip(int cmd_num)
+int	**ft_pip(int cmd_num, bool pip)
 {
 	int	i;
 	int	**fd;
@@ -42,12 +30,13 @@ int	**ft_pip(int cmd_num)
 			return (NULL);
 		}
 	}
-	i = 0;
-	while ((i < cmd_num - 1))
+	if (!pip)
+		return (fd);
+	i = -1;
+	while ((++i < cmd_num - 1))
 	{
 		if (pipe(fd[i]) == -1)
 			return (ft_close_pip(fd, i), free_int(fd, cmd_num), NULL);
-		i++;
 	}
 	return (fd);
 }

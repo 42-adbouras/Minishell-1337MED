@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:02:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:02:58 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:55:57 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,27 @@ char	*arg_join(t_elem *token, char **arg, char *join)
 		join2 = ft_strjoin(*arg, (token)->content);
 	free(*arg);
 	return (join2);
+}
+
+char	*get_after(char *var)
+{
+	char	*after;
+	size_t	i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	after = NULL;
+	if (var[0] && !ft_isalpha(var[0]) && var[0] != '_')
+	{
+		after = ft_substr(var, 1, ft_strlen(var));
+		return (after);
+	}
+	while (var[i] && (ft_isalnum(var[i]) || var[i] == '_'))
+	{
+		i++;
+	}
+	if (i > 0)
+		after = ft_substr(var, i, ft_strlen(var));
+	return (after);
 }

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/06 18:46:38 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:43:15 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_exec_struct(t_data **data, t_env *env)
 		if (!new)
 		{
 			ft_error("malloc failed!\n", 1);
-			// free_data(data, NULL, 1);
+			free_data(data, NULL, 1);
 			exit(1);
 		}
 		exec_add_back(&(*data)->exec, new);
@@ -51,13 +51,9 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 		if (cmd_getter(temp, new))
 			new->path_option_args[i++] = get_cmd(temp, env, &new->exed);
 		else if (arg_getter(temp))
-		{
 			new->path_option_args[i++] = get_arg(&temp, env, new->exed);
-		}
 		else if (temp && temp->type == ENV)
-		{
 			new->path_option_args[i++] = ft_expander(&temp, env, new->exed);
-		}
 		else if (temp && is_red(temp->type) && temp->state == GENERAL)
 			if_redir(&temp);
 		if (temp && temp->type != PIPE)

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 14:37:11 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 16:19:50 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ typedef struct s_data
 typedef struct s_fd
 {
 	int		**pipes;
-	int		*fds;
+	int		**fds;
 }	t_fd;
 
 /***	ft_readline.c		***********************************************/
@@ -107,6 +107,7 @@ int		ft_readline(char **rl);
 void	init_data(t_data **tokens, char *rl);
 char	*ft_strndup(const char *s1, int n);
 void	skip_quotes(t_elem ***token, t_state *state);
+bool	skip_cmd(t_exec **cmd, int *arry);
 
 /***	arg_utils.c			***********************************************/
 char	*get_cmd(t_elem *tokens, t_env *env, bool *exed);
@@ -192,6 +193,7 @@ bool	cmd_getter(t_elem *temp, t_exec *new);
 bool	arg_getter(t_elem *temp);
 bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int *j);
 void	heredoc_getter(t_exec ***new, t_elem *temp, int *l);
+char	*get_exit_status(char *str);
 
 /***	error.c				***********************************************/
 void	ft_exit(t_data **tokens, char *err);
@@ -275,7 +277,7 @@ bool	fd_hindler(int cmd_num, int **fd, int *fds, int pos);
 void	ft_stdout(int cmd_num, int **pipes, int pid, int *fds);
 void	ft_stdin(int **pipes, int pid, int *fds);
 void	ft_close(int cmd_num, int **pipes, int *fds);
-int		**ft_pip(int cmd_num);
+int		**ft_pip(int cmd_num, bool pip);
 
 /***	ft_exic_utils.c		***********************************************/
 int		ft_count_cmd(t_exec *cmd);
@@ -294,8 +296,9 @@ void	export_error(void);
 /***	ft_close_utils.c	***********************************************/
 void	free_fds(int *pids, t_fd **fd, int cmd_num);
 void	free_int(int **p, int n);
-void	close_fds(t_fd **fd);
+void	close_fds(t_fd **fd, int cmd_num);
 void	ft_clear(int cmd_num, t_fd *fd, int *pids);
+void	ft_close_pip(int **pip, int i);
 
 /***	heredoc.c			***********************************************/
 char	*get_expand_heredoc(char *temp, t_env *env, int i, char **join);

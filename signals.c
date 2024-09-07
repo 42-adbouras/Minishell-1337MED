@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:35:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 17:46:07 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:07:30 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	sig_handler(int sig, siginfo_t *siginfo, void *ptr)
 	{
 		g_status = 1;
 		write (1, "\n", 1);
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}

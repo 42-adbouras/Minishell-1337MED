@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:11:34 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 17:53:04 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:22:38 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,11 @@ char	*get_redire(t_elem **token, t_env *env, bool *ambiguous)
 	else if ((*token) && (*token)->type == ENV)
 	{
 		redir_in = get_arg(token, env, true);
-		if (check_ambiguous(redir_in, false))
+		if (check_ambiguous(redir_in, false)
+			|| (redir_in && redir_in[0] == '\0'))
 			*ambiguous = true;
 		if (*ambiguous)
-			return (NULL);
+			return (free(redir_in), NULL);
 	}
 	else
 		redir_in = get_arg(token, env, true);
@@ -52,7 +53,7 @@ char	*get_redire(t_elem **token, t_env *env, bool *ambiguous)
 	return (redir_in);
 }
 
-char *get_delim(t_elem **token)
+char	*get_delim(t_elem **token)
 {
 	char	*arg;
 	char	*join;
@@ -86,7 +87,7 @@ char	*get_heredoc(t_elem **token, bool *heredoc)
 		*heredoc = true;
 		redir = get_delim(token);
 	}
-	else if ((*token) && (*token)->type == ENV )
+	else if ((*token) && (*token)->type == ENV)
 	{
 		(*token) = (*token)->next;
 		if ((*token))
@@ -98,15 +99,5 @@ char	*get_heredoc(t_elem **token, bool *heredoc)
 	}
 	else
 		redir = get_arg(token, NULL, true);
-	// redir = ft_strndup((*token)->content, (*token)->len);
 	return (redir);
-}
-
-bool	last_heredoc(t_elem *token)
-{
-	while (token && token->type == W_SPACE)
-		token = token->next;
-	if (token && token->type == WORD)
-		return (true);
-	return (false);
 }

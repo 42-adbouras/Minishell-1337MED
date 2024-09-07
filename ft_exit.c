@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:33:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 11:47:49 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:07:19 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ bool	ft_exit_error(char c, char *message, bool error)
 {
 	if (!ft_isdigit(c))
 	{
-		// ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("exit\n", 2);
 		ft_putstr_fd(message, 2);
 		if (error)
 			exit (255);
@@ -58,7 +58,7 @@ bool	ft_exit_built(char **arg, int cmd_num)
 				false));
 	else
 	{
-		// ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("exit\n", 2);
 		exit(ft_atoi(arg[0]));
 	}
 }

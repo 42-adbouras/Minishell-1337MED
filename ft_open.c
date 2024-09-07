@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:06:52 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/06 16:50:32 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:14:18 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	*ft_open(t_exec *cmd)
 	if (!fds && heredoc > 0)
 		return (close(heredoc), NULL);
 	else if (!fds)
-		return ( NULL);
+		return (NULL);
 	if (cmd->heredoc)
 	{
 		if (fds[0] > 0)
@@ -49,9 +49,9 @@ int	*open_redir(t_exec *cmd)
 	fds[1] = -1;
 	fds[0] = -1;
 	if (!open_redir_in(cmd, fds))
-		return (NULL);
+		return (free(fds), NULL);
 	if (!open_redir_out(cmd, fds))
-		return (NULL);
+		return (free(fds), NULL);
 	return (fds);
 }
 
@@ -63,19 +63,19 @@ bool	open_redir_in(t_exec *cmd, int *fds)
 	while (cmd && cmd->redir_in && cmd->redir_in[++i])
 	{
 		if (check_ambiguous(cmd->redir_in[i], cmd->ambiguous))
-			return (free(fds), false);
+			return (false);
 		fds[0] = open(cmd->redir_in[i], O_RDONLY);
 		if (fds[0] == -1)
 		{
 			g_status = 1;
 			perror("minishell");
-			return (free(fds), false);
+			return (false);
 		}
 		if (cmd->redir_in[i + 1])
 			close (fds[0]);
 	}
 	if (cmd->ambiguous && check_ambiguous(cmd->redir_in[i], cmd->ambiguous))
-		return (free(fds), false);
+		return (false);
 	return (true);
 }
 
@@ -87,7 +87,7 @@ bool	open_redir_out(t_exec *cmd, int *fds)
 	while (cmd && cmd->redir_out && cmd->redir_out[++i])
 	{
 		if (check_ambiguous(cmd->redir_out[i], cmd->ambiguous))
-			return (free(fds), false);
+			return (false);
 		if (cmd->append)
 			fds[1] = open(cmd->redir_out[i], O_CREAT | O_RDWR | O_APPEND, 0644);
 		else
@@ -96,13 +96,13 @@ bool	open_redir_out(t_exec *cmd, int *fds)
 		{
 			g_status = 1;
 			perror("minishell");
-			return (free(fds), false);
+			return (false);
 		}
 		if (cmd->redir_out[i + 1])
 			close (fds[1]);
 	}
 	if (cmd->ambiguous && check_ambiguous(cmd->redir_out[i], cmd->ambiguous))
-		return (free(fds), false);
+		return (false);
 	return (true);
 }
 
@@ -118,7 +118,7 @@ bool	check_ambiguous(char *file, bool error)
 			ft_putstr_fd("minishell2: ambiguous redirect\n", 2);
 		return (true);
 	}
-	if ( error && split && split[0] && split[1])
+	if (split && split[0] && split[1])
 	{
 		g_status = 1;
 		if (error)

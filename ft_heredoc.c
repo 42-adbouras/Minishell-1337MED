@@ -6,27 +6,11 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 20:52:03 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/06 12:00:56 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:46:42 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char *get_exit_status(char *str)
-{
-	char *nb;
-	char *join;
-	char *temp;
-
-	join = NULL;
-	nb = ft_itoa(g_status);
-	if (ft_strlen(str) > 1)
-		join = ft_strdup(&str[1]);
-	temp = ft_strjoin(nb, join);
-	free(join);
-	free(nb);
-	return (temp);
-}
 
 char	*get_expand_heredoc(char *temp, t_env *env, int i, char **join)
 {
@@ -44,8 +28,10 @@ char	*get_expand_heredoc(char *temp, t_env *env, int i, char **join)
 		env_var = get_exit_status(sub);
 	else if (sub[j + 1] && sub[j + 1] != '\n')
 		env_var = ft_expand(env, sub);
-	else 
+	else if (!sub[j + 1])
 		env_var = ft_strdup("$\n");
+	else
+		env_var = ft_strdup("\n");
 	join2 = ft_strjoin(*join, env_var);
 	free(env_var);
 	env_var = ft_strdup(join2);

@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 10:02:41 by eismail           #+#    #+#             */
-/*   Updated: 2024/09/06 18:06:00 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:49:51 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ bool	init_fds(int **pids, t_fd **fd, int cmd_num)
 {
 	*pids = malloc(sizeof(int) * cmd_num);
 	*fd = malloc(sizeof(t_fd));
-	(*fd)->pipes = ft_pip(cmd_num);
+	(*fd)->fds = malloc(sizeof(int *) * cmd_num);
+	(*fd)->pipes = ft_pip(cmd_num, true);
 	if (!(*fd)->pipes)
 	{
 		ft_error("Resource temporarily unavailable\n", 1);
@@ -71,9 +72,9 @@ void	ft_exic(t_exec *cmds, t_env **env)
 		return ;
 	while (++i < cmd_num)
 	{
-		fd->fds = ft_open(cmds);
-		if (!fd->fds || !cmds->path_option_args[0])
-			return (free_fds(pids, &fd, cmd_num));
+		fd->fds[i] = ft_open(cmds);
+		if (skip_cmd(&cmds, fd->fds[i]))
+			continue ;
 		if (run_one_builtin(cmds, &env, fd, cmd_num))
 			break ;
 		pids[i] = fork();
@@ -82,7 +83,6 @@ void	ft_exic(t_exec *cmds, t_env **env)
 		if (pids[i] == 0)
 			ft_run_cmd(cmds, &env, fd, i);
 		cmds = cmds->next;
-		close_fds(&fd);
 	}
 	ft_clear(cmd_num, fd, pids);
 }

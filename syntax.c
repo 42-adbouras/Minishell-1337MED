@@ -6,7 +6,7 @@
 /*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/04 16:58:58 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:32:19 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	if_syntax_err(t_data *tokens)
 		if (tmp->type == D_QUOTE || tmp->type == S_QUOTE)
 		{
 			if (!if_closed_quotes(&tmp, tmp->type))
-				return (ft_error("minishell: unexpected EOF while looking for matching\n", 258));
+				return (ft_error("minishell: unexpected EOF\n", 258));
 		}
 		if (is_red(tmp->type))
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getters.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:15:27 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 13:43:55 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:46:18 by eismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,20 @@ bool	arg_getter(t_elem *temp)
 			|| (temp->type == WORD && temp->state == GENERAL)))
 		return (true);
 	return (false);
+}
+
+char	*get_exit_status(char *str)
+{
+	char	*nb;
+	char	*join;
+	char	*temp;
+
+	join = NULL;
+	nb = ft_itoa(g_status);
+	if (ft_strlen(str) > 1)
+		join = ft_strdup(&str[1]);
+	temp = ft_strjoin(nb, join);
+	free(join);
+	free(nb);
+	return (temp);
 }
