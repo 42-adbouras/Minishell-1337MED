@@ -65,7 +65,7 @@ For displaying the prompt and getting the command from the terminal, we have the
 	clear_history();			// frees the working history.
 ```
 NOTICE: You may encounter some issues with the readline library. Please ensure you follow these steps:
-* Include the necessary headers in your code:
+* Include the necessary tokensers in your code:
 ```c 
 	#include <stdio.h>
 	#include <readline/readline.h>
@@ -89,9 +89,6 @@ Now that we've read the command, the next step is to parse it. I’ve decided to
 ## II - Lexer
 A lexer (or lexical analyzer) play crucial role in the process of translating a string (or code) into a sequence of tokens.\
 Tokens are categorized strings or symbols that represent the basic building blocks of the language, such as keywords, operators, identifiers.
-
-
-
 
 
 

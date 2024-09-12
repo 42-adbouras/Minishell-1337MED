@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 08:58:47 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 16:19:50 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:49:43 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int							g_status;
 
 typedef struct sigaction	t_sa;
 
-typedef enum e_token
+typedef enum e_type
 {
 	WORD = 0,
 	W_SPACE = ' ',
@@ -45,7 +45,7 @@ typedef enum e_token
 	REDIR_OUT = '>',
 	REDIR_APP,
 	ENV = '$',
-}	t_token;
+}	t_type;
 
 typedef enum e_state
 {
@@ -54,15 +54,15 @@ typedef enum e_state
 	GENERAL,
 }	t_state;
 
-typedef struct s_elem
+typedef struct s_token
 {
 	char			*content;
 	int				len;
-	enum e_token	type;
-	enum e_state	state;
-	struct s_elem	*next;
-	struct s_elem	*prev;
-}	t_elem;
+	t_type			type;
+	t_state			state;
+	struct s_token	*next;
+	struct s_token	*prev;
+}	t_token;
 
 typedef struct s_env
 {
@@ -89,9 +89,10 @@ typedef struct s_exec
 
 typedef struct s_data
 {
-	t_elem	*head;
+	t_token	*tokens;
 	t_exec	*exec;
 }	t_data;
+
 typedef struct s_fd
 {
 	int		**pipes;
@@ -106,63 +107,63 @@ int		ft_readline(char **rl);
 /***	utils.c				***********************************************/
 void	init_data(t_data **tokens, char *rl);
 char	*ft_strndup(const char *s1, int n);
-void	skip_quotes(t_elem ***token, t_state *state);
+void	skip_quotes(t_token ***token, t_state *state);
 bool	skip_cmd(t_exec **cmd, int *arry);
 
 /***	arg_utils.c			***********************************************/
-char	*get_cmd(t_elem *tokens, t_env *env, bool *exed);
-int		count_words(t_elem *tokens);
+char	*get_cmd(t_token *tokens, t_env *env, bool *exed);
+int		count_words(t_token *tokens);
 char	*get_access(char *cmd, t_env *env);
-char	*get_spichil(t_elem **temp, char **new, t_env *env);
+char	*get_spichil(t_token **temp, char **new, t_env *env);
 
 /***	lexer_utils.c		***********************************************/
 bool	is_white_space(char c);
 bool	is_grammar(char c);
-bool	is_red(t_token type);
-t_elem	*skip_wspace(t_elem *token, char direction);
+bool	is_red(t_type type);
+t_token	*skip_wspace(t_token *token, char direction);
 
 /***	lexer_list_utils.c		*******************************************/
-t_elem	*new_token(char *content, int i, t_token type, t_state state);
-t_elem	*last_token(t_elem *token);
-void	token_add_back(t_data *tokens, t_elem *new);
+t_token	*new_token(char *content, int i, t_type type, t_state state);
+t_token	*last_type(t_token *token);
+void	token_add_back(t_data *tokens, t_token *new);
 
 /***	lexer.c				***********************************************/
 void	ft_lexing(char *read, t_data **tokens);
-int		ft_tokenize(t_data *tokens, char *read, int i, t_state *status);
+int		ft_typeize(t_data *tokens, char *read, int i, t_state *status);
 int		get_word(t_data *tokens, char *read, t_state status);
 int		red_token(t_data *tokens, char *read, int i, t_state *status);
-void	quote_token(t_data *tokens, char *read, t_token type, t_state *status);
+void	quote_token(t_data *tokens, char *read, t_type type, t_state *status);
 
 /***	syntax.c			***********************************************/
-bool	pipe_syntax(t_elem *token);
+bool	pipe_syntax(t_token *token);
 bool	if_syntax_err(t_data *tokens);
-bool	if_closed_quotes(t_elem **token, t_token type);
-bool	red_syntax(t_elem *token);
+bool	if_closed_quotes(t_token **token, t_type type);
+bool	red_syntax(t_token *token);
 
 /***	parse_utils.c			*******************************************/
-bool	process_redir(t_elem *tokens, t_exec **new, t_env *env);
-char	*ft_expander(t_elem **temp, t_env *env, bool exec);
+bool	process_redir(t_token *tokens, t_exec **new, t_env *env);
+char	*ft_expander(t_token **temp, t_env *env, bool exec);
 char	*ft_expand(t_env *env, char *var);
-char	*get_arg(t_elem **token, t_env *env, bool exec);
-void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env);
-void	rest_function(t_elem **token, t_state *state);
+char	*get_arg(t_token **token, t_env *env, bool exec);
+void	init_exec_node(t_exec **new, t_token *tokens, t_env *env);
+void	rest_function(t_token **token, t_state *state);
 
 /***	parse_list_utils.c			***************************************/
-t_exec	*new_exec(t_elem *tokens, t_env *env);
-void	new_exec_node(t_exec **new, t_elem *tokens);
+t_exec	*new_exec(t_token *tokens, t_env *env);
+void	new_exec_node(t_exec **new, t_token *tokens);
 void	init_exec_struct(t_data **data, t_env *env);
 void	exec_add_back(t_exec **exec, t_exec *new);
 
 /***	expand_utils.c		***********************************************/
-char	*arg_expand(t_elem *token, t_env *env, char **arg);
+char	*arg_expand(t_token *token, t_env *env, char **arg);
 char	*check_exec(bool exec, char **arg, char **join, t_env *env);
 char	*ft_expand(t_env *env, char *var);
 
 /***	redir_utils.c		***********************************************/
-int		count_red(t_elem *tokens, t_token type);
-char	*get_redire(t_elem **token, t_env *env, bool *ambiguous);
-char	*get_heredoc(t_elem **token, bool *heredoc);
-bool	last_heredoc(t_elem *token);
+int		count_red(t_token *tokens, t_type type);
+char	*get_redire(t_token **token, t_env *env, bool *ambiguous);
+char	*get_heredoc(t_token **token, bool *heredoc);
+bool	last_heredoc(t_token *token);
 
 /***	signals.c			***********************************************/
 void	signals_init(void);
@@ -170,29 +171,29 @@ void	sig_handler(int sig, siginfo_t *siginfo, void *ptr);
 
 /***	clean.c				***********************************************/
 void	free_data(t_data **data, char **rl, int flag);
-void	free_tokens(t_elem **tokens);
+void	free_tokens(t_token **tokens);
 void	free_char_arr(char **arr);
-char	*get_redirec(t_elem **token);
-bool	last_heredoc(t_elem *token);
+char	*get_redirec(t_token **token);
+bool	last_heredoc(t_token *token);
 void	free_exec(t_exec **exec);
-void	delete_token(t_elem **token);
+void	delete_token(t_token **token);
 
 /***	process_redir_utils.c	*******************************************/
-bool	redir_conditions(t_elem *temp, int flag);
-bool	get_redir_in(t_exec ***new, t_elem *temp, t_env *env, int *i);
-void	if_redir(t_elem **token);
+bool	redir_conditions(t_token *temp, int flag);
+bool	get_redir_in(t_exec ***new, t_token *temp, t_env *env, int *i);
+void	if_redir(t_token **token);
 
 /***	word_count_utils.c 		*******************************************/
-bool	not_pipe(t_elem *tokens);
-bool	should_skip(t_elem *tokens);
-bool	is_word(t_elem *tokens);
-bool	increment(t_elem *tokens);
+bool	not_pipe(t_token *tokens);
+bool	should_skip(t_token *tokens);
+bool	is_word(t_token *tokens);
+bool	increment(t_token *tokens);
 
 /***	getters.c			***********************************************/
-bool	cmd_getter(t_elem *temp, t_exec *new);
-bool	arg_getter(t_elem *temp);
-bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int *j);
-void	heredoc_getter(t_exec ***new, t_elem *temp, int *l);
+bool	cmd_getter(t_token *temp, t_exec *new);
+bool	arg_getter(t_token *temp);
+bool	get_redir_out(t_exec ***new, t_token *temp, t_env *env, int *j);
+void	heredoc_getter(t_exec ***new, t_token *temp, int *l);
 char	*get_exit_status(char *str);
 
 /***	error.c				***********************************************/
@@ -200,9 +201,9 @@ void	ft_exit(t_data **tokens, char *err);
 bool	ft_error(char *err, int exit);
 
 /***	print.c				***********************************************/
-void	print_tokens(t_data *tokens);
+void	print_types(t_data *tokens);
 char	*state_to_string(t_state state);
-char	*token_to_string(t_token token);
+char	*token_to_string(t_type token);
 void	print_exec(t_exec *exec);
 
 /***	signls.c			***********************************************/
@@ -211,19 +212,19 @@ void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
 void	child_signal(int sig);
 
-void	remove_quotes(t_elem **tokens);
+void	remove_quotes(t_token **tokens);
 void	child_process_code(void);
 void	handle_sigint(int sig);
 char	*get_after(char *var);
 char	*get_var(char *var);
-char	*arg_join(t_elem *token, char **arg, char *join);
+char	*arg_join(t_token *token, char **arg, char *join);
 void	herdoc_signal(int sig);
 
 /***	word_count_utils.c	************************************************/
-bool	not_pipe(t_elem *tokens);
-bool	should_skip(t_elem *tokens);
-bool	is_word(t_elem *tokens);
-bool	increment(t_elem *tokens);
+bool	not_pipe(t_token *tokens);
+bool	should_skip(t_token *tokens);
+bool	is_word(t_token *tokens);
+bool	increment(t_token *tokens);
 
 /****************************		eismail		****************************/
 /***	builtins_utils.c	***********************************************/
@@ -235,8 +236,8 @@ bool	ft_unset(t_env **env, char **toDelete);
 bool	ft_exit_built(char **arg, int cmd_num);
 void	read_heredoc(char *delimiter, int *pip, t_env *env, bool expand);
 bool	ft_pwd(int fd_out);
-char	*arg_expand(t_elem *token, t_env *env, char **arg);
-void	if_redir(t_elem **token);
+char	*arg_expand(t_token *token, t_env *env, char **arg);
+void	if_redir(t_token **token);
 
 /***	ft_unset.c			***********************************************/
 bool	ft_skip(int *index, char *delimi, char *temp);
@@ -260,7 +261,7 @@ bool	free_new_var(char **s);
 bool	ft_export(t_env **env, char **arg, int fd_out);
 
 /***	ft_env.c			***********************************************/
-void	add_env(t_env **head, t_env *env_new);
+void	add_env(t_env **tokens, t_env *env_new);
 t_env	*creat_var(char *var);
 t_env	*set_env(char **env);
 bool	ft_env(t_env *env, int fd_out);

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:34:45 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 15:39:46 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
+bool	process_redir(t_token *tokens, t_exec **new, t_env *env)
 {
-	t_elem	*temp;
+	t_token	*temp;
 	int		i;
 	int		j;
 	int		l;
@@ -40,7 +40,7 @@ bool	process_redir(t_elem *tokens, t_exec **new, t_env *env)
 	return (true);
 }
 
-bool	redir_conditions(t_elem *temp, int flag)
+bool	redir_conditions(t_token *temp, int flag)
 {
 	if (flag == 0)
 	{
@@ -63,7 +63,7 @@ bool	redir_conditions(t_elem *temp, int flag)
 	return (false);
 }
 
-void	rest_function(t_elem **token, t_state *state)
+void	rest_function(t_token **token, t_state *state)
 {
 	if ((token) && (*token))
 		(*token) = (*token)->next;
@@ -86,7 +86,7 @@ void	rest_function(t_elem **token, t_state *state)
 	}
 }
 
-char	*get_arg(t_elem **t, t_env *env, bool exec)
+char	*get_arg(t_token **t, t_env *env, bool exec)
 {
 	char	*arg;
 	char	*join;
@@ -114,7 +114,7 @@ char	*get_arg(t_elem **t, t_env *env, bool exec)
 	return (check_exec(exec, &arg, &join, env));
 }
 
-void	init_exec_node(t_exec **new, t_elem *tokens, t_env *env)
+void	init_exec_node(t_exec **new, t_token *tokens, t_env *env)
 {
 	int	n;
 	int	out;

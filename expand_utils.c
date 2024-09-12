@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:50:36 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 16:05:48 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_swipe(char **join, char **arg)
 	free(join2);
 }
 
-char	*ft_expander(t_elem **temp, t_env *env, bool exec)
+char	*ft_expander(t_token **temp, t_env *env, bool exec)
 {
 	char	*arg;
 	char	*join;
@@ -60,7 +60,7 @@ char	*ft_expander(t_elem **temp, t_env *env, bool exec)
 	return (check_exec(exec, &arg, &join, env));
 }
 
-char	*arg_expand(t_elem *token, t_env *env, char **arg)
+char	*arg_expand(t_token *token, t_env *env, char **arg)
 {
 	char	*temp;
 	char	*join;

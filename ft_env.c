@@ -6,21 +6,21 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:24:07 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 15:34:34 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:54:53 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_env(t_env **head, t_env *env_new)
+void	add_env(t_env **tokens, t_env *env_new)
 {
 	t_env	*last;
 
-	if (*head == NULL)
-		*head = env_new;
+	if (*tokens == NULL)
+		*tokens = env_new;
 	else 
 	{
-		last = ft_last(*head);
+		last = ft_last(*tokens);
 		last->next = env_new;
 	}
 }

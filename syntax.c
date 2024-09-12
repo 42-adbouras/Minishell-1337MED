@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:16:48 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 15:32:19 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 bool	if_syntax_err(t_data *tokens)
 {
-	t_elem	*tmp;
+	t_token	*tmp;
 
-	tmp = tokens->head;
+	tmp = tokens->tokens;
 	while (tmp)
 	{
 		if (tmp->type == D_QUOTE || tmp->type == S_QUOTE)
@@ -40,10 +40,10 @@ bool	if_syntax_err(t_data *tokens)
 	return (false);
 }
 
-bool	pipe_syntax(t_elem *token)
+bool	pipe_syntax(t_token *token)
 {
-	t_elem	*next;
-	t_elem	*prev;
+	t_token	*next;
+	t_token	*prev;
 
 	next = skip_wspace(token->next, 'N');
 	prev = skip_wspace(token->prev, 'P');
@@ -58,7 +58,7 @@ bool	pipe_syntax(t_elem *token)
 	return (true);
 }
 
-bool	if_closed_quotes(t_elem **token, t_token type)
+bool	if_closed_quotes(t_token **token, t_type type)
 {
 	while ((*token))
 	{
@@ -69,9 +69,9 @@ bool	if_closed_quotes(t_elem **token, t_token type)
 	return (false);
 }
 
-bool	red_syntax(t_elem *token)
+bool	red_syntax(t_token *token)
 {
-	t_elem	*next;
+	t_token	*next;
 
 	next = skip_wspace(token->next, 'N');
 	if (!next || (next->type != WORD && next->type != ENV

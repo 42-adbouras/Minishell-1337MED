@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 20:19:54 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/07 15:50:24 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_data(t_data **tokens, char *rl)
+void	init_data(t_data **data, char *rl)
 {
-	*tokens = malloc(sizeof(t_data));
-	if (!(*tokens))
+	*data = malloc(sizeof(t_data));
+	if (!(*data))
 	{
 		ft_error("malloc failed!\n", 1);
 		exit(1);
 	}
-	(*tokens)->head = NULL;
-	(*tokens)->exec = NULL;
-	ft_lexing(rl, tokens);
+	(*data)->tokens = NULL;
+	(*data)->exec = NULL;
+	ft_lexing(rl, data);
 }
 
 char	*ft_strndup(const char *s1, int n)
@@ -47,7 +47,7 @@ char	*ft_strndup(const char *s1, int n)
 	return (ptr);
 }
 
-void	skip_quotes(t_elem ***token, t_state *state)
+void	skip_quotes(t_token ***token, t_state *state)
 {
 	if ((**token) && ((**token)->type == D_QUOTE || (**token)->type == S_QUOTE))
 		(**token) = (**token)->next;
@@ -55,7 +55,7 @@ void	skip_quotes(t_elem ***token, t_state *state)
 		*state = (**token)->state;
 }
 
-bool	last_heredoc(t_elem *token)
+bool	last_heredoc(t_token *token)
 {
 	while (token && token->type == W_SPACE)
 		token = token->next;

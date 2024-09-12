@@ -6,13 +6,13 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:19:27 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:13:20 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_red(t_token type)
+bool	is_red(t_type type)
 {
 	if (type == REDIR_IN || type == REDIR_OUT
 		|| type == REDIR_APP || type == REDIR_AND)
@@ -36,7 +36,7 @@ bool	is_grammar(char c)
 	return (false);
 }
 
-t_elem	*skip_wspace(t_elem *token, char direction)
+t_token	*skip_wspace(t_token *token, char direction)
 {
 	while (token && token->type == W_SPACE)
 	{

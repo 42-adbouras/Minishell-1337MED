@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:11:03 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/01 19:28:44 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/09 12:44:34 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	ft_lexing(char *read, t_data **tokens)
 	i = 0;
 	state = GENERAL;
 	while (read[i])
-		i = ft_tokenize(*tokens, read, i, &state);
+		i = ft_typeize(*tokens, read, i, &state);
 }
 
-int	ft_tokenize(t_data *tokens, char *read, int i, t_state *status)
+int	ft_typeize(t_data *tokens, char *read, int i, t_state *status)
 {
 	if (!is_grammar(read[i]))
 		i += get_word(tokens, &read[i], *status);
@@ -84,10 +84,10 @@ int	red_token(t_data *tokens, char *read, int i, t_state *status)
 	return (i - old_i);
 }
 
-void	quote_token(t_data *tokens, char *read, t_token type, t_state *status)
+void	quote_token(t_data *tokens, char *read, t_type type, t_state *status)
 {
 	t_state	new_state;
-	t_token	new_type;
+	t_type	new_type;
 
 	if (type == D_QUOTE)
 	{

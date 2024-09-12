@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:02:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 18:37:53 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,12 @@ char	*get_var(char *var)
 	return (variable);
 }
 
-char	*arg_join(t_elem *token, char **arg, char *join)
+char	*arg_join(t_token *token, char **arg, char *join)
 {
 	char	*join2;
 
 	join2 = NULL;
+
 	if (token && (token->type == D_QUOTE
 			|| token->type == S_QUOTE) && token->state == GENERAL)
 		join2 = ft_strjoin(*arg, join);

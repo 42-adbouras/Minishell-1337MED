@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:46:31 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/07 19:08:50 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 11:54:26 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_env	*envi;
 	char	*rl;
-	t_data	*tokens;
+	t_data	*data;
 
 	(void)ac;
 	(void)av;
@@ -26,14 +26,14 @@ int	main(int ac, char **av, char **env)
 	{
 		if (ft_readline(&rl) && rl[0])
 		{
-			init_data(&tokens, rl);
-			if (!if_syntax_err(tokens))
+			init_data(&data, rl);
+			if (!if_syntax_err(data))
 			{
-				init_exec_struct(&tokens, envi);
-				if (tokens && tokens->exec && tokens->exec->run)
-					ft_exic(tokens->exec, &envi);
+				init_exec_struct(&data, envi);
+				if (data && data->exec && data->exec->run)
+					ft_exic(data->exec, &envi);
 			}
-			free_data(&tokens, &rl, 1);
+			free_data(&data, &rl, 1);
 		}
 		else
 			free(rl);

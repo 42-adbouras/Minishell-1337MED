@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 11:08:10 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/02 15:10:45 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_data(t_data **data, char **rl, int flag)
 	{
 		if (flag == 1)
 		{
-			free_tokens(&(*data)->head);
+			free_tokens(&(*data)->tokens);
 			if ((*data)->exec)
 				free_exec(&(*data)->exec);
 		}
@@ -32,10 +32,10 @@ void	free_data(t_data **data, char **rl, int flag)
 	}
 }
 
-void	free_tokens(t_elem **tokens)
+void	free_tokens(t_token **tokens)
 {
-	t_elem	*node;
-	t_elem	*temp;
+	t_token	*node;
+	t_token	*temp;
 
 	node = (*tokens);
 	while (node)

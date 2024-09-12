@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   getters.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:15:27 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 15:46:18 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	cmd_getter(t_elem *temp, t_exec *new)
+bool	cmd_getter(t_token *temp, t_exec *new)
 {
 	if (temp->type == WORD && !new->exed && temp->next
 		&& (temp->next->type != S_QUOTE && temp->next->type != D_QUOTE))
@@ -20,7 +20,7 @@ bool	cmd_getter(t_elem *temp, t_exec *new)
 	return (false);
 }
 
-bool	arg_getter(t_elem *temp)
+bool	arg_getter(t_token *temp)
 {
 	if (temp && ((temp->type == S_QUOTE || temp->type == D_QUOTE)
 			|| (temp->type == WORD && temp->state == GENERAL)))

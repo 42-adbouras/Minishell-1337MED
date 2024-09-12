@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:20:15 by adhambouras       #+#    #+#             */
-/*   Updated: 2024/09/07 15:43:15 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	init_exec_struct(t_data **data, t_env *env)
 {
 	t_exec	*new;
-	t_elem	*temp;
+	t_token	*temp;
 
-	temp = (*data)->head;
+	temp = (*data)->tokens;
 	while (temp)
 	{
 		new = new_exec(temp, env);
@@ -36,10 +36,10 @@ void	init_exec_struct(t_data **data, t_env *env)
 	}
 }
 
-t_exec	*new_exec(t_elem *tokens, t_env *env)
+t_exec	*new_exec(t_token *tokens, t_env *env)
 {
 	t_exec	*new;
-	t_elem	*temp;
+	t_token	*temp;
 	int		i;
 
 	i = 0;
@@ -64,7 +64,7 @@ t_exec	*new_exec(t_elem *tokens, t_env *env)
 	return (new);
 }
 
-void	new_exec_node(t_exec **new, t_elem *tokens)
+void	new_exec_node(t_exec **new, t_token *tokens)
 {
 	int	n;
 	int	out;

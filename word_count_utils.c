@@ -6,13 +6,13 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:57:01 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/03 11:28:42 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	not_pipe(t_elem *tokens)
+bool	not_pipe(t_token *tokens)
 {
 	if ((tokens && tokens->type != PIPE)
 		|| (tokens && (tokens)->type == PIPE && (tokens)->state != GENERAL))
@@ -20,7 +20,7 @@ bool	not_pipe(t_elem *tokens)
 	return (false);
 }
 
-bool	should_skip(t_elem *tokens)
+bool	should_skip(t_token *tokens)
 {
 	if (((tokens->prev && tokens->prev->type == PIPE
 				&& tokens->prev->state == GENERAL))
@@ -29,7 +29,7 @@ bool	should_skip(t_elem *tokens)
 	return (false);
 }
 
-bool	is_word(t_elem *tokens)
+bool	is_word(t_token *tokens)
 {
 	if (!tokens->next || (tokens->next && (tokens->next->type == W_SPACE
 				|| tokens->next->type == PIPE)
@@ -38,7 +38,7 @@ bool	is_word(t_elem *tokens)
 	return (false);
 }
 
-bool	increment(t_elem *tokens)
+bool	increment(t_token *tokens)
 {
 	if ((tokens && tokens->type != PIPE)
 		|| (tokens && (tokens)->type == PIPE && (tokens)->state != GENERAL))

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   arg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:14:13 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 16:05:21 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_cmd(t_elem *tokens, t_env *env, bool *exed)
+char	*get_cmd(t_token *tokens, t_env *env, bool *exed)
 {
 	char	*word;
 
@@ -26,7 +26,7 @@ char	*get_cmd(t_elem *tokens, t_env *env, bool *exed)
 	return (word);
 }
 
-bool	skip_space(t_elem **tokens, int *count)
+bool	skip_space(t_token **tokens, int *count)
 {
 	while ((*tokens) && (*tokens)->type == W_SPACE
 		&& (*tokens)->state == GENERAL)
@@ -37,10 +37,10 @@ bool	skip_space(t_elem **tokens, int *count)
 	return (true);
 }
 
-int	count_words(t_elem *tokens)
+int	count_words(t_token *tokens)
 {
 	int		count;
-	t_elem	*temp;
+	t_token	*temp;
 
 	count = 0;
 	temp = tokens;

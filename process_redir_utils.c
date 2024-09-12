@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   process_redir_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:27:24 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/06 12:08:26 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	if_redir(t_elem **token)
+void	if_redir(t_token **token)
 {
 	(*token) = (*token)->next;
 	while ((*token) && (*token)->type == W_SPACE && (*token)->state == GENERAL)
@@ -29,7 +29,7 @@ void	if_redir(t_elem **token)
 		(*token) = (*token)->next;
 }
 
-bool	get_redir_in(t_exec ***new, t_elem *temp, t_env *env, int *i)
+bool	get_redir_in(t_exec ***new, t_token *temp, t_env *env, int *i)
 {
 	bool	ambiguous;
 
@@ -50,7 +50,7 @@ bool	get_redir_in(t_exec ***new, t_elem *temp, t_env *env, int *i)
 	return (true);
 }
 
-bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int *j)
+bool	get_redir_out(t_exec ***new, t_token *temp, t_env *env, int *j)
 {
 	bool	ambiguous;
 
@@ -69,7 +69,7 @@ bool	get_redir_out(t_exec ***new, t_elem *temp, t_env *env, int *j)
 	return (true);
 }
 
-void	heredoc_getter(t_exec ***new, t_elem *temp, int *l)
+void	heredoc_getter(t_exec ***new, t_token *temp, int *l)
 {
 	bool	heredoc;
 

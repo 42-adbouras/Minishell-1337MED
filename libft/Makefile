@@ -6,7 +6,7 @@
 #    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/14 21:48:50 by adbouras          #+#    #+#              #
-#    Updated: 2024/09/03 16:29:34 by adbouras         ###   ########.fr        #
+#    Updated: 2024/09/09 11:51:02 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror
 
-HEADER = libft.h
+tokensER = libft.h
 
 SOURCE =	ft_atoi.c \
 		ft_strchr.c \
@@ -75,7 +75,7 @@ BNS_OBJC = $(addprefix $(OBJ_DIR), $(BNS:.c=.o))
 
 OBJECT = $(addprefix $(OBJ_DIR), $(SOURCE:.c=.o))
 
-$(OBJ_DIR)%.o:%.c $(HEADER)
+$(OBJ_DIR)%.o:%.c $(tokensER)
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
  
@@ -84,7 +84,7 @@ $(NAME): $(OBJECT)
 	
 all: $(NAME)
 
-bonus: $(BNS_OBJC) $(HEADER)
+bonus: $(BNS_OBJC) $(tokensER)
 	@ar -cr $(NAME) $(BNS_OBJC)
 
 clean:

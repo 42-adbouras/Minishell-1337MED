@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eismail <eismail@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:11:34 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/07 18:22:38 by eismail          ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_red(t_elem *tokens, t_token type)
+int	count_red(t_token *tokens, t_type type)
 {
 	int	count;
 
@@ -26,7 +26,7 @@ int	count_red(t_elem *tokens, t_token type)
 	return (count);
 }
 
-char	*get_redire(t_elem **token, t_env *env, bool *ambiguous)
+char	*get_redire(t_token **token, t_env *env, bool *ambiguous)
 {
 	char	*redir_in;
 
@@ -53,7 +53,7 @@ char	*get_redire(t_elem **token, t_env *env, bool *ambiguous)
 	return (redir_in);
 }
 
-char	*get_delim(t_elem **token)
+char	*get_delim(t_token **token)
 {
 	char	*arg;
 	char	*join;
@@ -73,7 +73,7 @@ char	*get_delim(t_elem **token)
 	return (check_exec(true, &arg, &join, NULL));
 }
 
-char	*get_heredoc(t_elem **token, bool *heredoc)
+char	*get_heredoc(t_token **token, bool *heredoc)
 {
 	char	*redir;
 	char	*temp;
