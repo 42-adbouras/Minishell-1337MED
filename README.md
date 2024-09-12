@@ -87,10 +87,66 @@ INCLUDES = -I/Users/<login>/.brew/opt/readline/include
 Now that we've read the command, the next step is to parse it. I’ve decided to proceed with lexing.
 
 ## II - Lexer
-A lexer (or lexical analyzer) play crucial role in the process of translating a string (or code) into a sequence of tokens.\
-Tokens are categorized strings or symbols that represent the basic building blocks of the language, such as keywords, operators, identifiers.
+A lexer, or lexical analyzer, is essential in converting a string or code into a sequence of tokens. Tokens are categorized strings or symbols that represent the fundamental components of a language, such as keywords, operators, and identifiers.
 
+In essence, the lexer for this project is responsible for identifying and naming elements, such as recognizing "WORD" for a word, white space for a "W_SPACE" and "PIPE" for a pipe.
 
+* This is the structure that we went with:
+	```c
+	typedef struct s_data
+	{
+		t_token	*tokens;
+		t_exec	*exec;
+	}	t_data;
+	```
+	* `tokens`: pointer to a linked list of tokens.
+	* `exec`: pointer to execution linked list.
+* This is the tokens structure:
+	```c
+ 	typedef struct s_token
+	{
+		char			*content;
+		int				len;
+		t_type			type;
+		t_state			state;
+		struct s_token	*next;
+		struct s_token	*prev;
+	}	t_token;
+ 	``` 
+  * `content`: pointer to a string holding an element.
+  * `len`: content lenght.
+  * `type`: structur identifing element type.
+  * `state`: structur identifing  element state.
+  * `next`: pointer to the next element.
+  * `prev`: pointer to the previous element.
+
+* Type structure:
+	```c
+ 	typedef enum e_type
+	{
+		WORD = 0,
+		W_SPACE = ' ',
+		D_QUOTE = '\"',
+		S_QUOTE = '\'',
+		PIPE = '|',
+		REDIR_IN = '<',
+		REDIR_AND,
+		REDIR_OUT = '>',
+		REDIR_APP,
+		ENV = '$',
+	}	t_type;
+ 	```
+* State structure:\
+`e_state` is an identifier for a node satuse, if a node is inside a single or double quote, `GENERAL` is niether.
+	```c
+ 	typedef enum e_state
+	{
+		IN_DQUOTE,
+		IN_SQUOTE,
+		GENERAL,
+	}	t_state;
+	```
+ 
 
 
 
