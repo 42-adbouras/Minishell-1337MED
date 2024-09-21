@@ -6,7 +6,7 @@
 #    By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/23 08:58:18 by adbouras          #+#    #+#              #
-#    Updated: 2024/09/12 19:40:49 by adbouras         ###   ########.fr        #
+#    Updated: 2024/09/21 16:45:53 by adbouras         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
-LDFLAGS = -lreadline -L/Users/adhambouras/.brew/opt/readline/lib
+LDFLAGS = -lreadline -L/Users/adbouras/.brew/opt/readline/lib
 
 SRC =  main.c utils.c lexer.c parse_list_utils.c syntax.c parse_utils.c clean.c error.c \
 		lexer_utils.c redir_utils.c arg_utils.c lexer_list_utils.c builtins.c ft_exic.c signals.c ft_readline.c \
@@ -35,7 +35,7 @@ HDR = minishell.h
 
 LIBFT_HDR = ./libft/libft.h
 
-NCLD = -I/Users/adhambouras/.brew/opt/readline/include
+NCLD = -I/Users/adbouras/.brew/opt/readline/include
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

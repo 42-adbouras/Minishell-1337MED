@@ -6,7 +6,7 @@
 /*   By: adbouras <adbouras@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:20:17 by adbouras          #+#    #+#             */
-/*   Updated: 2024/09/09 12:46:12 by adbouras         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:33:23 by adbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,23 @@ t_token	*last_type(t_token *token)
 	return (last);
 }
 
-void	token_add_back(t_data *tokens, t_token *new)
+void	token_add_back(t_data *data, t_token *new)
 {
 	t_token	*last;
 
-	if (!tokens && !new)
+	if (!data && !new)
 		return ;
 	if (!new)
 	{
-		free_tokens(&tokens->tokens);
+		free_tokens(&data->tokens);
 		exit(1);
 	}
-	if (!tokens->tokens)
+	if (!data->tokens)
 	{
-		tokens->tokens = new;
+		data->tokens = new;
 		return ;
 	}
-	last = last_type(tokens->tokens);
+	last = last_type(data->tokens);
 	last->next = new;
 	new->prev = last;
 }
